@@ -4,6 +4,10 @@
   "description": "",
   "author": "Keith Alpichi, Craig Rodrigues, Jong Kim",
   "license": "MIT",
+  "standard": {
+    "env": [ "mocha" ],
+    "ignore": [ "package.json" ]
+  },
   "engines": {
     "node": ">=6.6.0"
   },
@@ -26,7 +30,6 @@
     "redux": "^3.6.0",
     "redux-logger": "^3.0.1",
     "redux-thunk": "^2.2.0",
-    "snazzy": "^7.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
@@ -41,6 +44,8 @@
     "jest": "19.0.2",
     "karma": "^1.6.0",
     "nodemon": "^1.11.0",
+    "should": "^11.2.1",
+    "snazzy": "^7.0.0",
     "standard": "^10.0.1",
     "supertest": "^3.0.0",
     "webpack": "^2.2.1",
