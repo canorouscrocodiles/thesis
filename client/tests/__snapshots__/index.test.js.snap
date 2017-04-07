@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders App component to DOM 1`] = `
+<h2>
+  Hello World
+</h2>
+`;
