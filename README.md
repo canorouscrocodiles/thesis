@@ -2,6 +2,8 @@
 
 > project description
 
+[![Stories in Ready](https://badge.waffle.io/canorouscrocodiles/thesis.svg?label=ready&title=Ready)](http://waffle.io/canorouscrocodiles/thesis)
+
 ## Team
 
   - Keith Alpichi
@@ -40,8 +42,7 @@ bower install
 
 ### Roadmap
 
-View the project roadmap [here](LINK_TO_DOC)
-
+- [Waffle.io](http://waffle.io/canorouscrocodiles/thesis)
 
 ## Contributing
 
