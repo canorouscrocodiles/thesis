@@ -4,6 +4,7 @@
   "description": "",
   "author": "Keith Alpichi, Craig Rodrigues, Jong Kim",
   "license": "MIT",
+  "main": "server/index.js",
   "standard": {
     "env": [ "mocha" ],
     "ignore": [ "package.json" ]
@@ -18,7 +19,7 @@
     ]
   },
   "scripts": {
-    "start": "node server/index.js",
+    "start": "webpack -d && node server/index.js",
     "dev": "webpack -d --watch",
     "test-jest": "jest",
     "test-mocha": "mocha ./server/spec.js",
