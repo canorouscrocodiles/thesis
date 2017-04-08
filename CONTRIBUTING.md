@@ -18,7 +18,7 @@
 Use github’s interface to make a fork of the repo, then add that repo as an upstream remote:
 
 ```
-git remote add upstream https://github.com/reactorcore/<NAME_OF_REPO>.git
+git remote add upstream https://github.com/canorouscrocodiles/thesis.git
 ```
 
 ### Cut a namespaced feature branch from master
@@ -29,8 +29,6 @@ Your ticket # should correspond with the ticket number on Waffle. For example:
 These commands will help you do this:
 
 ``` bash
-
-# Creates your branch and brings you there
 git checkout -b `your-branch-name-#123`
 ```
 
@@ -63,7 +61,7 @@ for every commit where the conflict would exist.
 
 You can squash using this command:
 
-```
+```bash
 git rebase -i HEAD~2
 ```
 
