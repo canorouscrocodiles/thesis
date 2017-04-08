@@ -3,9 +3,10 @@
 ## General Workflow
 
 1. Fork the repo
-1. Cut a namespaced feature branch from master
+1. Check https://waffle.io/canorouscrocodiles/thesis and pick a ticket
+1. Cut a correctly named feature branch from master (details below)
 1. Make commits to your feature branch. Prefix each commit like so:
-1. When you've finished with your fix or feature, Rebase upstream changes into your branch. submit a pull request directly to master. Include a description of your changes.
+1. When you've finished with your fix or feature, rebase upstream changes into your branch. Submit a pull request directly to master. Include a description of your changes.
 1. Your pull request will be reviewed by another maintainer. The point of code reviews is to help keep the codebase clean and of high quality and, equally as important, to help you grow as a programmer. If your code reviewer requests you make a change you don't understand, ask them why.
 1. Fix any issues raised by your code reviwer, and push your fixes as a single new commit.
 1. Once the pull request has been reviewed, it will be merged by another member of the team. Do not merge your own commits.
@@ -22,19 +23,15 @@ git remote add upstream https://github.com/reactorcore/<NAME_OF_REPO>.git
 
 ### Cut a namespaced feature branch from master
 
-Your branch should follow this naming convention:
-  - bug/...
-  - feat/...
-  - test/...
-  - doc/...
-  - refactor/...
+Your ticket # should correspond with the ticket number on Waffle. For example:
+  - description-#123
 
 These commands will help you do this:
 
 ``` bash
 
 # Creates your branch and brings you there
-git checkout -b `your-branch-name`
+git checkout -b `your-branch-name-#123`
 ```
 
 ### Make commits to your feature branch.
@@ -57,6 +54,20 @@ changes.
 - Commit messages should be written in the present tense; e.g. "Fix continuous integration script".
 - The first line of your commit message should be a brief summary of what the commit changes. Aim for about 70 characters max. Remember: This is a summary, not a detailed description of everything that changed.
 - If you want to explain the commit in more depth, following the first line should be a blank line and then a more detailed description of the commit. This can be as detailed as you want, so dig into details here and keep the first line short.
+
+### Squash commits before rebasing
+
+Before you rebase upstream changes, you should make sure to squash your 
+commits into one. This saves you the trouble of resolving the same conflicts
+for every commit where the conflict would exist.
+
+You can squash using this command:
+
+```
+git rebase -i HEAD~2
+```
+
+This will squash the last two commits into one.
 
 ### Rebase upstream changes into your branch
 
@@ -122,7 +133,7 @@ Thanks for contributing!
 1. Uphold the current code standard:
     - Keep your code [DRY][].
     - Apply the [boy scout rule][].
-    - Follow [STYLE-GUIDE.md](_STYLE-GUIDE.md)
+    - Follow [style guide](StandardJS Style Guide).
 1. Run the [tests][] before submitting a pull request.
 1. Tests are very, very important. Submit tests if your pull request contains
    new, testable behavior.
@@ -146,9 +157,7 @@ no problem getting your changes merged in.
 
 
 <!-- Links -->
-[style guide]: https://github.com/reactorcore/style-guide
-[n-queens]: https://github.com/reactorcore/n-queens
-[Underbar]: https://github.com/reactorcore/underbar
+[style guide]: https://standardjs.com/rules.html
 [curriculum workflow diagram]: http://i.imgur.com/p0e4tQK.png
 [cons of merge]: https://f.cloud.github.com/assets/1577682/1458274/1391ac28-435e-11e3-88b6-69c85029c978.png
 [Bookstrap]: https://github.com/reactorcore/bookstrap
