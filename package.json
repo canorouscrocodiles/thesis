@@ -19,11 +19,12 @@
     ]
   },
   "scripts": {
-    "start": "webpack -d | node server/index.js",
+    "start": "node server/index.js",
     "dev": "webpack -d --watch",
     "test-jest": "jest",
     "test-mocha": "mocha ./server/spec.js",
-    "test": "npm run test-jest | npm run test-mocha"
+    "test": "npm run test-jest | npm run test-mocha",
+    "heroku-postbuild": "webpack -d"
   },
   "dependencies": {
     "axios": "^0.15.3",
