@@ -3,7 +3,9 @@ const path = require('path')
 // const bodyParser = require('body-parser')
 const app = express()
 
+const port = process.env.PORT || 8080
+
 app.use(express.static(path.join(__dirname, '../public/')))
-app.listen(8080, () => console.log('Listening on port 8080'))
+app.listen(port, () => console.log(`Listening on port: ${port}`))
 
 module.exports = app
