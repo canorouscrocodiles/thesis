@@ -11,6 +11,12 @@
   "engines": {
     "node": ">=6.6.0"
   },
+    "jest": {
+    "verbose": true,
+    "testPathIgnorePatterns": [
+      "<rootDir>/public/build/", "<rootDir>/node_modules/", "<rootDir>/server/"
+    ]
+  },
   "scripts": {
     "start": "node server/index.js",
     "dev": "webpack -d --watch",
