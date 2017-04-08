@@ -15,7 +15,7 @@
     "jest": {
     "verbose": true,
     "testPathIgnorePatterns": [
-      "<rootDir>/public/build/", "<rootDir>/node_modules/", "<rootDir>/server/"
+      "<rootDir>/public/build/", "<rootDir>/node_modules/"
     ]
   },
   "scripts": {
