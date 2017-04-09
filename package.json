@@ -6,8 +6,12 @@
   "license": "MIT",
   "main": "server/index.js",
   "standard": {
-    "env": [ "mocha" ],
-    "ignore": [ "package.json" ]
+    "env": [
+      "mocha"
+    ],
+    "ignore": [
+      "package.json"
+    ]
   },
   "engines": {
     "node": ">=6.6.0"
@@ -15,7 +19,8 @@
   "jest": {
     "verbose": true,
     "testPathIgnorePatterns": [
-      "<rootDir>/public/build/", "<rootDir>/node_modules/"
+      "<rootDir>/public/build/",
+      "<rootDir>/node_modules/"
     ]
   },
   "scripts": {
@@ -47,6 +52,7 @@
     "redux": "^3.6.0",
     "redux-logger": "^3.0.1",
     "redux-thunk": "^2.2.0",
+    "socket.io": "^1.7.3",
     "webpack": "^2.2.1"
   },
   "devDependencies": {
@@ -54,11 +60,13 @@
     "enzyme": "^2.8.0",
     "jest": "19.0.2",
     "karma": "^1.6.0",
-    "mocha": "^3.2.0",
+    "mock-socket": "^6.0.4",
     "nodemon": "^1.11.0",
     "react-test-renderer": "^15.5.0",
     "should": "^11.2.1",
     "snazzy": "^7.0.0",
+    "react-test-renderer": "^15.5.0",
+    "socket.io-mock": "^1.2.3",
     "standard": "^10.0.1",
     "supertest": "^3.0.0",
     "webpack-dev-server": "^2.4.2"
