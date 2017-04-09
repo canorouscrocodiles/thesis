@@ -3,7 +3,7 @@ const env = process.env.ENV || 'test'
 const dbPassword = process.env.DBPASSWORD || null
 const dbHost = process.env.DATABASE_URL || 'localhost'
 const port = process.env.DBPORT || 5432
-const dbName = `${projectName}_${env}`
+const dbName = process.env.DBNAME || `${projectName}_${env}`
 const user = process.env.USER || 'root'
 const config = {}
 
