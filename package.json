@@ -12,17 +12,18 @@
   "engines": {
     "node": ">=6.6.0"
   },
-    "jest": {
+  "jest": {
     "verbose": true,
     "testPathIgnorePatterns": [
       "<rootDir>/public/build/", "<rootDir>/node_modules/"
     ]
   },
   "scripts": {
-    "start": "node server/index.js",
-    "dev": "webpack -d --watch",
-    "test": "jest",
-    "heroku-postbuild": "webpack -d"
+    "start": "ENV=production node server/index.js",
+    "dev-client": "ENV=development webpack -d --watch",
+    "dev-server": "ENV=development nodemon server/index.js",
+    "test": "ENV=test jest --forceExit",
+    "heroku-postbuild": "ENV=production webpack -d"
   },
   "dependencies": {
     "axios": "^0.15.3",
@@ -33,6 +34,7 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "babel-register": "^6.24.1",
+    "bluebird": "^3.5.0",
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
     "pg": "^6.1.5",
@@ -52,10 +54,11 @@
     "enzyme": "^2.8.0",
     "jest": "19.0.2",
     "karma": "^1.6.0",
+    "mocha": "^3.2.0",
     "nodemon": "^1.11.0",
+    "react-test-renderer": "^15.5.0",
     "should": "^11.2.1",
     "snazzy": "^7.0.0",
-    "react-test-renderer": "^15.5.0",
     "standard": "^10.0.1",
     "supertest": "^3.0.0",
     "webpack-dev-server": "^2.4.2"
