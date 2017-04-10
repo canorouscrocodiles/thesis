@@ -1,7 +1,116 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`renders App component to DOM 1`] = `
-<h2>
-  Hello World
-</h2>
+<div>
+  <h2>
+    Hello World
+  </h2>
+  <div>
+    <h4>
+      Current Location
+    </h4>
+    <p>
+      South of Market St
+    </p>
+  </div>
+  <div>
+    <h3>
+      PostList
+    </h3>
+    <div>
+      <p>
+        Keith - 10m Ago
+      </p>
+      <p>
+        What does Tri Tip even mean?
+      </p>
+    </div>
+    <div>
+      <p>
+        Keith - 10m Ago
+      </p>
+      <p>
+        What does Tri Tip even mean?
+      </p>
+    </div>
+    <div>
+      <p>
+        Keith - 10m Ago
+      </p>
+      <p>
+        What does Tri Tip even mean?
+      </p>
+    </div>
+    <div>
+      <p>
+        Keith - 10m Ago
+      </p>
+      <p>
+        What does Tri Tip even mean?
+      </p>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`renders CurrentLocation component to DOM 1`] = `
+<div>
+  <h4>
+    Current Location
+  </h4>
+  <p>
+    South of Market St
+  </p>
+</div>
+`;
+
+exports[`renders ListEntry component to DOM 1`] = `
+<div>
+  <p>
+    Keith - 10m Ago
+  </p>
+  <p>
+    What does Tri Tip even mean?
+  </p>
+</div>
+`;
+
+exports[`renders PostList component to DOM 1`] = `
+<div>
+  <h3>
+    PostList
+  </h3>
+  <div>
+    <p>
+      Keith - 10m Ago
+    </p>
+    <p>
+      What does Tri Tip even mean?
+    </p>
+  </div>
+  <div>
+    <p>
+      Keith - 10m Ago
+    </p>
+    <p>
+      What does Tri Tip even mean?
+    </p>
+  </div>
+  <div>
+    <p>
+      Keith - 10m Ago
+    </p>
+    <p>
+      What does Tri Tip even mean?
+    </p>
+  </div>
+  <div>
+    <p>
+      Keith - 10m Ago
+    </p>
+    <p>
+      What does Tri Tip even mean?
+    </p>
+  </div>
+</div>
 `;
