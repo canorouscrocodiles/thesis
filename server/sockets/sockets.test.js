@@ -1,7 +1,11 @@
 const socket = require('socket.io-client')
 const { io, server } = require('../index')
-const url = process.env.HOST || 'http://localhost'
+let url = process.env.HEROKU_APP_NAME || 'http://localhost'
 const port = process.env.PORT || 8080
+
+if (process.env.HEROKU_APP_NAME) {
+  url = `${url}.herokuapp.com`
+}
 
 describe('Socket Tests', () => {
   it('Should emit Hello World', done => {
