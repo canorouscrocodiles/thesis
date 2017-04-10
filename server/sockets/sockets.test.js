@@ -1,11 +1,11 @@
 const socket = require('socket.io-client')
 const { io, server } = require('../index')
-let url = process.env.HEROKU_APP_NAME || 'http://localhost'
+let url = process.env.HOST || 'http://localhost'
 const port = process.env.PORT || 8080
 
-if (process.env.HEROKU_APP_NAME) {
-  url = `http://${url}.herokuapp.com`
-}
+// if (process.env.HEROKU_APP_NAME) {
+//   url = `http://${url}.herokuapp.com`
+// }
 
 console.log(`
   URL = ${url}
