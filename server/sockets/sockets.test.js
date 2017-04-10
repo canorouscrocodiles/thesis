@@ -4,8 +4,13 @@ let url = process.env.HEROKU_APP_NAME || 'http://localhost'
 const port = process.env.PORT || 8080
 
 if (process.env.HEROKU_APP_NAME) {
-  url = `${url}.herokuapp.com`
+  url = `http://${url}.herokuapp.com`
 }
+
+console.log(`
+  URL = ${url}
+  PORT = ${port}
+`)
 
 describe('Socket Tests', () => {
   it('Should emit Hello World', done => {
