@@ -2,14 +2,23 @@ const express = require('express')
 const path = require('path')
 const bodyParser = require('body-parser')
 const router = require('./router')
-const app = express()
+const socket = require('./sockets')
 
+const app = express()
+const server = require('http').Server(app)
+const io = require('socket.io')(server)
 const port = process.env.PORT || 8080
+
+if (!module.parent) {
+  server.listen(port, () => console.log(`Listening on port: ${port}`))
+}
 
 app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, '../public/')))
 app.use('/api', router)
 
-app.listen(port, () => console.log(`Listening on port: ${port}`))
+io.on('connection', socket)
 
-module.exports = app
+module.exports.app = app
+module.exports.server = server
+module.exports.io = io

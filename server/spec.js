@@ -1,4 +1,4 @@
-const app = require('./index')
+const { app } = require('./index')
 const request = require('supertest')
 
 describe('HTTP Server Tests', () => {
@@ -71,6 +71,15 @@ describe('Router Tests', () => {
   it('Should return 200 on a DELETE request to /api/users', done => {
     request(app)
       .delete('/api/users')
+      .expect(200)
+      .end((err, res) => {
+        if (err) throw err
+        done()
+      })
+  })
+  it('Should return 200 on a PUT request to /api/votes', done => {
+    request(app)
+      .put('/api/votes')
       .expect(200)
       .end((err, res) => {
         if (err) throw err
