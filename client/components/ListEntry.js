@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-export default class ListEntry extends Component {
+export default class CurrentLocation extends Component {
   constructor (props) {
     super(props)
     this.state = {}

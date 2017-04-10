@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ListEntry from './ListEntry'
 
 export default class PostList extends Component {
   constructor (props) {
@@ -10,6 +11,10 @@ export default class PostList extends Component {
     return (
       <div>
         <h3>PostList</h3>
+        <ListEntry />
+        <ListEntry />
+        <ListEntry />
+        <ListEntry />
       </div>
     )
   }
