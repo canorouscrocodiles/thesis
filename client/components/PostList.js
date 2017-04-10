@@ -1,12 +1,16 @@
 import React, { Component } from 'react'
 
-export default class App extends Component {
+export default class PostList extends Component {
   constructor (props) {
     super(props)
     this.state = {}
   }
 
   render () {
-    return <h2>Hello World</h2>
+    return (
+      <div>
+        <h3>PostList</h3>
+      </div>
+    )
   }
 }
