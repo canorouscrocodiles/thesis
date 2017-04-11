@@ -1,15 +1,25 @@
 const router = require('express').Router()
+const answerHandlers = require('./routes/answers')
+const questionHandlers = require('./routes/questions')
+const userHandlers = require('./routes/users')
+const voteHandlers = require('./routes/votes')
 
-router.post('/answers', (req, res) => res.sendStatus(201))
+router.get('/answers', answerHandlers.getAnswers)
+router.post('/answers', answerHandlers.postAnswer)
+router.put('/answers', answerHandlers.updateAnswer)
+router.delete('/answers', answerHandlers.deleteAnswer)
 
-router.put('/votes', (req, res) => res.sendStatus(200))
+router.put('/votes', voteHandlers.updateVote)
 
-router.get('/questions', (req, res) => res.sendStatus(200))
-router.post('/questions', (req, res) => res.sendStatus(201))
+router.get('/questions', questionHandlers.getQuestions)
+router.get('/questions/:id', questionHandlers.getQuestion)
+router.post('/questions', questionHandlers.createQuestion)
+router.put('/questions', questionHandlers.updateQuestion)
+router.delete('/questions', questionHandlers.deleteQuestion)
 
-router.get('/users', (req, res) => res.sendStatus(200))
-router.post('/users', (req, res) => res.sendStatus(201))
-router.put('/users', (req, res) => res.sendStatus(200))
-router.delete('/users', (req, res) => res.sendStatus(200))
+router.get('/users', userHandlers.getUser)
+router.post('/users', userHandlers.createUser)
+router.put('/users', userHandlers.updateUser)
+router.delete('/users', userHandlers.deleteUser)
 
 module.exports = router
