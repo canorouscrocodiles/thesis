@@ -3,15 +3,15 @@ const answerQueries = require('./answers')
 const questionQueries = require('./questions')
 const userQueries = require('./users')
 const voteQueries = require('./votes')
-const testUtils = require('../testUtils')
-const truncateAndSeed = testUtils.truncateAndSeed
-const createTables = testUtils.createTables
+const { deleteTables, createTables, truncateTables, seedTestData, seedDummyData } = require('./../testUtils')
 
-beforeAll(() => createTables(db))
-afterAll(() => truncateAndSeed(db))
+// deleteTables should be used during testing/dev phases only
+
+beforeAll(() => deleteTables(db).then(() => createTables(db)))
+afterAll(() => truncateTables(db).then(() => seedDummyData(db)))
 
 describe('Database user queries ', () => {
-  beforeEach(() => truncateAndSeed(db))
+  beforeEach(() => truncateTables(db).then(() => seedTestData(db)))
 
   it('selects a user', () => {
     return userQueries.selectUser(1)
@@ -44,7 +44,7 @@ describe('Database user queries ', () => {
 })
 
 describe('Database question queries', () => {
-  beforeEach(() => truncateAndSeed(db))
+  beforeEach(() => truncateTables(db).then(() => seedTestData(db)))
 
   it('selects all questions', () => {
     return questionQueries.selectQuestions()
@@ -83,7 +83,7 @@ describe('Database question queries', () => {
 })
 
 describe('Database answer queries', () => {
-  beforeEach(() => truncateAndSeed(db))
+  beforeEach(() => truncateTables(db).then(() => seedTestData(db)))
 
   it('selects all users answers', () => {
     return answerQueries.selectAnswers(1)
@@ -116,7 +116,7 @@ describe('Database answer queries', () => {
 })
 
 describe('Database vote queries', () => {
-  beforeEach(() => truncateAndSeed(db))
+  beforeEach(() => truncateTables(db).then(() => seedTestData(db)))
 
   it('updates a vote', () => {
     const vote = {id: 1, vote_type: -1, answer_id: 1}

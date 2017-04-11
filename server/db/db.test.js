@@ -1,13 +1,11 @@
 const db = require('./index')
-const testUtils = require('./testUtils')
-const createTables = testUtils.createTables
-const truncateAndSeed = testUtils.truncateAndSeed
+const { deleteTables, createTables, truncateTables, seedTestData, seedDummyData } = require('./testUtils')
 
-beforeAll(() => createTables(db))
-afterAll(() => truncateAndSeed(db))
+beforeAll(() => deleteTables(db).then(() => createTables(db)))
+afterAll(() => truncateTables(db).then(() => seedDummyData(db)))
 
 describe('Database tables: ', () => {
-  beforeEach(() => truncateAndSeed(db))
+  beforeEach(() => truncateTables(db).then(() => seedTestData(db)))
 
   test('user table exists with one record', () => {
     const username = 'JohnSmith'
