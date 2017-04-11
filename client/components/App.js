@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import GMap from './GMap'
 import { connect } from 'react-redux'
 import CurrentLocation from './CurrentLocation'
 import Menu from './Menu'
@@ -15,6 +16,7 @@ class App extends Component {
       <div>
         <h2>OnPoint 👇</h2>
         <Menu />
+        <GMap />
         <CurrentLocation />
         <PostList />
       </div>
