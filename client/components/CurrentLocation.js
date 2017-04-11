@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 
-export default class CurrentLocation extends Component {
+class CurrentLocation extends Component {
   constructor (props) {
     super(props)
     this.state = {}
@@ -15,3 +16,9 @@ export default class CurrentLocation extends Component {
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  return { currentLocation: state.currentLocation }
+}
+
+export default connect(mapStateToProps)(CurrentLocation)
