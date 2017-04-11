@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import ListEntry from './ListEntry'
 
-class PostList extends Component {
+class MainQuestion extends Component {
   constructor (props) {
     super(props)
     this.state = {}
@@ -11,11 +10,9 @@ class PostList extends Component {
   render () {
     return (
       <div>
-        <h3>PostList</h3>
-        <ListEntry />
-        <ListEntry />
-        <ListEntry />
-        <ListEntry />
+        <p>Keith - 22s ago</p>
+        <p>Is Chipotle out of guac?!</p>
+        <p>Hack Reactor</p>
       </div>
     )
   }
@@ -25,4 +22,4 @@ const mapStateToProps = (state) => {
   return { questions: state.questions }
 }
 
-export default connect(mapStateToProps)(PostList)
+export default connect(mapStateToProps)(MainQuestion)
