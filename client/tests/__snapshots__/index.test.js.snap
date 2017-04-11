@@ -5,6 +5,11 @@ exports[`renders App component to DOM 1`] = `
   <h2>
     OnPoint 👇
   </h2>
+  <div
+    id="mapWindow"
+  >
+    Map loading...
+  </div>
   <div>
     <p>
       Home
@@ -75,6 +80,14 @@ exports[`renders CurrentLocation component to DOM 1`] = `
   <p>
     South of Market St
   </p>
+</div>
+`;
+
+exports[`renders GMap component to DOM 1`] = `
+<div
+  id="mapWindow"
+>
+  Map loading...
 </div>
 `;
 
