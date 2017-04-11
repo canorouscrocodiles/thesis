@@ -3,8 +3,22 @@
 exports[`renders App component to DOM 1`] = `
 <div>
   <h2>
-    Hello World
+    OnPoint 👇
   </h2>
+  <div>
+    <p>
+      Home
+    </p>
+    <p>
+      Search
+    </p>
+    <p>
+      Notifications
+    </p>
+    <p>
+      Me
+    </p>
+  </div>
   <div>
     <h4>
       Current Location
@@ -71,6 +85,37 @@ exports[`renders ListEntry component to DOM 1`] = `
   </p>
   <p>
     What does Tri Tip even mean?
+  </p>
+</div>
+`;
+
+exports[`renders MainQuestion component to DOM 1`] = `
+<div>
+  <p>
+    Keith - 22s ago
+  </p>
+  <p>
+    Is Chipotle out of guac?!
+  </p>
+  <p>
+    Hack Reactor
+  </p>
+</div>
+`;
+
+exports[`renders Menu component to DOM 1`] = `
+<div>
+  <p>
+    Home
+  </p>
+  <p>
+    Search
+  </p>
+  <p>
+    Notifications
+  </p>
+  <p>
+    Me
   </p>
 </div>
 `;
