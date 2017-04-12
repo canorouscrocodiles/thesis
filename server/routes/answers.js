@@ -13,7 +13,7 @@ const getAnswers = (req, res) => {
 const postAnswer = (req, res) => {
   const { message, user_id, question_id } = req.body
   Answers.insertAnswer({message, user_id, question_id})
-    .then(() => res.status(200))
+    .then(() => res.status(201))
     .catch(error => {
       console.log(`Error: ${error}`)
       res.sendStatus(500)
