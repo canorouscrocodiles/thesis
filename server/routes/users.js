@@ -1,7 +1,7 @@
 const Users  = require('../db/models/users')
 
 const getUser = (req, res) => {
-  const id = req.body.id
+  const id = req.params.id
   Users.selectUser(id)
   .then((user) => res.status(200).send(user))
   .catch((err) => {
@@ -11,8 +11,8 @@ const getUser = (req, res) => {
 }
 
 const createUser = (req, res) => {
-  const { id, username, email, img_url, bio } = req.body
-  Users.insertUser({ id, username, email, img_url, bio })
+  const { username, email, img_url, bio } = req.body
+  Users.insertUser({ username, email, img_url, bio })
   .then(() => res.sendStatus(201))
   .catch((err) => {
     console.log(err);
