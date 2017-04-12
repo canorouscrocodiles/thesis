@@ -17,7 +17,7 @@ router.post('/questions', questionHandlers.createQuestion)
 router.put('/questions', questionHandlers.updateQuestion)
 router.delete('/questions', questionHandlers.deleteQuestion)
 
-router.get('/users', userHandlers.getUser)
+router.get('/users/:id', userHandlers.getUser)
 router.post('/users', userHandlers.createUser)
 router.put('/users', userHandlers.updateUser)
 router.delete('/users', userHandlers.deleteUser)
