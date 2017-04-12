@@ -22,6 +22,8 @@ const createTables = (db) => {
     coordinates VARCHAR (100) NOT NULL,
     location VARCHAR (100) NOT NULL,
     category_id INTEGER NOT NULL,
+    vote_count INTEGER DEFAULT 0,
+    view_count INTEGER DEFAULT 0,
     active BOOLEAN NOT NULL DEFAULT TRUE
     );`))
   .then(() => db.none(`CREATE TABLE IF NOT EXISTS answers (
@@ -36,7 +38,8 @@ const createTables = (db) => {
     id SERIAL PRIMARY KEY,
     created_timestamp TIMESTAMP DEFAULT now() NOT NULL,
     user_id INTEGER NOT NULL REFERENCES users ON DELETE CASCADE,
-    answer_id INTEGER NOT NULL REFERENCES answers ON DELETE CASCADE,
+    question_id INTEGER DEFAULT NULL REFERENCES questions ON DELETE CASCADE,
+    answer_id INTEGER DEFAULT NULL REFERENCES answers ON DELETE CASCADE,
     vote_type INTEGER DEFAULT 0
     );`))
   .then(() => db.none(`CREATE TABLE IF NOT EXISTS categories (

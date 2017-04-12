@@ -21,6 +21,8 @@ CREATE TABLE IF NOT EXISTS questions (
   coordinates VARCHAR (100) NOT NULL,
   location VARCHAR (100) NOT NULL,
   category_id INTEGER NOT NULL,
+  vote_count INTEGER DEFAULT 0,
+  view_count INTEGER DEFAULT 0,
   active BOOLEAN NOT NULL DEFAULT TRUE
 );
 
@@ -37,7 +39,8 @@ CREATE TABLE IF NOT EXISTS votes (
   id SERIAL PRIMARY KEY,
   created_timestamp TIMESTAMP DEFAULT now() NOT NULL,
   user_id INTEGER NOT NULL REFERENCES users ON DELETE CASCADE,
-  answer_id INTEGER NOT NULL REFERENCES answers ON DELETE CASCADE,
+  question_id INTEGER DEFAULT NULL REFERENCES questions ON DELETE CASCADE,
+  answer_id INTEGER DEFAULT NULL REFERENCES answers ON DELETE CASCADE,
   vote_type INTEGER DEFAULT 0
 );
 
@@ -62,7 +65,7 @@ INSERT INTO users (username, email, img_url, bio)
 INSERT INTO questions (user_id, message, coordinates, location, category_id, active)
   VALUES
   (1, 'Is Chipotle still open?', '{lat: 37.783494, lng: -122.407433}', '139 5th St', 1, 'true'),
-  (2, 'Can someone describe the "Tenderloin" in San Francisco?', '{lat: 37.784167 lng: -122.413696}', '364 Eddy St', 19, 'true'),
+  (2, 'Can someone describe the "Tenderloin" in San Francisco?', '{lat: 37.784167, lng: -122.413696}', '364 Eddy St', 19, 'true'),
   (3, 'Has anyone seen my son?! He is wearing a blue hat and a red shirt!', '{lat: 37.769706, lng: -122.462644}', 'Golden Gate Park', 15, 'true'),
   (4, 'How old is Kalmanovitz Hall?', '{lat: 37.775571, lng: -122.450901}', 'Kalmanovitz Hall', 9, 'true'),
   (5, 'Do people really eat birds?', '{lat: 37.795055, lng: -122.465570}', 'Piper Loop', 7, 'true'),
