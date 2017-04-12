@@ -66,7 +66,7 @@ const seedTestData = (db) => {
 }
 
 const seedDummyData = (db) => {
-  db.none(`INSERT INTO users (username, email, img_url, bio)
+  return db.none(`INSERT INTO users (username, email, img_url, bio)
     VALUES  ('JohnSmith', 'js@example.com', 'www.example.com/avatar.png',
             'One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could'),
             ('CraigRodrigues', 'craig@craigrodrigues.com', 'https://api.adorable.io/avatars/151/abott@adorable.png', 'One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could se'),
