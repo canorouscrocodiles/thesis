@@ -67,7 +67,7 @@ describe('Database question queries', () => {
   })
 
   it('updates a single question', () => {
-    const question = {user_id: 1, message: 'What is the weather like outside near the corner of...?', coordinates: '{lat: 82.61723989, lng: -122.9553215}', location: '123 St. Johns Drive, San Francisco, Ca 90000', category_id: 1}
+    const question = {id: 1, message: 'What is the weather like outside near the corner of...?', coordinates: '{lat: 82.61723989, lng: -122.9553215}', location: '123 St. Johns Drive, San Francisco, Ca 90000', category_id: 1}
     return questionQueries.updateQuestion(question)
     .then(() => db.one('SELECT * FROM questions WHERE id = 1'))
     .then(result => expect(result.message).toBe('What is the weather like outside near the corner of...?'))
@@ -100,7 +100,7 @@ describe('Database answer queries', () => {
   })
 
   it('updates a single answer', () => {
-    const answer = { user_id: 1, message: 'Nevermind, they\'re about to close', question_id: 1 }
+    const answer = { id: 1, message: 'Nevermind, they\'re about to close', question_id: 1 }
     return answerQueries.updateAnswer(answer)
     .then(() => db.one('SELECT * FROM answers WHERE id = 1'))
     .then(result => expect(result.message).toBe('Nevermind, they\'re about to close'))
@@ -119,7 +119,7 @@ describe('Database vote queries', () => {
   beforeEach(() => truncateTables(db).then(() => seedTestData(db)))
 
   it('updates a vote', () => {
-    const vote = {id: 1, vote_type: -1, answer_id: 1}
+    const vote = { user_id: 1, vote_type: -1, answer_id: 1 }
     return voteQueries.updateVote(vote)
     .then(() => db.one('SELECT * FROM votes WHERE id = 1'))
     .then(result => expect(result.vote_type).toBe(-1))
