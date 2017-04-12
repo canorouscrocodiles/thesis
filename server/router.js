@@ -4,7 +4,7 @@ const questionHandlers = require('./routes/questions')
 const userHandlers = require('./routes/users')
 const voteHandlers = require('./routes/votes')
 
-router.get('/answers', answerHandlers.getAnswers)
+router.get('/answers/:id', answerHandlers.getAnswers)
 router.post('/answers', answerHandlers.postAnswer)
 router.put('/answers', answerHandlers.updateAnswer)
 router.delete('/answers', answerHandlers.deleteAnswer)
