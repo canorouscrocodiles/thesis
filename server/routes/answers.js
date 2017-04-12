@@ -1,7 +1,7 @@
 const Answers = require('../db/models/answers')
 
 const getAnswers = (req, res) => {
-  const id = req.body.id
+  const id = req.params.id
   Answers.selectAnswers(id)
     .then(answers => res.status(200).send(answers))
     .catch(error => {
@@ -13,7 +13,7 @@ const getAnswers = (req, res) => {
 const postAnswer = (req, res) => {
   const { message, user_id, question_id } = req.body
   Answers.insertAnswer({message, user_id, question_id})
-    .then(() => res.status(201))
+    .then(() => res.sendStatus(201))
     .catch(error => {
       console.log(`Error: ${error}`)
       res.sendStatus(500)
@@ -31,8 +31,8 @@ const deleteAnswer = (req, res) => {
 }
 
 const updateAnswer = (req, res) => {
-  const { message, user_id, question_id } = req.body
-  Answers.updateAnswer({message, user_id, question_id})
+  const { id, message } = req.body
+  Answers.updateAnswer({id, message})
     .then(() => res.sendStatus(200))
     .catch(error => {
       console.log(`Error: ${error}`)

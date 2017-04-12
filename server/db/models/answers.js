@@ -6,7 +6,7 @@ const insertAnswer = ({ message, user_id, question_id }) => db.none('INSERT INTO
 
 const deleteAnswer = (id) => db.none('DELETE FROM answers WHERE id = $1', [id])
 
-const updateAnswer = ({ message, user_id, question_id }) => db.none('UPDATE answers SET message = $1 WHERE user_id = $2 AND question_id = $3', [message, user_id, question_id])
+const updateAnswer = ({ message, id }) => db.none('UPDATE answers SET message = $1 WHERE id = $2', [message, id])
 
 module.exports = {
   selectAnswers: selectAnswers,
