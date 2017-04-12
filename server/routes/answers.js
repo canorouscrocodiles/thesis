@@ -2,6 +2,7 @@ const Answers = require('../db/models/answers')
 
 const getAnswers = (req, res) => {
   const id = req.body.id
+  console.log(id)
   Answers.selectAnswers(id)
     .then(answers => res.status(200).send(answers))
     .catch(error => {

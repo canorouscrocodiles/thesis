@@ -27,7 +27,7 @@
     "start": "ENV=production node server/index.js",
     "dev-client": "ENV=development webpack -d --watch",
     "dev-server": "ENV=development nodemon server/index.js",
-    "test": "ENV=test jest --forceExit",
+    "test": "ENV=test jest --runInBand --forceExit",
     "heroku-postbuild": "ENV=production webpack -d"
   },
   "dependencies": {
