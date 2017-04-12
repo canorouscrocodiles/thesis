@@ -6,4 +6,6 @@ const options = {
 const pgp = require('pg-promise')(options)
 const db = pgp(project)
 
+console.log(`DB Host: ${project.db.host}`)
+
 module.exports = db
