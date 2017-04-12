@@ -10,7 +10,7 @@ const getQuestions = (req, res) => {
 }
 
 const getQuestion = (req, res) => {
-  const id = req.body.id
+  const id = req.params.id
   Questions.selectQuestion(id)
     .then(question => res.status(200).send(question))
     .catch(error => {
@@ -20,8 +20,8 @@ const getQuestion = (req, res) => {
 }
 
 const createQuestion = (req, res) => {
-  const { message, coordinates, location } = req.body
-  Questions.insertQuestion({ message, coordinates, location })
+  const { user_id, message, coordinates, location, category_id } = req.body
+  Questions.insertQuestion({ user_id, message, coordinates, location, category_id })
     .then(() => res.sendStatus(201))
     .catch(error => {
       console.log(`Error: ${error}`)
@@ -30,8 +30,8 @@ const createQuestion = (req, res) => {
 }
 
 const updateQuestion = (req, res) => {
-  const { user_id, message, coordinates, location } = req.body
-  Questions.updateQuestion({ user_id, message, coordinates, location })
+  const { id, message, coordinates, location, category_id } = req.body
+  Questions.updateQuestion({ id, message, coordinates, location, category_id })
   .then(() => res.sendStatus(200))
   .catch(error => {
     console.log(`Error: ${error}`)
