@@ -1,6 +1,6 @@
 import {
   QUESTIONS_REQUEST_SENT, QUESTIONS_REQUEST_RECEIVED,
-  QUESTIONS_REQUEST_ERROR, SELECT_SINGLE_QUESTION
+  QUESTIONS_REQUEST_ERROR, SELECT_SINGLE_QUESTION, SINGLE_QUESTION_RECEIVED
 } from '../actions/questions'
 const initialState = {data: [], selectedQuestion: {}, fetching: false, error: null}
 
@@ -22,6 +22,11 @@ export default (state = initialState, action) => {
       return {
         ...state,
         error: action.data
+      }
+    case SINGLE_QUESTION_RECEIVED:
+      return {
+        ...state,
+        selectedQuestion: action.data
       }
     case SELECT_SINGLE_QUESTION:
       const singleQuestion = state.data.find(question => question.id === parseInt(action.data))

@@ -1,17 +1,28 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { selectSingleQuestion } from '../actions/questions'
+import { fetchSingleQuestion } from '../actions/questions'
 
 class MainQuestion extends Component {
   componentWillMount () {
     let id = this.props.match.params.id
-    this.props.selectSingleQuestion(id)
+    if (Object.keys(this.props.question).length === 0) {
+      this.props.fetchSingleQuestion(id)
+    } else {
+      this.props.selectSingleQuestion(id)
+    }
+  }
+
+  renderLoader () {
+    return (<div>Loading...</div>)
   }
 
   render () {
+    const { question } = this.props
+    if (!question) { return this.renderLoader() }
     return (
       <div>
-        <p>{this.props.question.message}</p>
+        <p>{question.message}</p>
       </div>
     )
   }
@@ -23,7 +34,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    selectSingleQuestion: (id) => dispatch(selectSingleQuestion(id))
+    selectSingleQuestion: (id) => dispatch(selectSingleQuestion(id)),
+    fetchSingleQuestion: (id) => dispatch(fetchSingleQuestion(id))
   }
 }
 
