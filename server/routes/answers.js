@@ -10,10 +10,15 @@ const getAnswers = (req, res) => {
     })
 }
 
-const getQAnswers = (req, res) => {
-  const id = req.body.id
-  Answers.selectQAnswers(id)
-    .then(answers => res.status(200).send(answers))
+const getQuestionAnswers = (req, res) => {
+  const id = req.params.id
+  console.log('Inside getQuestionAnswers')
+  Answers.selectQuestionAnswers(id)
+    .then(answers => {
+      console.log('ID', id)
+      console.log('Answers from DB', answers)
+      res.status(200).send(answers)
+    })
     .catch(error => {
       console.log(`Error: ${error}`)
       res.sendStatus(500)
@@ -52,7 +57,7 @@ const updateAnswer = (req, res) => {
 
 module.exports = {
   getAnswers: getAnswers,
-  getQAnswers: getQAnswers,
+  getQuestionAnswers: getQuestionAnswers,
   postAnswer: postAnswer,
   deleteAnswer: deleteAnswer,
   updateAnswer: updateAnswer
