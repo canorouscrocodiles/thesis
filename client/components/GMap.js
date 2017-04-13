@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 
 // These are options used to initially render map
 // center defines the center of the map
@@ -12,29 +13,30 @@ let options = {
   zoom: 11
 }
 
-let map
-
-window.loadMap = () => {
-  // Check to see if window.google exists
-  if (window.google) {
-    // If so, create map object
-    map = new window.google.maps.Map(document.getElementById('mapWindow'), options)
-  } else {
-    // Else, call itself
-    setTimeout(window.loadMap, 100)
-  }
-}
-
-export default class GMap extends Component {
+class GMap extends Component {
   constructor (props) {
     super(props)
     this.state = {
+      map: null
     }
+    this.loadMap = this.loadMap.bind(this)
     this.createMarker = this.createMarker.bind(this)
     this.createInfoWindow = this.createInfoWindow.bind(this)
     this.addPoints = this.addPoints.bind(this)
     this.deletePoints = this.deletePoints.bind(this)
     this.closeInfos = this.closeInfos.bind(this)
+    this.resetView = this.resetView.bind(this)
+  }
+
+  loadMap () {
+    // Check to see if window.google exists
+    if (window.google) {
+      // If so, create map object
+      this.state.map = new window.google.maps.Map(document.getElementById('mapWindow'), options)
+    } else {
+      // Else, call itself
+      setTimeout(this.loadMap, 100)
+    }
   }
 
   // Creates markers given a map, position and icon
@@ -116,20 +118,23 @@ export default class GMap extends Component {
     this.setState({markers: []})
   }
 
-  render () {
-    // These are just testing functionality
-    // setTimeout(() => {
-    //   this.createMarker(map, {lng: -122.41, lat: 37.78}, null, '<h2>Hey!</h2>')
-    // }, 2000)
-    // setTimeout(() => {
-    //   this.addPoints(map, [{lng: -122.41, lat: 37.78, content: '<h2>Hey!</h2>'}, {lng: -122.31, lat: 37.88, content: '<h2>Hey You!</h2>'}, {lng: -122.21, lat: 37.68, content: '<h2>Hey-O!</h2>'}])
-    //   // setTimeout(() => {
-    //   //   console.log('Deleting Markers')
-    //   //   this.deletePoints(this.state.markers)
-    //   //   console.log(this.state.markers)
-    //   // }, 4000)
-    // }, 2000)
+  resetView (map, position) {
+    // Create a new bounds object
+    let bounds = new window.google.maps.LatLngBounds()
+    bounds.extend(position)
+    map.fitBounds(bounds)
+  }
 
+  componentDidMount () {
+    this.loadMap()
+  }
+
+  componentWillUpdate (prevProps) {
+    this.createMarker(this.state.map, prevProps.location)
+    this.resetView(this.state.map, prevProps.location)
+  }
+
+  render () {
     return (
       <div id='mapWindow'>
         Map loading...
@@ -137,3 +142,9 @@ export default class GMap extends Component {
     )
   }
 }
+
+const mapStateToProps = state => {
+  return { location: state.currentLocation.location }
+}
+
+export default connect(mapStateToProps)(GMap)

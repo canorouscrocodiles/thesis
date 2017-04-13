@@ -9,6 +9,7 @@ export const fetchingLocation = () => {
 }
 
 export const setLocation = (location) => {
+  console.log('action', location)
   return {
     type: SET_LOCATION,
     data: location

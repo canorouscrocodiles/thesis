@@ -11,9 +11,10 @@ export default (state = initialState, action) => {
         error: null
       }
     case SET_LOCATION:
+      console.log('reducer', action.data)
       return {
         ...state,
-        coordinates: action.data,
+        location: action.data,
         fetching: false
       }
     case FETCH_LOCATION_ERROR:
