@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { selectSingleQuestion } from '../actions/questions'
-import { fetchSingleQuestion } from '../actions/questions'
+import { selectSingleQuestion, fetchSingleQuestion } from '../actions/questions'
 
 class MainQuestion extends Component {
   componentWillMount () {
-    let id = this.props.match.params.id
+    let id = this.props.id
     if (Object.keys(this.props.question).length === 0) {
       this.props.fetchSingleQuestion(id)
     } else {

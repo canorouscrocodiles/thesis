@@ -31,7 +31,6 @@ export const fetchSingleQuestion = (id) => {
 
     axios.get(`/api/questions/${id}`)
     .then((question) => {
-      console.log(question);
       dispatch(setSingleQuestion(question.data))
     })
     .catch((error) => dispatch(signalRequestError(error)))

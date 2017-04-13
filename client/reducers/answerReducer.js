@@ -1,8 +1,8 @@
 import {
-  ANSWERS_REQUEST_SENT, ANSWERS_REQUEST_RECEIVED,
-  ANSWERS_REQUEST_ERROR, SET_ANSWERS
+  ANSWERS_REQUEST_SENT, USER_ANSWERS_REQUEST_RECEIVED,
+  ANSWERS_REQUEST_ERROR, QUESTION_ANSWERS_REQUEST_RECEIVED
 } from '../actions/answer'
-const initialState = { data: [], fetching: false, error: null }
+const initialState = { data: [], userAnswers: [], fetching: false, error: null }
 
 export default (state = initialState, action) => {
   switch (action.type) {
@@ -11,7 +11,13 @@ export default (state = initialState, action) => {
         ...state,
         fetching: true
       }
-    case ANSWERS_REQUEST_RECEIVED:
+    case USER_ANSWERS_REQUEST_RECEIVED:
+      return {
+        ...state,
+        userAnswers: action.data,
+        fetching: false
+      }
+    case QUESTION_ANSWERS_REQUEST_RECEIVED:
       return {
         ...state,
         data: action.data,
