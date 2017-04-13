@@ -10,14 +10,28 @@ let options = {
   center: {lng: -122.41, lat: 37.78},
   minZoom: 5,
   maxZoom: 19,
-  zoom: 11
+  zoom: 11,
+  draggable: false,
+  streetViewControl: false,
+  styles: [
+    {
+      'featureType': 'poi',
+      'stylers': [
+        { 'visibility': 'off' }
+      ]
+    }
+  ]
 }
+
+let markers = []
 
 class GMap extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      map: null
+      map: null,
+      lastWindow: null,
+      markers: []
     }
     this.loadMap = this.loadMap.bind(this)
     this.createMarker = this.createMarker.bind(this)
@@ -94,18 +108,15 @@ class GMap extends Component {
   addPoints (map, locations, index) {
     // Initialize variables
     let marker
-    let markers = []
 
     // Loop through all locations
     locations.forEach((location) => {
+      let coordinates = JSON.parse(location.coordinates)
       // Create the marker
-      marker = this.createMarker(map, location, null, location.content)
+      marker = this.createMarker(map, coordinates, null, location.content)
       // Push the marker into markers for later referencing
       markers.push(marker)
     })
-
-    // Set state with new array of markers
-    this.setState({markers: markers})
   }
 
   deletePoints (markers) {
@@ -118,10 +129,10 @@ class GMap extends Component {
     this.setState({markers: []})
   }
 
-  resetView (map, position) {
+  resetView (map, positions) {
     // Create a new bounds object
     let bounds = new window.google.maps.LatLngBounds()
-    bounds.extend(position)
+    positions.forEach(position => bounds.extend(JSON.parse(position.coordinates)))
     map.fitBounds(bounds)
   }
 
@@ -129,9 +140,12 @@ class GMap extends Component {
     this.loadMap()
   }
 
-  componentWillUpdate (prevProps) {
-    this.createMarker(this.state.map, prevProps.location)
-    this.resetView(this.state.map, prevProps.location)
+  componentWillUpdate (nextProps, nextState) {
+    if (this.state.map) {
+      this.createMarker(this.state.map, nextProps.location)
+      this.addPoints(this.state.map, nextProps.questions.data)
+      this.resetView(this.state.map, nextProps.questions.data)
+    }
   }
 
   render () {
@@ -144,7 +158,7 @@ class GMap extends Component {
 }
 
 const mapStateToProps = state => {
-  return { location: state.currentLocation.location }
+  return { location: state.currentLocation.location, questions: state.questions }
 }
 
 export default connect(mapStateToProps)(GMap)
