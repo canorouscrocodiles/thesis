@@ -10,6 +10,16 @@ const getAnswers = (req, res) => {
     })
 }
 
+const getQAnswers = (req, res) => {
+  const id = req.body.id
+  Answers.selectQAnswers(id)
+    .then(answers => res.status(200).send(answers))
+    .catch(error => {
+      console.log(`Error: ${error}`)
+      res.sendStatus(500)
+    })
+}
+
 const postAnswer = (req, res) => {
   const { message, user_id, question_id } = req.body
   Answers.insertAnswer({message, user_id, question_id})
@@ -42,6 +52,7 @@ const updateAnswer = (req, res) => {
 
 module.exports = {
   getAnswers: getAnswers,
+  getQAnswers: getQAnswers,
   postAnswer: postAnswer,
   deleteAnswer: deleteAnswer,
   updateAnswer: updateAnswer
