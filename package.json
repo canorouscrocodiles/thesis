@@ -18,6 +18,7 @@
   },
   "jest": {
     "verbose": true,
+    "collectCoverage": true,
     "testPathIgnorePatterns": [
       "<rootDir>/public/build/",
       "<rootDir>/node_modules/"
