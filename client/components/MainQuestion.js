@@ -1,25 +1,30 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { selectSingleQuestion } from '../actions/questions'
 
 class MainQuestion extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {}
+  componentWillMount () {
+    let id = this.props.match.params.id
+    this.props.selectSingleQuestion(id)
   }
 
   render () {
     return (
       <div>
-        <p>Keith - 22s ago</p>
-        <p>Is Chipotle out of guac?!</p>
-        <p>Hack Reactor</p>
+        <p>{this.props.question.message}</p>
       </div>
     )
   }
 }
 
 const mapStateToProps = (state) => {
-  return { questions: state.questions }
+  return { question: state.questions.selectedQuestion }
 }
 
-export default connect(mapStateToProps)(MainQuestion)
+const mapDispatchToProps = (dispatch) => {
+  return {
+    selectSingleQuestion: (id) => dispatch(selectSingleQuestion(id))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MainQuestion)

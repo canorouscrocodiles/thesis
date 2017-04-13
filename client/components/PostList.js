@@ -1,21 +1,18 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { fetchQuestions } from '../actions/questions'
 import ListEntry from './ListEntry'
 
 class PostList extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {}
+  componentWillMount () {
+    this.props.fetchQuestions()
   }
 
   render () {
     return (
       <div>
         <h3>PostList</h3>
-        <ListEntry />
-        <ListEntry />
-        <ListEntry />
-        <ListEntry />
+        {this.props.questions.data.map(question => <ListEntry question={question} />)}
       </div>
     )
   }
@@ -25,4 +22,10 @@ const mapStateToProps = (state) => {
   return { questions: state.questions }
 }
 
-export default connect(mapStateToProps)(PostList)
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchQuestions: () => dispatch(fetchQuestions())
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PostList)

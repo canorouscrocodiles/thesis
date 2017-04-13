@@ -2,7 +2,7 @@ import {
   QUESTIONS_REQUEST_SENT, QUESTIONS_REQUEST_RECEIVED,
   QUESTIONS_REQUEST_ERROR, SELECT_SINGLE_QUESTION
 } from '../actions/questions'
-const initialState = {data: [], selectedQuestion: null, fetching: false, error: null}
+const initialState = {data: [], selectedQuestion: {}, fetching: false, error: null}
 
 export default (state = initialState, action) => {
   switch (action.type) {
@@ -24,10 +24,10 @@ export default (state = initialState, action) => {
         error: action.data
       }
     case SELECT_SINGLE_QUESTION:
-      const index = state.data.findIndex(q => q.id === action.data)
+      const singleQuestion = state.data.find(question => question.id === parseInt(action.data))
       return {
         ...state,
-        selectedQuestion: state.data[index]
+        selectedQuestion: singleQuestion
       }
     default:
       return state
