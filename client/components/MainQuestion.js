@@ -12,8 +12,6 @@ class MainQuestion extends Component {
     return (
       <div>
         <p>{this.props.question.message}</p>
-        <p>Why</p>
-        <p>Wtf</p>
       </div>
     )
   }
