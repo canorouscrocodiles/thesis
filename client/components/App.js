@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import GMap from './GMap'
 import { connect } from 'react-redux'
-import { setLocation, fetchLocationError } from '../actions/location'
+import { fetchingLocationName, fetchLocationError } from '../actions/location'
 import CurrentLocation from './CurrentLocation'
 import Menu from './Menu'
 import PostList from './PostList'
@@ -9,7 +9,7 @@ import PostList from './PostList'
 class App extends Component {
   componentWillMount () {
     navigator.geolocation.getCurrentPosition(coords => {
-      this.props.setLocation({lat: coords.coords.latitude, lng: coords.coords.longitude})
+      this.props.fetchingLocationName({lat: coords.coords.latitude, lng: coords.coords.longitude})
     }, error => {
       this.props.fetchLocationError(error)
     })
@@ -34,7 +34,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    setLocation: coords => dispatch(setLocation(coords)),
+    fetchingLocationName: coords => dispatch(fetchingLocationName(coords)),
     fetchLocationError: error => dispatch(fetchLocationError(error))
   }
 }

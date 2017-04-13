@@ -12,7 +12,7 @@ class PostList extends Component {
     return (
       <div>
         <h3>PostList</h3>
-        {this.props.questions.data.map(question => <ListEntry question={question} />)}
+        {this.props.questions.data.map(question => <ListEntry key={question.id} question={question} />)}
       </div>
     )
   }

@@ -9,10 +9,24 @@ export const fetchingLocation = () => {
 }
 
 export const setLocation = (location) => {
-  console.log('action', location)
   return {
     type: SET_LOCATION,
     data: location
+  }
+}
+
+export const fetchingLocationName = (location) => {
+  return dispatch => {
+    dispatch(fetchingLocation())
+    let geocoder = new window.google.maps.Geocoder()
+    let latlng = new window.google.maps.LatLng(location.lat, location.lng)
+    geocoder.geocode({'latLng': latlng}, (results, status) => {
+      if (status === window.google.maps.GeocoderStatus.OK) {
+        dispatch(setLocation({location: location, name: results[0]}))
+      } else {
+        dispatch(fetchLocationError(status))
+      }
+    })
   }
 }
 

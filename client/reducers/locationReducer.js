@@ -1,6 +1,6 @@
 import { FETCHING_LOCATION, SET_LOCATION, FETCH_LOCATION_ERROR } from '../actions/location'
 
-const initialState = { location: null, fetching: false, error: null }
+const initialState = { name: null, location: null, fetching: false, error: null }
 
 export default (state = initialState, action) => {
   switch (action.type) {
@@ -11,10 +11,10 @@ export default (state = initialState, action) => {
         error: null
       }
     case SET_LOCATION:
-      console.log('reducer', action.data)
       return {
         ...state,
-        location: action.data,
+        location: action.data.location,
+        name: action.data.name,
         fetching: false
       }
     case FETCH_LOCATION_ERROR:
