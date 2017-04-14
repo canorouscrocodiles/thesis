@@ -5,8 +5,13 @@ import { fetchingLocationName, fetchLocationError } from '../actions/location'
 import CurrentLocation from './CurrentLocation'
 import Menu from './Menu'
 import PostList from './PostList'
+import { testSocketPing } from '../actions/sockets/testPing'
 
 class App extends Component {
+  constructor (props) {
+    super(props)
+    this.props.testSocketPing()
+  }
   componentWillMount () {
     navigator.geolocation.getCurrentPosition(coords => {
       this.props.fetchingLocationName({lat: coords.coords.latitude, lng: coords.coords.longitude})
@@ -35,7 +40,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => {
   return {
     fetchingLocationName: coords => dispatch(fetchingLocationName(coords)),
-    fetchLocationError: error => dispatch(fetchLocationError(error))
+    fetchLocationError: error => dispatch(fetchLocationError(error)),
+    testSocketPing: () => dispatch(testSocketPing())
   }
 }
 
