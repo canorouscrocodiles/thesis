@@ -13,9 +13,7 @@ const getAnswers = (req, res) => {
 const getQuestionAnswers = (req, res) => {
   const id = req.params.id
   Answers.selectQuestionAnswers(id)
-    .then(answers => {
-      res.status(200).send(answers)
-    })
+    .then(answers => res.status(200).send(answers))
     .catch(error => {
       console.log(`Error: ${error}`)
       res.sendStatus(500)

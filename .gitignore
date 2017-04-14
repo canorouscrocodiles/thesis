@@ -24,6 +24,7 @@ dist/
 public/dist/
 
 # Specific Files
+facebookSecret.js
 
 # Dependency directorys
 # Deployed apps should consider commenting these lines out:
