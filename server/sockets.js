@@ -1,7 +1,6 @@
-// const postAnswer = require('./sockets/answers').postAnswer
+// const questionHandler = require('../sockets/questions')
 const socketTestActions = require('../client/actions/sockets/testPing')
 // const socketActions = require('../client/actions/sockets')
-// const rooms = []
 const allClients = {}
 
 module.exports = socket => {
@@ -23,8 +22,15 @@ module.exports = socket => {
     switch (action.type) {
       case 'get/helloworld':
         socket.emit('action', { type: socketTestActions.SERVER_TO_CLIENT_TEST_PING, data: 'Client to Server and server to client ping success!' })
-      // case 'post/answers':
-      //   return postAnswer(socket, action)
+        break
+      case 'enter/':
+        console.log(`User with socket id: ${socket.id} is entering room with id ${action.data}`)
+        socket.join(action.data)
+        // questionHandler.enterRoom(action, socket)
+        break
+      case 'leave/':
+        console.log(`User with socket id: ${socket.id} is leaving room with id ${action.data}`)
+        socket.leave(action.data)
         break
       default:
         break
