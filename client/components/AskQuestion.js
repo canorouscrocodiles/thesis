@@ -6,29 +6,29 @@ class AskQuestion extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      question: null,
+      question: '',
       categories: ['Chipotle', 'Convention', 'Sports', 'Education', 'Advice', 'Traffic', 'Animals', 'Health', 'History', 'Tourism', 'Tech', 'Business', 'News', 'Food', 'Emergency', 'Music', 'Movies', 'TV', 'Life', 'Love', 'Politics'],
       category: '1'
     }
-    this.handleQChange = this.handleQChange.bind(this)
-    this.handleCChange = this.handleCChange.bind(this)
-    this.submitQ = this.submitQ.bind(this)
+    this.handleQuestionChange = this.handleQuestionChange.bind(this)
+    this.handleCategoryChange = this.handleCategoryChange.bind(this)
+    this.submitQuestion = this.submitQuestion.bind(this)
     this.resetValues = this.resetValues.bind(this)
   }
 
-  handleQChange (event) {
+  handleQuestionChange (event) {
     this.setState({ question: event.target.value })
   }
 
-  handleCChange (event) {
+  handleCategoryChange (event) {
     this.setState({ category: event.target.value })
   }
 
   resetValues () {
-    this.setState({ question: null, category: '1' })
+    this.setState({ question: '', category: '1' })
   }
 
-  submitQ () {
+  submitQuestion () {
     let district, city
 
     // Parse location_name data
@@ -70,11 +70,11 @@ class AskQuestion extends Component {
   render () {
     return (
       <div>
-        <input type='text' value={this.state.question} onChange={this.handleQChange} name='question' placeholder='Ask a question...' />
-        <select value={this.state.category} onChange={this.handleCChange}>
-          {this.state.categories.map((category, id) => <option value={id + 1}>{category}</option>)}
+        <input type='text' value={this.state.question} onChange={this.handleQuestionChange} name='question' placeholder='Ask a question...' />
+        <select value={this.state.category} onChange={this.handleCategoryChange}>
+          {this.state.categories.map((category, id) => <option key={id} value={id + 1}>{category}</option>)}
         </select>
-        <span onClick={this.submitQ}>Ask</span>
+        <span onClick={this.submitQuestion}>Ask</span>
       </div>
     )
   }
