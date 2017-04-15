@@ -1,9 +1,6 @@
 const promise = require('bluebird')
-const project = require('../../project.config.js')
-const options = {
-  promiseLib: promise
-}
-const pgp = require('pg-promise')(options)
-const db = pgp(project)
+const { dbHost } = require('../../project.config.js')
+const options = { promiseLib: promise }
 
-module.exports = db
+const pgp = require('pg-promise')(options)
+module.exports = pgp(dbHost)

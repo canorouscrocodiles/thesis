@@ -1,9 +1,19 @@
 const questionHandler = require('./sockets/questions')
+const jwt = require('jsonwebtoken')
 const answerHandler = require('./sockets/answers')
 const socketTestActions = require('../client/actions/sockets/testPing')
 
+const allClients = {}
+
 module.exports = socket => {
   console.log(`Client connected with id: ${socket.id}`)
+  socket.user = 'anonymous'
+  socket.join(socket.user)
+
+  allClients[socket.user] = socket.id
+  console.log(`All clients: ${JSON.stringify(allClients)}`)
+  socket.emit('echo', 'Hello World')
+  socket.emit('clients', allClients)
 
   socket.on('action', action => {
     switch (action.type) {
@@ -21,6 +31,9 @@ module.exports = socket => {
         break
       case 'post/ANSWER_TO_QUESTION':
         console.log(`User with socket id: ${socket.id} is posting answer ${action.data}`)
+        // Check jwt here
+        // let decoded = jwt.verify(action.token, 'secret')
+
         answerHandler.postAnswer(socket, action.data)
         break
       case 'post/question':
