@@ -1,7 +1,8 @@
 import {
   QUESTIONS_REQUEST_SENT, QUESTIONS_REQUEST_RECEIVED,
-  QUESTIONS_REQUEST_ERROR, SELECT_SINGLE_QUESTION, SINGLE_QUESTION_RECEIVED
+  QUESTIONS_REQUEST_ERROR, SELECT_SINGLE_QUESTION, SINGLE_QUESTION_RECEIVED,
 } from '../actions/questions'
+import { POST_QUESTION_SUCCESS, GET_QUESTION_SUCCESS } from '../actions/sockets/questions'
 const initialState = {data: [], selectedQuestion: {}, fetching: false, error: null}
 
 export default (state = initialState, action) => {
@@ -23,6 +24,11 @@ export default (state = initialState, action) => {
         ...state,
         error: action.data
       }
+    case GET_QUESTION_SUCCESS:
+      return {
+        ...state,
+        selectedQuestion: action.data
+      }
     case SINGLE_QUESTION_RECEIVED:
       return {
         ...state,
@@ -33,6 +39,12 @@ export default (state = initialState, action) => {
       return {
         ...state,
         selectedQuestion: singleQuestion
+      }
+    case POST_QUESTION_SUCCESS:
+      return {
+        ...state,
+        data: action.data,
+        fetching: false
       }
     default:
       return state

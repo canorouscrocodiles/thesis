@@ -1,6 +1,6 @@
 const db = require('../index')
 
-const selectQuestions = () => db.manyOrNone('SELECT * from questions')
+const selectQuestions = () => db.manyOrNone('SELECT * from questions ORDER BY created_timestamp DESC')
 
 const selectQuestion = (id) => db.oneOrNone('SELECT * from questions where id = $1', [id])
 

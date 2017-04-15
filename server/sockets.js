@@ -1,23 +1,9 @@
-// const questionHandler = require('../sockets/questions')
+const questionHandler = require('./sockets/questions')
 const answerHandler = require('./sockets/answers')
 const socketTestActions = require('../client/actions/sockets/testPing')
-// const socketActions = require('../client/actions/sockets')
-const allClients = {}
 
 module.exports = socket => {
-  console.log('A client connected')
-  socket.user = 'anonymous'
-  socket.join(socket.user)
-
-  // socket.on('disconnect', cb) = remove client from list
-  // socket.on('updated location', cb) = emit new questions in client's area
-  // socket.on('question created', cb) = emit new question from client to other users in area
-  // socket.on('answer created', cb) = emit answer to OP and to clients inside the area
-
-  allClients[socket.user] = socket.id
-  console.log(`All clients: ${JSON.stringify(allClients)}`)
-  socket.emit('echo', 'Hello World')
-  socket.emit('clients', allClients)
+  console.log(`Client connected with id: ${socket.id}`)
 
   socket.on('action', action => {
     switch (action.type) {
@@ -36,6 +22,14 @@ module.exports = socket => {
       case 'post/ANSWER_TO_QUESTION':
         console.log(`User with socket id: ${socket.id} is posting answer ${action.data}`)
         answerHandler.postAnswer(socket, action.data)
+        break
+      case 'post/question':
+        console.log(`User with socket id: ${socket.id} is posting a question`)
+        questionHandler.insertQuestion(socket, action.data)
+        break
+      case 'get/question':
+        console.log(`User with socket id: ${socket.id} is requesting question with id ${action.data}`)
+        questionHandler.selectQuestion(socket, action.data)
         break
       default:
         break
