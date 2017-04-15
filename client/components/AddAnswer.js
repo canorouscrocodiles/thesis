@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import axios from 'axios'
+import { postQuestionAnswer } from '../actions/sockets/answer'
 
 class AddAnswer extends Component {
   constructor (props) {
@@ -32,18 +32,9 @@ class AddAnswer extends Component {
 
     // Check to make sure we have all the necessary data points to successfully insert record
     if (data.user_id && data.message && data.question_id) {
-      // If we have all the data
-      axios.post('/api/answers', data)
-      .then(res => {
-        console.log('Success posting answer:', res)
-        // Upon successful POST, reset both inputs
-        this.resetValues()
-      })
-      .catch(error => {
-        // Else, throw error
-        console.log('Error posting answer:', error)
-        throw error
-      })
+      // If we have all the data call action
+      this.props.postQuestionAnswer(data)
+      this.resetValues()
     } else {
       console.log('Missing some info')
     }
@@ -63,4 +54,10 @@ const mapStateToProps = (state) => {
   return { user: state.user }
 }
 
-export default connect(mapStateToProps)(AddAnswer)
+const mapDispatchToProps = (dispatch) => {
+  return {
+    postQuestionAnswer: (data) => dispatch(postQuestionAnswer(data))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddAnswer)
