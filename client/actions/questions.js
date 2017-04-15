@@ -7,7 +7,7 @@ export const SET_QUESTIONS = 'SET_QUESTIONS'
 export const SELECT_SINGLE_QUESTION = 'SELECT_SINGLE_QUESTION'
 export const SINGLE_QUESTION_RECEIVED = 'SINGLE_QUESTION_RECEIVED'
 
-const signalQuestionsRequest = () => ({ type: QUESTIONS_REQUEST_SENT })
+export const signalQuestionsRequest = () => ({ type: QUESTIONS_REQUEST_SENT })
 const setQuestions = questions => ({ type: QUESTIONS_REQUEST_RECEIVED, data: questions })
 const setSingleQuestion = question => ({ type: SINGLE_QUESTION_RECEIVED, data: question })
 const signalRequestError = (error) => ({ type: QUESTIONS_REQUEST_ERROR, data: error })
