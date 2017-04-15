@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { selectSingleQuestion, fetchSingleQuestion } from '../actions/questions'
-import { enterRoom } from '../actions/sockets/questions'
+import { enterRoom, leaveRoom } from '../actions/sockets/questions'
 
 class MainQuestion extends Component {
   componentWillMount () {
@@ -12,6 +12,10 @@ class MainQuestion extends Component {
     } else {
       this.props.selectSingleQuestion(id)
     }
+  }
+
+  componentWillUnmount () {
+    this.props.leaveRoom(this.props.id)
   }
 
   renderLoader () {
@@ -37,7 +41,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     selectSingleQuestion: (id) => dispatch(selectSingleQuestion(id)),
     fetchSingleQuestion: (id) => dispatch(fetchSingleQuestion(id)),
-    enterRoom: (id) => dispatch(enterRoom(id))
+    enterRoom: (id) => dispatch(enterRoom(id)),
+    leaveRoom: (id) => dispatch(leaveRoom(id))
   }
 }
 

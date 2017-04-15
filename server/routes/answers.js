@@ -12,11 +12,8 @@ const getAnswers = (req, res) => {
 
 const getQuestionAnswers = (req, res) => {
   const id = req.params.id
-  console.log('Inside getQuestionAnswers')
   Answers.selectQuestionAnswers(id)
     .then(answers => {
-      console.log('ID', id)
-      console.log('Answers from DB', answers)
       res.status(200).send(answers)
     })
     .catch(error => {
