@@ -1,6 +1,5 @@
 var path = require('path');
 var webpack = require('webpack');
-var ENV = process.env.ENV
 
 module.exports = {
   entry: "./client/index.js",
@@ -20,5 +19,10 @@ module.exports = {
         }
       }
     ]
-  }
+  },
+  plugins: [
+    new webpack.EnvironmentPlugin({
+      NODE_ENV: 'development'
+    })
+  ]
 };

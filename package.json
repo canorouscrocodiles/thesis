@@ -25,11 +25,11 @@
     ]
   },
   "scripts": {
-    "start": "ENV=production node server/index.js",
-    "dev-client": "ENV=development webpack -d --watch",
-    "dev-server": "ENV=development nodemon server/index.js",
-    "test": "ENV=test jest --runInBand --forceExit",
-    "heroku-postbuild": "ENV=production webpack -d"
+    "start": "NODE_ENV=production node server/index.js",
+    "dev-client": "webpack -d --watch",
+    "dev-server": "nodemon server/index.js",
+    "test": "NODE_ENV=test jest --runInBand --forceExit",
+    "heroku-postbuild": "NODE_ENV=production webpack -d"
   },
   "dependencies": {
     "axios": "^0.15.3",
@@ -42,6 +42,7 @@
     "babel-register": "^6.24.1",
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.1",
+    "dotenv": "^4.0.0",
     "express": "^4.15.2",
     "express-jwt": "^5.1.0",
     "jsonwebtoken": "^7.3.0",
