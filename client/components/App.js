@@ -12,12 +12,26 @@ class App extends Component {
     super(props)
     this.props.testSocketPing()
   }
+
   componentWillMount () {
     navigator.geolocation.getCurrentPosition(coords => {
       this.props.fetchingLocationName({lat: coords.coords.latitude, lng: coords.coords.longitude})
     }, error => {
       this.props.fetchLocationError(error)
     })
+
+    this.parseToken()
+  }
+
+  parseToken () {
+    // Split the window hash query and take the token only
+    let hash = window.location.hash
+    let token = hash.split('=')[1]
+    console.log('TOKEN: ', token)
+
+    // Check logic here
+    window.localStorage.onPointJWT = token
+    window.location.hash = ''
   }
 
   render () {
@@ -25,6 +39,7 @@ class App extends Component {
       <div>
         <h2>OnPoint 👇</h2>
         <Menu />
+        <a href='/auth/facebook'>Login with Facebook</a>
         <GMap />
         <CurrentLocation />
         <PostList />

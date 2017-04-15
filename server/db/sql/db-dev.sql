@@ -4,9 +4,9 @@ CREATE DATABASE thesis_development;
 \c thesis_development;
 
 CREATE TABLE IF NOT EXISTS users (
-  id SERIAL PRIMARY KEY,
+  id BIGINT PRIMARY KEY,
   created_timestamp TIMESTAMP DEFAULT now() NOT NULL,
-  username VARCHAR (50) NOT NULL UNIQUE,
+  username VARCHAR (50) NOT NULL,
   email VARCHAR (50) NOT NULL,
   img_url VARCHAR (200),
   bio VARCHAR (250)
@@ -49,18 +49,18 @@ CREATE TABLE IF NOT EXISTS categories (
   name VARCHAR(24) NOT NULL
 );
 
-INSERT INTO users (username, email, img_url, bio)
-  VALUES  ('JohnSmith', 'js@example.com', 'www.example.com/avatar.png',
+INSERT INTO users (id, username, email, img_url, bio)
+  VALUES  (1, 'JohnSmith', 'js@example.com', 'www.example.com/avatar.png',
           'One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could'),
-          ('CraigRodrigues', 'craig@craigrodrigues.com', 'https://api.adorable.io/avatars/151/abott@adorable.png', 'One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could se'),
-          ('JongKim', 'Jong@Kim.com', 'https://api.adorable.io/avatars/151/abott@adorable.png', 'One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could se'),
-          ('KeithAlpichi', 'Keith@Alpichi.com', 'https://api.adorable.io/avatars/151/abott@adorable.png', 'One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could se'),
-          ('JohnDoe', 'js@example.com', 'https://api.adorable.io/avatars/151/abott@adorable.png', 'One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could se'),
-          ('JoeSchmoe', 'hack@reactor.com', 'https://api.adorable.io/avatars/151/abott@adorable.png', 'One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could se'),
-          ('HackReactor', 'Reactor@Hack.com', 'https://api.adorable.io/avatars/151/abott@adorable.png', 'One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could se'),
-          ('WaterBottle', 'Water@bottle.com', 'https://api.adorable.io/avatars/151/abott@adorable.png', 'One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could se'),
-          ('ColdBrew', 'Iluv@coffee.com', 'https://api.adorable.io/avatars/151/abott@adorable.png', 'One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could se'),
-          ('HydroFlask', 'hydro@flask.com', 'https://api.adorable.io/avatars/151/abott@adorable.png', 'One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could se');
+          (2, 'CraigRodrigues', 'craig@craigrodrigues.com', 'https://api.adorable.io/avatars/151/abott@adorable.png', 'One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could se'),
+          (3, 'JongKim', 'Jong@Kim.com', 'https://api.adorable.io/avatars/151/abott@adorable.png', 'One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could se'),
+          (4, 'KeithAlpichi', 'Keith@Alpichi.com', 'https://api.adorable.io/avatars/151/abott@adorable.png', 'One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could se'),
+          (5, 'JohnDoe', 'js@example.com', 'https://api.adorable.io/avatars/151/abott@adorable.png', 'One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could se'),
+          (6, 'JoeSchmoe', 'hack@reactor.com', 'https://api.adorable.io/avatars/151/abott@adorable.png', 'One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could se'),
+          (7, 'HackReactor', 'Reactor@Hack.com', 'https://api.adorable.io/avatars/151/abott@adorable.png', 'One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could se'),
+          (8, 'WaterBottle', 'Water@bottle.com', 'https://api.adorable.io/avatars/151/abott@adorable.png', 'One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could se'),
+          (9, 'ColdBrew', 'Iluv@coffee.com', 'https://api.adorable.io/avatars/151/abott@adorable.png', 'One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could se'),
+          (10, 'HydroFlask', 'hydro@flask.com', 'https://api.adorable.io/avatars/151/abott@adorable.png', 'One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could se');
 
 INSERT INTO questions (user_id, message, coordinates, location, category_id, active)
   VALUES
