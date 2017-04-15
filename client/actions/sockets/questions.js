@@ -1,5 +1,9 @@
 export const ENTER_QUESTION_ROOM_REQUEST = 'enter/'
 export const ENTER_QUESTION_ROOM_SUCCESS = 'ENTER_QUESTION_ROOM_SUCCESS'
 export const ENTER_QUESTION_ROOM_FAILED = 'ENTER_QUESTION_ROOM_FAILED'
+export const LEAVE_QUESTION_ROOM_REQUEST = 'leave/'
+export const LEAVE_QUESTION_ROOM_SUCCESS = 'LEAVE_QUESTION_ROOM_SUCCESS'
+export const LEAVE_QUESTION_ROOM_FAILED = 'LEAVE_QUESTION_ROOM_FAILED'
 
 export const enterRoom = (id) => ({ type: ENTER_QUESTION_ROOM_REQUEST, data: id })
+export const leaveRoom = (id) => ({ type: LEAVE_QUESTION_ROOM_REQUEST, data: id })
