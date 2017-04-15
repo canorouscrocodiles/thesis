@@ -5,7 +5,7 @@ import { createLogger } from 'redux-logger'
 import rootReducer from './reducers/index'
 import reduxSocket from 'redux-socket.io'
 
-const socket = io('http://localhost:8080')
+const socket = io('/')
 const pessimisticExecute = (action, emit, next, dispatch) => {
   emit('action', action)
 }

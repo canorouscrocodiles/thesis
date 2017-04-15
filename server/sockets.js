@@ -1,4 +1,5 @@
 // const questionHandler = require('../sockets/questions')
+const answerHandler = require('./sockets/answers')
 const socketTestActions = require('../client/actions/sockets/testPing')
 // const socketActions = require('../client/actions/sockets')
 const allClients = {}
@@ -31,6 +32,10 @@ module.exports = socket => {
       case 'leave/':
         console.log(`User with socket id: ${socket.id} is leaving room with id ${action.data}`)
         socket.leave(action.data)
+        break
+      case 'post/ANSWER_TO_QUESTION':
+        console.log(`User with socket id: ${socket.id} is posting answer ${action.data}`)
+        answerHandler.postAnswer(socket, action.data)
         break
       default:
         break
