@@ -1,6 +1,6 @@
 import {
   QUESTIONS_REQUEST_SENT, QUESTIONS_REQUEST_RECEIVED,
-  QUESTIONS_REQUEST_ERROR, SELECT_SINGLE_QUESTION, SINGLE_QUESTION_RECEIVED,
+  QUESTIONS_REQUEST_ERROR, SELECT_SINGLE_QUESTION, SINGLE_QUESTION_RECEIVED
 } from '../actions/questions'
 import { POST_QUESTION_SUCCESS, GET_QUESTION_SUCCESS } from '../actions/sockets/questions'
 const initialState = {data: [], selectedQuestion: {}, fetching: false, error: null}

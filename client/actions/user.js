@@ -11,7 +11,7 @@ const fetchingUser = () => {
   }
 }
 
-const setUser = (user) => {
+export const setUser = (user) => {
   return {
     type: SET_USER,
     data: user

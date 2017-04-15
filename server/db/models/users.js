@@ -2,8 +2,6 @@ const db = require('../index')
 
 const selectUser = (id) => db.oneOrNone('SELECT * from users WHERE id = $1', [id])
 
-// const insertUser = ({ username, email, img_url, bio }) => db.oneOrNone('INSERT INTO users (username, email, img_url, bio) VALUES ($1, $2, $3, $4)', [username, email, img_url, bio])
-
 const insertUser = ({ id, username, email, img_url, bio }) => db.oneOrNone(
   `INSERT INTO users (id, username, email, img_url, bio)
     VALUES ($1, $2, $3, $4, $5)
@@ -14,9 +12,12 @@ const updateUser = ({ id, username, email, img_url, bio }) => db.none('UPDATE us
 
 const deleteUser = (id) => db.none('DELETE FROM users WHERE id = $1', [id])
 
+const verifyUser = (id) => db.query(`SELECT EXISTS(SELECT * FROM users WHERE id=${id})`)
+
 module.exports = {
   selectUser: selectUser,
   insertUser: insertUser,
   updateUser: updateUser,
-  deleteUser: deleteUser
+  deleteUser: deleteUser,
+  verifyUser: verifyUser
 }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import cookie from 'react-cookie'
+import { setUser } from '../actions/user'
 import { fetchingLocationName, fetchLocationError } from '../actions/location'
 import { fetchQuestions } from '../actions/questions'
 import GMap from './GMap'
@@ -18,7 +19,7 @@ class App extends Component {
   componentWillMount () {
     this.getCurrentPosition()
     this.removeLocationHash()
-    this.setTokenFromCookie()
+    this.setUsernameFromCookie()
   }
 
   getCurrentPosition () {
@@ -37,25 +38,19 @@ class App extends Component {
     }
   }
 
-  setTokenFromCookie () {
-    // Grab token from cookie
-    let token = cookie.select(/(onpoint-bearer)/g)['onpoint-bearer']
-
-    // Set token in local storage if it exists
-    if (token) {
-      window.localStorage.onPointJWT = token
+  setUsernameFromCookie () {
+    let username = cookie.select(/(onpoint-username)/g)['onpoint-username']
+    console.log('User :', username)
+    if (username) {
+      this.props.setUser({ username })
     }
-
-    // Clear the cookie for the future
-    cookie.remove('onpoint-bearer')
   }
 
   render () {
     return (
       <div>
         <h2>OnPoint 👇</h2>
-        <Menu />
-        <a href='/auth/facebook'>Login with Facebook</a>
+        <Menu username={this.props.user.username} />
         <GMap />
         <CurrentLocation />
         <PostList />
@@ -72,6 +67,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    setUser: user => dispatch(setUser(user)),
     fetchingLocationName: coords => dispatch(fetchingLocationName(coords)),
     fetchLocationError: error => dispatch(fetchLocationError(error)),
     testSocketPing: () => dispatch(testSocketPing()),
