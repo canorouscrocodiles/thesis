@@ -1,6 +1,4 @@
 const Questions = require('../db/models/questions')
-const LocationUtils = require('../utils')
-console.log(LocationUtils)
 
 const getQuestions = (req, res) => {
   Questions.selectQuestions(req.body)
