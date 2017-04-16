@@ -111,7 +111,11 @@ class GMap extends Component {
 
     // Loop through all locations
     locations.forEach((location) => {
-      let coordinates = JSON.parse(location.coordinates)
+      let geojson = JSON.parse(location.st_asgeojson)
+      let coordinates = {
+        lng: geojson.coordinates[0],
+        lat: geojson.coordinates[1]
+      }
       // Create the marker
       marker = this.createMarker(map, coordinates, null, location.content)
       // Push the marker into markers for later referencing
@@ -132,7 +136,14 @@ class GMap extends Component {
   resetView (map, positions) {
     // Create a new bounds object
     let bounds = new window.google.maps.LatLngBounds()
-    positions.forEach(position => bounds.extend(JSON.parse(position.coordinates)))
+    positions.forEach(position => {
+      let geojson = JSON.parse(position.st_asgeojson)
+      let coordinates = {
+        lng: geojson.coordinates[0],
+        lat: geojson.coordinates[1]
+      }
+      bounds.extend(coordinates)
+    })
     map.fitBounds(bounds)
   }
 

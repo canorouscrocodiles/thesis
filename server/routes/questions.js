@@ -1,9 +1,7 @@
 const Questions = require('../db/models/questions')
-const LocationUtils = require('../utils')
-console.log(LocationUtils)
 
 const getQuestions = (req, res) => {
-  Questions.selectQuestions()
+  Questions.selectQuestions(req.body)
     .then(questions => res.status(200).send(questions))
     .catch(error => {
       console.log(`Error: ${error}`)

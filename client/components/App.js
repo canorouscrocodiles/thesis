@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import cookie from 'react-cookie'
 import { fetchingLocationName, fetchLocationError } from '../actions/location'
+import { fetchQuestions } from '../actions/questions'
 import GMap from './GMap'
 import CurrentLocation from './CurrentLocation'
 import Menu from './Menu'
@@ -23,6 +24,7 @@ class App extends Component {
   getCurrentPosition () {
     navigator.geolocation.getCurrentPosition(coords => {
       this.props.fetchingLocationName({lat: coords.coords.latitude, lng: coords.coords.longitude})
+      this.props.fetchQuestions({lat: coords.coords.latitude, lng: coords.coords.longitude})
     }, error => {
       this.props.fetchLocationError(error)
     })
@@ -72,7 +74,8 @@ const mapDispatchToProps = dispatch => {
   return {
     fetchingLocationName: coords => dispatch(fetchingLocationName(coords)),
     fetchLocationError: error => dispatch(fetchLocationError(error)),
-    testSocketPing: () => dispatch(testSocketPing())
+    testSocketPing: () => dispatch(testSocketPing()),
+    fetchQuestions: location => dispatch(fetchQuestions(location))
   }
 }
 
