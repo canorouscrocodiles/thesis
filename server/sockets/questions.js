@@ -30,9 +30,8 @@ const selectQuestion = (socket, action) => {
 
 const insertQuestion = (socket, action) => {
   // needed to stringify the object so it can be inserted into the DB as a string
-  action.coordinates = JSON.stringify(action.coordinates)
   Questions.insertQuestion(action)
-    .then(() => Questions.selectQuestions())
+    .then(() => Questions.selectQuestions(action.coordinates))
     .then((questions) => {
       io.emit('action', { type: POST_QUESTION_SUCCESS, data: questions })
       // TODO: emit question to all users within radius not all users as done above

@@ -44,7 +44,7 @@ class AddAnswer extends Component {
     return (
       <div>
         <input type='text' value={this.state.answer} onChange={this.handleAnswerChange} name='answer' placeholder='Add an answer...' />
-        <span onClick={this.submitAnswer}>Respond!</span>
+        <span className="button" onClick={this.submitAnswer}>Respond!</span>
       </div>
     )
   }

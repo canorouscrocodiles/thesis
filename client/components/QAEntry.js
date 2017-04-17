@@ -1,7 +1,7 @@
 import React from 'react'
 
 export default (props) => (
-  <div>
-    <p>{props.answer.message}</p>
+  <div className="list-entry">
+    <p className="post-title">{props.answer.message}</p>
   </div>
 )

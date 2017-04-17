@@ -60,13 +60,13 @@ class AskQuestion extends Component {
 
   render () {
     return (
-      <div>
-        <input type='text' value={this.state.question} onChange={this.handleQuestionChange} name='question' placeholder='Ask a question...' />
+      <li className="nav-link-right">
+        <input type='text' size="100" value={this.state.question} onChange={this.handleQuestionChange} name='question' placeholder='Ask a question...' />
         <select value={this.state.category} onChange={this.handleCategoryChange}>
           {this.state.categories.map((category, id) => <option key={id} value={id + 1}>{category}</option>)}
         </select>
-        <span onClick={this.submitQuestion}>Ask</span>
-      </div>
+        <span className="button" onClick={this.submitQuestion}>Ask</span>
+      </li>
     )
   }
 }
