@@ -13,7 +13,7 @@ const SOCKET_GET_QUESTION = 'get/question'
 
 export const enterRoom = (id) => ({ type: ENTER_QUESTION_ROOM_REQUEST, data: id })
 export const leaveRoom = (id) => ({ type: LEAVE_QUESTION_ROOM_REQUEST, data: id })
-const socketPostQuestion = (data) => ({ type: POST_QUESTION_REQUEST, data: data})
+const socketPostQuestion = (data) => ({ type: POST_QUESTION_REQUEST, data: data })
 const sendSocketFetchQuestion = (id) => ({ type: SOCKET_GET_QUESTION, data: id })
 
 export const postQuestion = data => {

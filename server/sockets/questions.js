@@ -29,7 +29,6 @@ const selectQuestion = (socket, action) => {
 }
 
 const insertQuestion = (socket, action) => {
-  action.coordinates = JSON.stringify(action.coordinates) // needed to stringify the object so it can be inserted into the DB as a string
   Questions.insertQuestion(action)
   .then(() => Questions.selectQuestions())
   .then((questions) => {
@@ -51,7 +50,7 @@ const updateQuestion = (socket, action) => {
 module.exports = {
   enterRoom: enterRoom,
   leaveRoom: leaveRoom,
-  selectQuestion, selectQuestion,
+  selectQuestion: selectQuestion,
   insertQuestion: insertQuestion,
   updateQuestion: updateQuestion
 }

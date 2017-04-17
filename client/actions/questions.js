@@ -13,11 +13,10 @@ const setSingleQuestion = question => ({ type: SINGLE_QUESTION_RECEIVED, data: q
 const signalRequestError = (error) => ({ type: QUESTIONS_REQUEST_ERROR, data: error })
 export const selectSingleQuestion = (id) => ({ type: SELECT_SINGLE_QUESTION, data: id })
 
-export const fetchQuestions = () => {
+export const fetchQuestions = (location) => {
   return dispatch => {
     dispatch(signalQuestionsRequest())
-
-    axios.get('/api/questions')
+    axios.post('/api/questions', location)
     .then((questions) => dispatch(setQuestions(questions.data)))
     .catch((error) => dispatch(signalRequestError(error)))
   }

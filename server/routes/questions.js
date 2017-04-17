@@ -1,7 +1,7 @@
 const Questions = require('../db/models/questions')
 
 const getQuestions = (req, res) => {
-  Questions.selectQuestions()
+  Questions.selectQuestions(req.body)
     .then(questions => res.status(200).send(questions))
     .catch(error => {
       console.log(`Error: ${error}`)

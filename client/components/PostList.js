@@ -1,13 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { fetchQuestions } from '../actions/questions'
 import ListEntry from './ListEntry'
 
 class PostList extends Component {
-  componentWillMount () {
-    this.props.fetchQuestions()
-  }
-
   render () {
     return (
       <div>
@@ -24,7 +19,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchQuestions: () => dispatch(fetchQuestions())
   }
 }
 

@@ -3,6 +3,8 @@ CREATE DATABASE thesis_test;
 
 \c thesis_test;
 
+CREATE EXTENSION postgis;
+
 CREATE TABLE IF NOT EXISTS users (
   id BIGINT PRIMARY KEY,
   created_timestamp TIMESTAMP DEFAULT now() NOT NULL,
@@ -18,7 +20,7 @@ CREATE TABLE IF NOT EXISTS questions (
   created_timestamp TIMESTAMP DEFAULT now() NOT NULL,
   updated_timestamp TIMESTAMP DEFAULT now() NOT NULL,
   message VARCHAR (300) NOT NULL,
-  coordinates VARCHAR (100) NOT NULL,
+  coordinates geography(POINT,4326) NOT NULL,
   location VARCHAR (100) NOT NULL,
   category_id INTEGER NOT NULL,
   vote_count INTEGER DEFAULT 0,
@@ -64,26 +66,26 @@ INSERT INTO users (id, username, email, img_url, bio)
 
 INSERT INTO questions (user_id, message, coordinates, location, category_id, active)
   VALUES
-  (1, 'Is Chipotle still open?', '{"lat": 37.783494, "lng": -122.407433}', '139 5th St', 1, 'true'),
-  (2, 'Can someone describe the "Tenderloin" in San Francisco?', '{"lat": 37.784167, "lng": -122.413696}', '364 Eddy St', 19, 'true'),
-  (3, 'Has anyone seen my son?! He is wearing a blue hat and a red shirt!', '{"lat": 37.769706, "lng": -122.462644}', 'Golden Gate Park', 15, 'true'),
-  (4, 'How old is Kalmanovitz Hall?', '{"lat": 37.775571, "lng": -122.450901}', 'Kalmanovitz Hall', 9, 'true'),
-  (5, 'Do people really eat birds?', '{"lat": 37.795055, "lng": -122.465570}', 'Piper Loop', 7, 'true'),
-  (6, 'Does Scotland have the internet?', '{"lat": 37.754576, "lng": -122.417306}', '739 Capp St', 11, 'true'),
-  (7, 'What part of the zoo MUST I see today?', '{"lat": 37.732753, "lng": -122.500183}', '1 Zoo Rd', 4, 'true'),
-  (8, 'How do I get out of here?', '{"lat": 37.826504, "lng": -122.422676}', 'Alcatraz Island', 15, 'true'),
-  (9, 'Did anyone just hear that explosion?!? OMG!', '{"lat": 37.795103, "lng": -122.402763}', 'Transamerica Pyramid', 15, 'true'),
-  (10, 'Does anyone know why the traffic is at a standstill?!', '{"lat": 37.798037, "lng": -122.378160}', 'San Francisco - Oakland Bay Bridge', 6, 'true'),
-  (1, 'Why is there so much traffic??', '{"lat": 37.799961, "lng": -122.376003}', 'San Francisco - Oakland Bay Bridge', 6, 'true'),
-  (2, 'What floor is the Hack Reactor algorithms meetup on?', '{"lat": 37.783856, "lng": -122.408794}','944 Market St', 11, 'true'),
-  (3, 'What is the best coffee shop around these parts?', '{"lat": 37.783856, "lng": -122.408794}', 'Powell St Station', 14, 'true'),
-  (4, 'Chipotle still got dat guac?', '{"lat": 37.782448, "lng": -122.409532}', '989 Market St', 1, 'true'),
-  (5, 'Does anyone have fingernail clippers? I’m turning into a neanderthal over here!', '{"lat": 37.784590, "lng": -122.409115}', '55 Cyril Magnin St', 8, 'true'),
-  (6, 'What movie theater is the best around here? I want to see that new Fast and Furious movie!', '{"lat": 37.783352, "lng": -122.407277}', '60 5th St', 16, 'true'),
-  (7, 'How do you know youre you?', '{"lat": 37.739945, "lng": -122.420177}', 'Cortland Ave & Elsie St', 18, 'true'),
-  (8, 'Did they film that movie "The Rock" here?', '{"lat": 37.825988, "lng": -122.421729}', 'Alcatraz Island', 16, 'true'),
-  (9, 'I only have a couple hours here at the museum. What floors and exhibits must I see while I am here?', '{"lat": 37.785656, "lng": -122.401243}', '143 3rd St', 4, 'true'),
-  (10, 'Where the heck do I park for MoMA?', '{"lat": 37.785823, "lng": -122.400728}', '151 3rd St', 5, 'true');
+  (1, 'Is Chipotle still open?', ST_SetSRID(ST_MakePoint(-122.407433, 37.783494), 4326), '139 5th St', 1, 'true'),
+  (2, 'Can someone describe the "Tenderloin" in San Francisco?', ST_SetSRID(ST_MakePoint(-122.413696, 37.784167), 4326), '364 Eddy St', 19, 'true'),
+  (3, 'Has anyone seen my son?! He is wearing a blue hat and a red shirt!', ST_SetSRID(ST_MakePoint(-122.462644, 37.769706), 4326), 'Golden Gate Park', 15, 'true'),
+  (4, 'How old is Kalmanovitz Hall?', ST_SetSRID(ST_MakePoint(-122.450901, 37.775571), 4326), 'Kalmanovitz Hall', 9, 'true'),
+  (5, 'Do people really eat birds?', ST_SetSRID(ST_MakePoint(-122.465570, 37.795055), 4326), 'Piper Loop', 7, 'true'),
+  (6, 'Does Scotland have the internet?', ST_SetSRID(ST_MakePoint(-122.417306, 37.754576), 4326), '739 Capp St', 11, 'true'),
+  (7, 'What part of the zoo MUST I see today?', ST_SetSRID(ST_MakePoint(-122.500183, 37.732753), 4326), '1 Zoo Rd', 4, 'true'),
+  (8, 'How do I get out of here?', ST_SetSRID(ST_MakePoint(-122.422676, 37.826504), 4326), 'Alcatraz Island', 15, 'true'),
+  (9, 'Did anyone just hear that explosion?!? OMG!', ST_SetSRID(ST_MakePoint(-122.402763, 37.795103), 4326), 'Transamerica Pyramid', 15, 'true'),
+  (10, 'Does anyone know why the traffic is at a standstill?!', ST_SetSRID(ST_MakePoint(-122.378160, 37.798037), 4326), 'San Francisco - Oakland Bay Bridge', 6, 'true'),
+  (1, 'Why is there so much traffic??', ST_SetSRID(ST_MakePoint(-122.376003, 37.799961), 4326), 'San Francisco - Oakland Bay Bridge', 6, 'true'),
+  (2, 'What floor is the Hack Reactor algorithms meetup on?', ST_SetSRID(ST_MakePoint(-122.408794, 37.783856), 4326), '944 Market St', 11, 'true'),
+  (3, 'What is the best coffee shop around these parts?', ST_SetSRID(ST_MakePoint(-122.408794, 37.783856), 4326), 'Powell St Station', 14, 'true'),
+  (4, 'Chipotle still got dat guac?', ST_SetSRID(ST_MakePoint(-122.409532, 37.782448), 4326), '989 Market St', 1, 'true'),
+  (5, 'Does anyone have fingernail clippers? I’m turning into a neanderthal over here!', ST_SetSRID(ST_MakePoint(-122.409115, 37.784590), 4326), '55 Cyril Magnin St', 8, 'true'),
+  (6, 'What movie theater is the best around here? I want to see that new Fast and Furious movie!', ST_SetSRID(ST_MakePoint(-122.407277, 37.783352), 4326), '60 5th St', 16, 'true'),
+  (7, 'How do you know youre you?', ST_SetSRID(ST_MakePoint(-122.420177, 37.739945), 4326), 'Cortland Ave & Elsie St', 18, 'true'),
+  (8, 'Did they film that movie "The Rock" here?', ST_SetSRID(ST_MakePoint(-122.421729, 37.825988), 4326), 'Alcatraz Island', 16, 'true'),
+  (9, 'I only have a couple hours here at the museum. What floors and exhibits must I see while I am here?', ST_SetSRID(ST_MakePoint(-122.401243, 37.785656), 4326), '143 3rd St', 4, 'true'),
+  (10, 'Where the heck do I park for MoMA?', ST_SetSRID(ST_MakePoint(-122.400728, 37.785823), 4326), '151 3rd St', 5, 'true');
 
 INSERT INTO answers (user_id, question_id, message)
   VALUES
