@@ -86,6 +86,10 @@ module.exports = socket => {
         console.log(`User with socket id: ${socket.id} is requesting question with id ${action.data}`)
         questionHandler.selectQuestion(socket, action.data)
         break
+      case 'post/location':
+        console.log(`Users updated location is ${JSON.stringify(action.data)}`);
+        // TODO: Place/update action.data (coords) into locations table
+        break
       default:
         break
         // socket.emit('action', { type: socketActions.SERVER_TO_CLIENT_FAILURE, error: 'No socket route match'})

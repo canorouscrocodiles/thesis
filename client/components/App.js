@@ -8,27 +8,43 @@ import GMap from './GMap'
 import Menu from './Menu'
 import PostList from './PostList'
 import { testSocketPing } from '../actions/sockets/testPing'
+import { sendLocationToServer } from '../actions/sockets/location'
+
+const watchOptions = {
+  enableHighAccuracy: false,
+  timeout: 10000,
+  maximumAge: 0
+}
 
 class App extends Component {
   constructor (props) {
     super(props)
     this.props.testSocketPing()
+    this.watchPosition = this.watchPosition.bind(this)
+    this.watchLocationSuccess = this.watchLocationSuccess.bind(this)
+    this.watchLocationError = this.watchLocationError.bind(this)
   }
 
   componentWillMount () {
-    this.getCurrentPosition()
+    this.watchPosition()
     this.removeLocationHash()
     this.setUsernameFromCookie()
   }
 
-  getCurrentPosition () {
-    navigator.geolocation.getCurrentPosition(coords => {
-      this.props.fetchingLocationName({lat: coords.coords.latitude, lng: coords.coords.longitude})
-      this.props.fetchQuestions({lat: coords.coords.latitude, lng: coords.coords.longitude})
-    }, error => {
-      this.props.fetchLocationError(error)
-    })
+  watchPosition () {
+    navigator.geolocation.watchPosition(this.watchLocationSuccess, this.watchLocationError, watchOptions)
   }
+
+  watchLocationError (error) {
+    this.props.fetchLocationError(error)
+  }
+
+  watchLocationSuccess (coords) {
+    this.props.sendLocationToServer({lat: coords.coords.latitude, lng: coords.coords.longitude})
+    this.props.fetchingLocationName({lat: coords.coords.latitude, lng: coords.coords.longitude})
+    this.props.fetchQuestions({lat: coords.coords.latitude, lng: coords.coords.longitude})
+  }
+
 
   // To remove FB security hash on auth redirect
   removeLocationHash () {
@@ -68,7 +84,8 @@ const mapDispatchToProps = dispatch => {
     fetchingLocationName: coords => dispatch(fetchingLocationName(coords)),
     fetchLocationError: error => dispatch(fetchLocationError(error)),
     testSocketPing: () => dispatch(testSocketPing()),
-    fetchQuestions: location => dispatch(fetchQuestions(location))
+    fetchQuestions: location => dispatch(fetchQuestions(location)),
+    sendLocationToServer: (coords) => dispatch(sendLocationToServer(coords))
   }
 }
 
