@@ -29,7 +29,6 @@ const selectQuestion = (socket, action) => {
 }
 
 const insertQuestion = (socket, action) => {
-  // needed to stringify the object so it can be inserted into the DB as a string
   Questions.insertQuestion(action)
     .then(() => Questions.selectQuestions(action.coordinates))
     .then((questions) => {
