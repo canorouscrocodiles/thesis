@@ -1,3 +1,4 @@
+import cookie from 'react-cookie'
 import { signalQuestionsRequest } from '../questions'
 
 export const ENTER_QUESTION_ROOM_REQUEST = 'enter/'
@@ -17,6 +18,11 @@ const socketPostQuestion = (data) => ({ type: POST_QUESTION_REQUEST, data: data 
 const sendSocketFetchQuestion = (id) => ({ type: SOCKET_GET_QUESTION, data: id })
 
 export const postQuestion = data => {
+  // Extend data with JWT
+  let token = cookie.select(/(onpoint-bearer)/g)['onpoint-bearer']
+  Object.assign(data, {token})
+
+  console.log(`Dispatching with token ${token}`)
   return dispatch => {
     dispatch(socketPostQuestion(data))
   }

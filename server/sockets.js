@@ -1,9 +1,22 @@
-const questionHandler = require('./sockets/questions')
 const jwt = require('jsonwebtoken')
+const { verifyUser } = require('./db/models/users')
+const questionHandler = require('./sockets/questions')
 const answerHandler = require('./sockets/answers')
 const socketTestActions = require('../client/actions/sockets/testPing')
 
 const allClients = {}
+
+const verifyJWT = token => {
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(decoded)
+      }
+    })
+  })
+}
 
 module.exports = socket => {
   console.log(`Client connected with id: ${socket.id}`)
@@ -19,6 +32,7 @@ module.exports = socket => {
     switch (action.type) {
       case 'get/helloworld':
         socket.emit('action', { type: socketTestActions.SERVER_TO_CLIENT_TEST_PING, data: 'Client to Server and server to client ping success!' })
+
         break
       case 'enter/':
         console.log(`User with socket id: ${socket.id} is entering room with id ${action.data}`)
@@ -28,17 +42,45 @@ module.exports = socket => {
       case 'leave/':
         console.log(`User with socket id: ${socket.id} is leaving room with id ${action.data}`)
         socket.leave(action.data)
+
         break
       case 'post/ANSWER_TO_QUESTION':
         console.log(`User with socket id: ${socket.id} is posting answer ${action.data}`)
-        // Check jwt here
-        // let decoded = jwt.verify(action.token, 'secret')
 
-        answerHandler.postAnswer(socket, action.data)
+        verifyJWT(action.data.token)
+          .then(({ id }) => verifyUser(id))
+          .then(data => {
+            let exists = data[0].exists
+            if (!exists) {
+              throw new Error(`Authentication Error: User doesn't exist in DB`)
+            }
+          })
+          .then(() => answerHandler.postAnswer(socket, action.data))
+          .catch(({name, message}) => {
+            console.log(`${name} - ${message}`)
+            // Emit Authentication error to client
+            socket.emit('action', { type: socketTestActions.SERVER_TO_CLIENT_TEST_PING, data: 'Authorization Error' })
+          })
+
         break
       case 'post/question':
         console.log(`User with socket id: ${socket.id} is posting a question`)
-        questionHandler.insertQuestion(socket, action.data)
+
+        verifyJWT(action.data.token)
+          .then(({ id }) => verifyUser(id))
+          .then(data => {
+            let exists = data[0].exists
+            if (!exists) {
+              throw new Error(`Authentication Error: User doesn't exist in DB`)
+            }
+          })
+          .then(() => questionHandler.insertQuestion(socket, action.data))
+          .catch(({name, message}) => {
+            console.log(`${name} - ${message}`)
+            // Emit authentication error to client
+            socket.emit('action', { type: socketTestActions.SERVER_TO_CLIENT_TEST_PING, data: 'Authorization Error' })
+          })
+
         break
       case 'get/question':
         console.log(`User with socket id: ${socket.id} is requesting question with id ${action.data}`)

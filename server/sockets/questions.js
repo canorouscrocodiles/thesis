@@ -4,7 +4,6 @@ const POST_QUESTION_SUCCESS = 'POST_QUESTION_SUCCESS'
 const POST_QUESTION_FAILURE = 'POST_QUESTION_FAILURE'
 const GET_QUESTION_SUCCESS = 'GET_QUESTION_SUCCESS'
 const GET_QUESTION_FAILURE = 'GET_QUESTION_FAILURE'
-const SET_URL = 'SET_URL'
 
 const enterRoom = (socket, action) => {
   // verify user, emit error if not valid or does not exists
@@ -19,26 +18,29 @@ const leaveRoom = (socket, action) => socket.leave(action.data.id)
 
 const selectQuestion = (socket, action) => {
   Questions.selectQuestion(action)
-  .then(question => {
-    if (Object.keys(question).length > 0) {
-      io.to(socket.id).emit('action', { type: GET_QUESTION_SUCCESS, data: question })
-    } else {
-      io.to(socket.id).emit('action', { type: GET_QUESTION_FAILURE, error: 'No question found' })
-    }
-  })
+    .then(question => {
+      if (Object.keys(question).length > 0) {
+        io.to(socket.id).emit('action', { type: GET_QUESTION_SUCCESS, data: question })
+      } else {
+        io.to(socket.id).emit('action', { type: GET_QUESTION_FAILURE, error: 'No question found' })
+      }
+    })
+    .catch((err) => console.log(err))
 }
 
 const insertQuestion = (socket, action) => {
+  // needed to stringify the object so it can be inserted into the DB as a string
+  action.coordinates = JSON.stringify(action.coordinates)
   Questions.insertQuestion(action)
-  .then(() => Questions.selectQuestions())
-  .then((questions) => {
-    io.emit('action', { type: POST_QUESTION_SUCCESS, data: questions })
-    // TODO: emit question to all users within radius not all users as done above
-  })
-  .catch((error) => {
-    console.log(`Failed to insert question and query all questions. Error: ${error}`);
-    io.emit('action', { type: POST_QUESTION_FAILURE, error: `Failed to insert question and query all questions. Error: ${error}` })
-  })
+    .then(() => Questions.selectQuestions())
+    .then((questions) => {
+      io.emit('action', { type: POST_QUESTION_SUCCESS, data: questions })
+      // TODO: emit question to all users within radius not all users as done above
+    })
+    .catch((error) => {
+      console.log(`Failed to insert question and query all questions. Error: ${error}`)
+      io.emit('action', { type: POST_QUESTION_FAILURE, error: `Failed to insert question and query all questions. Error: ${error}` })
+    })
 }
 
 const updateQuestion = (socket, action) => {

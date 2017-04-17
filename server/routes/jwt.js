@@ -2,10 +2,10 @@ const jwt = require('jsonwebtoken')
 const userDB = require('../db/models/users')
 
 const serialize = function serialize (req, res, next) {
-  let profile = req.user
+  let profile = req.user._json
   userDB.insertUser({
-    id: profile._json.id,
-    username: profile._json.first_name,
+    id: profile.id,
+    username: profile.first_name,
     email: 'email@test.com',
     img_url: 'www.test.com',
     bio: 'My bio'
@@ -17,8 +17,8 @@ const serialize = function serialize (req, res, next) {
 }
 
 const generateToken = function generateToken (req, res, next) {
-  let profile = req.user
-  jwt.sign({ id: profile._json.id, username: profile._json.first_name }, process.env.JWT_SECRET, { issuer: 'OnPoint', expiresIn: '2 days' }, function (error, token) {
+  let profile = req.user._json
+  jwt.sign({ id: profile.id, username: profile.first_name }, process.env.JWT_SECRET, { issuer: 'OnPoint', expiresIn: '90 days' }, function (error, token) {
     if (error) {
       console.log(`JWT signing error: ${error}`)
     } else {
@@ -30,7 +30,9 @@ const generateToken = function generateToken (req, res, next) {
 }
 
 const respond = function respond (req, res) {
+  let profile = req.user._json
   res.cookie('onpoint-bearer', req.token)
+  res.cookie('onpoint-username', profile.first_name)
   res.redirect('/')
 }
 
