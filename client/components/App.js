@@ -45,7 +45,6 @@ class App extends Component {
     this.props.fetchQuestions({lat: coords.coords.latitude, lng: coords.coords.longitude})
   }
 
-
   // To remove FB security hash on auth redirect
   removeLocationHash () {
     if (window.location.hash) {
