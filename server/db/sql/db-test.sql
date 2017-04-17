@@ -51,6 +51,11 @@ CREATE TABLE IF NOT EXISTS categories (
   name VARCHAR(24) NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS sockets (
+  id VARCHAR(20) PRIMARY KEY,
+  coordinates geography(POINT,4326) NOT NULL
+);
+
 INSERT INTO users (id, username, email, img_url, bio)
   VALUES  (1, 'JohnSmith', 'js@example.com', 'www.example.com/avatar.png',
           'One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could'),
