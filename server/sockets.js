@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken')
-const { secret } = require('../project.config.js')
 const { verifyUser } = require('./db/models/users')
 const questionHandler = require('./sockets/questions')
 const answerHandler = require('./sockets/answers')
@@ -9,7 +8,7 @@ const allClients = {}
 
 const verifyJWT = token => {
   return new Promise((resolve, reject) => {
-    jwt.verify(token, secret, (err, decoded) => {
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
       if (err) {
         reject(err)
       } else {

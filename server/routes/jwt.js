@@ -18,7 +18,7 @@ const serialize = function serialize (req, res, next) {
 
 const generateToken = function generateToken (req, res, next) {
   let profile = req.user._json
-  jwt.sign({ id: profile.id, username: profile.first_name }, secret, { issuer: 'OnPoint', expiresIn: '90 days' }, function (error, token) {
+  jwt.sign({ id: profile.id, username: profile.first_name }, process.env.JWT_SECRET, { issuer: 'OnPoint', expiresIn: '90 days' }, function (error, token) {
     if (error) {
       console.log(`JWT signing error: ${error}`)
     } else {
