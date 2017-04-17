@@ -8,9 +8,9 @@ import { connect } from 'react-redux'
 // zoom defines the starting zoom level
 let options = {
   center: {lng: -122.41, lat: 37.78},
-  minZoom: 5,
+  minZoom: 16,
   maxZoom: 19,
-  zoom: 11,
+  zoom: 16,
   draggable: false,
   streetViewControl: false,
   styles: [
@@ -35,6 +35,8 @@ class GMap extends Component {
     }
     this.loadMap = this.loadMap.bind(this)
     this.createMarker = this.createMarker.bind(this)
+    this.createCircle = this.createCircle.bind(this)
+    this.createUserCircle = this.createUserCircle.bind(this)
     this.createInfoWindow = this.createInfoWindow.bind(this)
     this.addPoints = this.addPoints.bind(this)
     this.deletePoints = this.deletePoints.bind(this)
@@ -54,43 +56,93 @@ class GMap extends Component {
   }
 
   // Creates markers given a map, position and icon
-  createMarker (map, pos, icon, content) {
+  createMarker (map, pos, icon, content, isUser) {
     // Create new marker
-    let marker = new window.google.maps.Marker({
+    let marker = new window.google.maps.Marker({ map: map, position: pos, icon: icon })
     // map determines which map object to set the marker on
     // position determines the latitude and longitude of marker
     // Format for pos: {lat: xx.xxxx, lng: xx.xxxx} lat and lng should be floating numbers
-      map: map, position: pos, icon: icon
-    })
 
     // If content was passed in, create an infoWindow for the marker
     if (content) {
       this.createInfoWindow(map, marker, content)
     }
 
+    if (isUser) {
+      marker.set('clickable', false)
+      this.createCircle(map, marker, 402)
+    }
+
     // Return marker object
     return marker
+  }
+
+  createCircle (map, position, radius) {
+    var circle = new window.google.maps.Circle({
+      map: map,
+      center: position,
+      radius: radius,
+      fillColor: '#429bf4',
+      fillOpacity: 1,
+      strokeColor: '#ffffff',
+      strokeOpacity: 0.2,
+      strokeWeight: 2
+    })
+    return circle
+  }
+
+  createUserCircle (map, position, radius) {
+    var innerCircle = new window.google.maps.Circle({
+      map: map,
+      center: position,
+      radius: 20,
+      fillColor: '#429bf4',
+      fillOpacity: 1,
+      strokeColor: '#ffffff',
+      strokeOpacity: 1,
+      strokeWeight: 2,
+      clickable: false
+    })
+
+    var outerCircle = new window.google.maps.Circle({
+      map: map,
+      center: position,
+      radius: radius,
+      fillColor: '#429bf4',
+      fillOpacity: 0.1,
+      strokeColor: '#429bf4',
+      strokeOpacity: 0.2,
+      strokeWeight: 2,
+      clickable: false
+    })
   }
 
   createInfoWindow (map, marker, content) {
     // Create a blank infoWindow
     let infoWindow = new window.google.maps.InfoWindow()
-
+    let innerHTML = `<h3>${content}</h3>`
     // Set an event listener to listen for a click on the marker
     window.google.maps.event.addListener(marker, 'click', ((marker, content, infoWindow) => {
       // Here we are returning a function that retains access to the associated content and marker
       // through the use of closure
       return () => {
-        // Close any open infoWindows
-        this.closeInfos()
-        // Set the infoWindow's content
-        infoWindow.setContent(content)
-        // Set the infoWindow's associated map and marker
-        infoWindow.open(map, marker)
-        // Setting lastWindow to reference the current infoWindow
-        this.setState({lastWindow: infoWindow})
+        // If the window is already open
+        if (this.state.lastWindow === infoWindow) {
+          // Just close it
+          this.closeInfos()
+        } else {
+          // Close any open infoWindows
+          this.closeInfos()
+          // Set the infoWindow's content
+          infoWindow.setContent(content)
+          // Set the infoWindow's associated map and position
+          infoWindow.setPosition(marker.center)
+          infoWindow.open(map)
+          // Set lastWindow to reference the current infoWindow
+          this.state.lastWindow = infoWindow
+        }
       }
-    })(marker, content, infoWindow)) // Here we are immediately invoking our anonymous function with the current marker, content, and infoWindow
+    })(marker, innerHTML, infoWindow)) // Here we are immediately invoking our anonymous function with the current marker, content, and infoWindow
   }
 
   closeInfos () {
@@ -101,7 +153,7 @@ class GMap extends Component {
       // Close the infoWindow
       this.state.lastWindow.close()
       // Remove the reference to the lastWindow
-      this.setState({lastWindow: null})
+      this.state.lastWindow = null
     }
   }
 
@@ -117,7 +169,8 @@ class GMap extends Component {
         lat: geojson.coordinates[1]
       }
       // Create the marker
-      marker = this.createMarker(map, coordinates, null, location.content)
+      marker = this.createCircle(map, coordinates, 10)
+      this.createInfoWindow(map, marker, location.message)
       // Push the marker into markers for later referencing
       markers.push(marker)
     })
@@ -153,9 +206,11 @@ class GMap extends Component {
 
   componentWillUpdate (nextProps, nextState) {
     if (this.state.map) {
-      this.createMarker(this.state.map, nextProps.location)
+      // this.createMarker(this.state.map, nextProps.location, null, null, true)
+      this.createUserCircle(this.state.map, nextProps.location, 402)
       this.addPoints(this.state.map, nextProps.questions.data)
-      this.resetView(this.state.map, nextProps.questions.data)
+      // this.resetView(this.state.map, nextProps.questions.data)
+      this.state.map.setCenter(nextProps.location)
     }
   }
 
