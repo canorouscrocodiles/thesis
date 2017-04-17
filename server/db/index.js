@@ -6,9 +6,9 @@ const pgp = require('pg-promise')(options)
 let dbUrl
 
 if (process.env.NODE_ENV === 'development') {
-  dbUrl = `postgres://Sent:@localhost:5432/thesis_${process.env.NODE_ENV}`
+  dbUrl = process.env.DEV_DB_URL
 } else if (process.env.NODE_ENV === 'test') {
-  dbUrl = `postgres://Sent:@localhost:5432/thesis_${process.env.NODE_ENV}`
+  dbUrl = process.env.TEST_DB_URL
 } else {
   dbUrl = process.env.DATABASE_URL
 }
