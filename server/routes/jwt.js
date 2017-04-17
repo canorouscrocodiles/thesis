@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken')
 const userDB = require('../db/models/users')
-const { secret } = require('../../project.config.js')
 
 const serialize = function serialize (req, res, next) {
   let profile = req.user
@@ -19,7 +18,7 @@ const serialize = function serialize (req, res, next) {
 
 const generateToken = function generateToken (req, res, next) {
   let profile = req.user
-  jwt.sign({ id: profile._json.id, username: profile._json.first_name }, secret, { issuer: 'OnPoint', expiresIn: '2 days' }, function (error, token) {
+  jwt.sign({ id: profile._json.id, username: profile._json.first_name }, process.env.JWT_SECRET, { issuer: 'OnPoint', expiresIn: '2 days' }, function (error, token) {
     if (error) {
       console.log(`JWT signing error: ${error}`)
     } else {

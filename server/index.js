@@ -1,6 +1,6 @@
+require('dotenv').config()
 const express = require('express')
-const port = process.env.PORT || 8080
-const { fbClientId, fbClientSecret, fbCallbackUrl } = require('../facebookSecret')
+const port = process.env.PORT
 const path = require('path')
 const bodyParser = require('body-parser')
 const router = require('./router')
@@ -17,13 +17,13 @@ module.exports.io = io
 const socket = require('./sockets')
 
 if (!module.parent) {
-  server.listen(port, () => console.log(`Listening on port: ${port}`))
+  server.listen(port, () => console.log(`Listening on port: ${port} in ${process.env.NODE_ENV} environment`))
 }
 
 let fbOptions = {
-  clientID: process.env.CLIENTID || fbClientId,
-  clientSecret: process.env.CLIENTSECRET || fbClientSecret,
-  callbackURL: process.env.HOSTNAME ? `${process.env.HOSTNAME}/auth/facebook/callback` : fbCallbackUrl,
+  clientID: process.env.CLIENT_ID,
+  clientSecret: process.env.CLIENT_SECRET,
+  callbackURL: `${process.env.HOSTNAME}/auth/facebook/callback`,
   profileFields: ['id', 'email', 'locale', 'name', 'updated_time', 'verified']
 }
 

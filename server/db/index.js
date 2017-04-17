@@ -1,6 +1,16 @@
 const promise = require('bluebird')
-const { dbHost } = require('../../project.config.js')
 const options = { promiseLib: promise }
 
 const pgp = require('pg-promise')(options)
-module.exports = pgp(dbHost)
+
+let dbUrl
+
+if (process.env.NODE_ENV === 'development') {
+  dbUrl = `postgres://root:@localhost:5432/thesis_${process.env.NODE_ENV}`
+} else if (process.env.NODE_ENV === 'test') {
+  dbUrl = `postgres://root:@localhost:5432/thesis_${process.env.NODE_ENV}`
+} else {
+  dbUrl = process.env.DATABASE_URL
+}
+
+module.exports = pgp(dbUrl)
