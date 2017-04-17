@@ -5,7 +5,6 @@ import { setUser } from '../actions/user'
 import { fetchingLocationName, fetchLocationError } from '../actions/location'
 import { fetchQuestions } from '../actions/questions'
 import GMap from './GMap'
-import CurrentLocation from './CurrentLocation'
 import Menu from './Menu'
 import PostList from './PostList'
 import { testSocketPing } from '../actions/sockets/testPing'
@@ -49,10 +48,8 @@ class App extends Component {
   render () {
     return (
       <div>
-        <h2>OnPoint 👇</h2>
         <Menu username={this.props.user.username} />
         <GMap />
-        <CurrentLocation />
         <PostList />
       </div>
     )

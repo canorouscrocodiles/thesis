@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { loggingOut } from '../actions/auth'
 import AskQuestion from './AskQuestion'
@@ -6,24 +7,24 @@ import AskQuestion from './AskQuestion'
 class Menu extends Component {
   userProfileButton () {
     return (
-      <p>Welcome {this.props.user.username}! <a onClick={this.props.loggingOut}>(Logout)</a></p>
+      <li className="nav-link-right">Welcome {this.props.user.username}! <a onClick={this.props.loggingOut}>(Logout)</a></li>
     )
   }
 
   loggedOutButton () {
     return (
-      <p><a href='/auth/facebook'>Login with Facebook</a></p>
+      <li className="nav-link-right"><a className="link button" href='/auth/facebook'>Login with Facebook</a></li>
     )
   }
 
   render () {
     return (
-      <div>
-        <p>Home</p>
-        <p>Search</p>
-        <p>Notifications</p>
-        { this.props.user ? this.userProfileButton() : this.loggedOutButton() }
-        <AskQuestion />
+      <div id="menu">
+        <ul id="nav-links">
+          <li className="nav-link-left"><Link className="link" to="/"><h2 id="title">OnPoint 👇</h2></Link></li>
+          { this.props.user ? this.userProfileButton() : this.loggedOutButton() }
+          <AskQuestion />
+        </ul>
       </div>
     )
   }

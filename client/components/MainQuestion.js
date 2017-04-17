@@ -27,9 +27,7 @@ class MainQuestion extends Component {
     const { question } = this.props
     if (!question) { return this.renderLoader() }
     return (
-      <div>
-        <p>{question.message}</p>
-      </div>
+      <h2>{question.message}</h2>
     )
   }
 }
