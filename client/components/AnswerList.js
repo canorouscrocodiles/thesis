@@ -12,9 +12,9 @@ class AnswerList extends Component {
 
   render () {
     return (
-      <div className="post-list">
+      <div className='post-list'>
         <h4>Answers</h4>
-        <AddAnswer id={this.props.id}/>
+        <AddAnswer id={this.props.id} />
         {this.props.answers.map(answer => <QAEntry key={answer.id} answer={answer} />)}
       </div>
     )
