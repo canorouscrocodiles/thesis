@@ -11,8 +11,8 @@ import { testSocketPing } from '../actions/sockets/testPing'
 import { sendLocationToServer } from '../actions/sockets/location'
 
 const watchOptions = {
-  enableHighAccuracy: false,
-  timeout: 10000,
+  enableHighAccuracy: true,
+  timeout: 60000,
   maximumAge: 0
 }
 
