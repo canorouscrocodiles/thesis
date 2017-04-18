@@ -9,11 +9,11 @@ const selectQuestionAnswers = (id) => db.manyOrNone(`
   WHERE question_id = ${id}
 `)
 
-const insertAnswer = ({ message, user_id, question_id }) => db.none(`INSERT INTO answers (message, user_id, question_id) VALUES ($$'${message}'$$, ${user_id}, ${question_id})`)
+const insertAnswer = ({ message, user_id, question_id }) => db.none(`INSERT INTO answers (message, user_id, question_id) VALUES ($$${message}$$, ${user_id}, ${question_id})`)
 
 const deleteAnswer = (id) => db.none(`DELETE FROM answers WHERE id = ${id}`)
 
-const updateAnswer = ({ message, id }) => db.none(`UPDATE answers SET message = $$'${message}'$$ WHERE id = ${id}`)
+const updateAnswer = ({ message, id }) => db.none(`UPDATE answers SET message = $$${message}$$ WHERE id = ${id}`)
 
 module.exports = {
   selectAnswers: selectAnswers,
