@@ -31,17 +31,20 @@ class GMap extends Component {
     this.state = {
       map: null,
       lastWindow: null,
-      markers: []
+      markers: [],
+      userCircle: null
     }
     this.loadMap = this.loadMap.bind(this)
     this.createMarker = this.createMarker.bind(this)
     this.createCircle = this.createCircle.bind(this)
     this.createUserCircle = this.createUserCircle.bind(this)
+    this.createOrUpdateUserCircle = this.createOrUpdateUserCircle.bind(this)
     this.createInfoWindow = this.createInfoWindow.bind(this)
     this.addPoints = this.addPoints.bind(this)
     this.deletePoints = this.deletePoints.bind(this)
     this.closeInfos = this.closeInfos.bind(this)
     this.resetView = this.resetView.bind(this)
+    this.parseGeoJSON = this.parseGeoJSON.bind(this)
   }
 
   loadMap () {
@@ -92,7 +95,7 @@ class GMap extends Component {
   }
 
   createUserCircle (map, position, radius) {
-    var innerCircle = new window.google.maps.Circle({
+    let innerCircle = new window.google.maps.Circle({
       map: map,
       center: position,
       radius: 10,
@@ -104,7 +107,7 @@ class GMap extends Component {
       clickable: false
     })
 
-    var outerCircle = new window.google.maps.Circle({
+    let outerCircle = new window.google.maps.Circle({
       map: map,
       center: position,
       radius: radius,
@@ -115,6 +118,20 @@ class GMap extends Component {
       strokeWeight: 2,
       clickable: false
     })
+
+    this.state.userCircle = {
+      inner: innerCircle,
+      outer: outerCircle
+    }
+  }
+
+  createOrUpdateUserCircle (map, position) {
+    if (this.state.userCircle) {
+      this.state.userCircle.inner.setCenter(position)
+      this.state.userCircle.outer.setCenter(position)
+    } else {
+      this.createUserCircle(map, position, 402)
+    }
   }
 
   createInfoWindow (map, marker, content) {
@@ -160,14 +177,9 @@ class GMap extends Component {
   addPoints (map, locations, index) {
     // Initialize variables
     let marker
-
     // Loop through all locations
     locations.forEach((location) => {
-      let geojson = JSON.parse(location.st_asgeojson)
-      let coordinates = {
-        lng: geojson.coordinates[0],
-        lat: geojson.coordinates[1]
-      }
+      let coordinates = this.parseGeoJSON(location)
       // Create the marker
       marker = this.createCircle(map, coordinates, 10)
       this.createInfoWindow(map, marker, location.message)
@@ -183,21 +195,26 @@ class GMap extends Component {
       marker.setMap(null)
     })
     // Clear markers
-    this.setState({markers: []})
+    markers = []
   }
 
   resetView (map, positions) {
     // Create a new bounds object
     let bounds = new window.google.maps.LatLngBounds()
     positions.forEach(position => {
-      let geojson = JSON.parse(position.st_asgeojson)
-      let coordinates = {
-        lng: geojson.coordinates[0],
-        lat: geojson.coordinates[1]
-      }
+      let coordinates = this.parseGeoJSON(position)
       bounds.extend(coordinates)
     })
     map.fitBounds(bounds)
+  }
+
+  parseGeoJSON (location) {
+    let geojson = JSON.parse(location.st_asgeojson)
+    let coordinates = {
+      lng: geojson.coordinates[0],
+      lat: geojson.coordinates[1]
+    }
+    return coordinates
   }
 
   componentDidMount () {
@@ -206,10 +223,8 @@ class GMap extends Component {
 
   componentWillUpdate (nextProps, nextState) {
     if (this.state.map) {
-      // this.createMarker(this.state.map, nextProps.location, null, null, true)
-      this.createUserCircle(this.state.map, nextProps.location, 402)
+      this.createOrUpdateUserCircle(this.state.map, nextProps.location)
       this.addPoints(this.state.map, nextProps.questions.data)
-      // this.resetView(this.state.map, nextProps.questions.data)
       this.state.map.setCenter(nextProps.location)
     }
   }
