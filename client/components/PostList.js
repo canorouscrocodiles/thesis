@@ -4,9 +4,16 @@ import ListEntry from './ListEntry'
 
 class PostList extends Component {
   locationLoaded () {
+    let district
+    let city
     let location = this.props.currentLocation.address_components
-    let district = location[2].long_name
-    let city = location[3].long_name
+    if (location.length > 1) {
+      district = location[2].long_name
+      city = location[3].long_name
+    } else {
+      district = location[0].long_name
+      city = location[0].long_name
+    }
     return (
       <h3>Questions around { `${district}, ${city}` }</h3>
     )

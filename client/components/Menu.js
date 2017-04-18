@@ -7,7 +7,11 @@ import AskQuestion from './AskQuestion'
 class Menu extends Component {
   userProfileButton () {
     return (
-      <li className='nav-link-right'><img src={`http://graph.facebook.com/${this.props.user.id}/picture?type=square`} />{this.props.user.username}<a onClick={this.props.loggingOut}>(Logout)</a></li>
+      <li className='nav-link-right'>
+        <img src={`http://graph.facebook.com/${this.props.user.id}/picture?type=square`} />
+        <Link className='link' to={`/users/${this.props.user.id}`}>{this.props.user.username}</Link>
+        <a onClick={this.props.loggingOut}>(Logout)</a>
+      </li>
     )
   }
 

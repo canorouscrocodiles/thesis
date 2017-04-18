@@ -15,6 +15,14 @@ const selectQuestions = (coordinates) => db.manyOrNone(`
   ORDER BY timestamp DESC
 `)
 
+const selectUserQuestions = (id) => db.manyOrNone(`
+  SELECT q.id, q.user_id, q.created_timestamp AS timestamp, q.message, q.coordinates, q.location, q.vote_count, q.view_count, u.username, c.name AS category
+  FROM questions AS q
+  INNER JOIN users AS u ON q.user_id = u.id
+  INNER JOIN categories AS c ON q.category_id = c.id
+  WHERE q.user_id = ${id}
+`)
+
 const selectQuestion = (id) => db.oneOrNone(`SELECT *, ST_AsGeoJSON(coordinates) from questions where id = ${id}`)
 
 const insertQuestion = ({ user_id, message, coordinates, location, category_id }) => db.none(`INSERT INTO questions (user_id, message, coordinates, location, category_id) VALUES (${user_id}, $$${message}$$, ST_SetSRID(ST_MakePoint(${coordinates.lng}, ${coordinates.lat}), 4326)::geography, $$${location}$$, ${category_id})`)
@@ -26,6 +34,7 @@ const deleteQuestion = (id) => db.none(`DELETE FROM questions WHERE id = ${id}`)
 module.exports = {
   selectQuestions: selectQuestions,
   selectQuestion: selectQuestion,
+  selectUserQuestions: selectUserQuestions,
   insertQuestion: insertQuestion,
   updateQuestion: updateQuestion,
   deleteQuestion: deleteQuestion
