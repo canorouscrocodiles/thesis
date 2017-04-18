@@ -63,7 +63,6 @@ class App extends Component {
   render () {
     return (
       <div>
-        <h2>OnPoint 👇</h2>
         <Menu username={this.props.user.username} />
         <GMap />
         <PostList />
