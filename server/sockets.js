@@ -3,6 +3,7 @@ const { verifyUser } = require('./db/models/users')
 const questionHandler = require('./sockets/questions')
 const answerHandler = require('./sockets/answers')
 const socketTestActions = require('../client/actions/sockets/testPing')
+const locationHandler = require('./sockets/location')
 
 const allClients = {}
 
@@ -87,8 +88,8 @@ module.exports = socket => {
         questionHandler.selectQuestion(socket, action.data)
         break
       case 'post/location':
-        console.log(`Users updated location is ${JSON.stringify(action.data)}`);
-        // TODO: Place/update action.data (coords) into locations table
+        console.log(`User ${socket.id} updated his location to ${JSON.stringify(action.data)}. Adding it to the sockets table.`);
+        locationHandler.updateLocation(socket, action.data)
         break
       default:
         break
@@ -96,5 +97,8 @@ module.exports = socket => {
     }
   })
 
-  socket.on('disconnect', () => console.log(`client disconnected with id ${socket.id}`))
+  socket.on('disconnect', () => {
+    console.log(`client disconnected with id ${socket.id}`)
+    locationHandler.deleteLocation(socket.id)
+  })
 }
