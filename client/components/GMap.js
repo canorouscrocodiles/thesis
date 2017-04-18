@@ -95,8 +95,8 @@ class GMap extends Component {
     var innerCircle = new window.google.maps.Circle({
       map: map,
       center: position,
-      radius: 20,
-      fillColor: '#429bf4',
+      radius: 10,
+      fillColor: '#ff0000',
       fillOpacity: 1,
       strokeColor: '#ffffff',
       strokeOpacity: 1,
@@ -109,9 +109,9 @@ class GMap extends Component {
       center: position,
       radius: radius,
       fillColor: '#429bf4',
-      fillOpacity: 0.1,
+      fillOpacity: 0,
       strokeColor: '#429bf4',
-      strokeOpacity: 0.2,
+      strokeOpacity: 0.5,
       strokeWeight: 2,
       clickable: false
     })
