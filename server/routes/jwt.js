@@ -7,7 +7,7 @@ const serialize = function serialize (req, res, next) {
     id: profile.id,
     username: profile.first_name,
     email: 'email@test.com',
-    img_url: 'www.test.com',
+    img_url: `http://graph.facebook.com/${profile.id}/picture?type=square`,
     bio: 'My bio'
   })
   .then((data) => {
@@ -33,6 +33,7 @@ const respond = function respond (req, res) {
   let profile = req.user._json
   res.cookie('onpoint-bearer', req.token)
   res.cookie('onpoint-username', profile.first_name)
+  res.cookie('onpoint-id', profile.id)
   res.redirect('/')
 }
 

@@ -41,7 +41,7 @@ class AskQuestion extends Component {
     // Form message data
     // For now, user_id is hardcoded. We will want to reference this.state.user.user in the future
     let data = {
-      user_id: '1',
+      user_id: this.props.user.data.id,
       message: this.state.question,
       coordinates: this.props.location,
       location: `${district}, ${city}`,

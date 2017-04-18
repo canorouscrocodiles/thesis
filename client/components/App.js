@@ -28,7 +28,7 @@ class App extends Component {
   componentWillMount () {
     this.watchPosition()
     this.removeLocationHash()
-    this.setUsernameFromCookie()
+    this.setUserFromCookie()
   }
 
   watchPosition () {
@@ -52,11 +52,11 @@ class App extends Component {
     }
   }
 
-  setUsernameFromCookie () {
+  setUserFromCookie () {
     let username = cookie.select(/(onpoint-username)/g)['onpoint-username']
-    console.log('User :', username)
+    let id = cookie.select(/(onpoint-id)/g)['onpoint-id']
     if (username) {
-      this.props.setUser({ username })
+      this.props.setUser({ username, id })
     }
   }
 
