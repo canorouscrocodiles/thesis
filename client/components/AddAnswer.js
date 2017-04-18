@@ -25,7 +25,7 @@ class AddAnswer extends Component {
     // Form message data
     // For now, user_id is hardcoded. We will want to reference this.state.user.user in the future
     let data = {
-      user_id: '1',
+      user_id: this.props.user.id,
       message: this.state.answer,
       question_id: this.props.id
     }
@@ -51,7 +51,7 @@ class AddAnswer extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return { user: state.user }
+  return { user: state.user.data }
 }
 
 const mapDispatchToProps = (dispatch) => {

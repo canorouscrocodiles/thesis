@@ -5,10 +5,11 @@ const Answers = require('../db/models/answers')
 module.exports.postAnswer = (socket, action) => {
   const { message, user_id, question_id } = action
   Answers.insertAnswer({message, user_id, question_id})
-    .then(() => {
+    .then(({id}) => Answers.selectIndividualAnswer(id))
+    .then((answer) => {
       io.to(question_id).emit('action', {
         type: 'SUCCESSFUL_POST_ANSWER',
-        data: action
+        data: answer
       })
     })
     .catch(error => {
