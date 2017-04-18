@@ -1,11 +1,15 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import moment from 'moment'
 
-export default (props) => (
-  <div className='list-entry'>
-    <p><Link className='link post-title' to={`/question/${props.question.id}`}>{props.question.message}</Link></p>
-    <p className='question-location'>{props.question.location}</p>
-    <p>{props.question.username} - {props.question.timestamp}</p>
-    <p>{props.question.category}</p>
-  </div>
-)
+export default (props) => {
+  let humanTime = moment(props.question.timestamp).fromNow()
+  return (
+    <div className='list-entry'>
+      <p><Link className='link post-title' to={`/question/${props.question.id}`}>{props.question.message}</Link></p>
+      <p className='question-location'>{props.question.location}</p>
+      <p>{props.question.username} - {humanTime}</p>
+      <p>{props.question.category}</p>
+    </div>
+  )
+}
