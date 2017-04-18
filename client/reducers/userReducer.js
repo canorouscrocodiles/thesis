@@ -1,6 +1,6 @@
 import { FETCHING_USER, SET_USER, FETCH_USER_ERROR } from '../actions/user'
 
-const initialState = {user: null, fetching: false, error: null}
+const initialState = {data: null, fetching: false, error: null}
 
 export default (state = initialState, action) => {
   switch (action.type) {
@@ -13,7 +13,7 @@ export default (state = initialState, action) => {
     case SET_USER:
       return {
         ...state,
-        user: action.data,
+        data: action.data,
         fetching: false
       }
     case FETCH_USER_ERROR:
