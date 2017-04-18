@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS categories (
 );
 
 CREATE TABLE IF NOT EXISTS sockets (
-  id VARCHAR(20) PRIMARY KEY,
+  id VARCHAR(40) PRIMARY KEY,
   coordinates geography(POINT,4326) NOT NULL
 );
 
