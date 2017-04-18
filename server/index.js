@@ -23,7 +23,7 @@ if (!module.parent) {
 let fbOptions = {
   clientID: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
-  callbackURL: `/auth/facebook/callback`,
+  callbackURL: `${process.env.HOSTNAME}/auth/facebook/callback`,
   profileFields: ['id', 'email', 'locale', 'name', 'updated_time', 'verified']
 }
 
