@@ -7,21 +7,21 @@ import AskQuestion from './AskQuestion'
 class Menu extends Component {
   userProfileButton () {
     return (
-      <li className="nav-link-right">Welcome {this.props.user.username}! <a onClick={this.props.loggingOut}>(Logout)</a></li>
+      <li className='nav-link-right'>Welcome {this.props.user.username}! <a onClick={this.props.loggingOut}>(Logout)</a></li>
     )
   }
 
   loggedOutButton () {
     return (
-      <li className="nav-link-right"><a className="link button" href='/auth/facebook'>Login with Facebook</a></li>
+      <li className='nav-link-right'><a className='link button' href='/auth/facebook'>Login with Facebook</a></li>
     )
   }
 
   render () {
     return (
-      <div id="menu">
-        <ul id="nav-links">
-          <li className="nav-link-left"><Link className="link" to="/"><h2 id="title">OnPoint 👇</h2></Link></li>
+      <div id='menu'>
+        <ul id='nav-links'>
+          <li className='nav-link-left'><Link className='link' to='/'><h2 id='title'>OnPoint 👇</h2></Link></li>
           { this.props.user ? this.userProfileButton() : this.loggedOutButton() }
           <AskQuestion />
         </ul>
