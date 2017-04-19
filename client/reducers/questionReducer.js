@@ -54,11 +54,11 @@ export default (state = initialState, action) => {
         fetching: false
       }
     case UPDATED_QUESTIONS_FAILURE:
-    return {
-      ...state,
-      fetching: false,
-      error: action.data
-    }
+      return {
+        ...state,
+        fetching: false,
+        error: action.data
+      }
     default:
       return state
   }
