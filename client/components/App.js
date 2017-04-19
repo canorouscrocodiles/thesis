@@ -11,6 +11,7 @@ import QuestionPage from './QuestionPage'
 import PostList from './PostList'
 import { testSocketPing } from '../actions/sockets/testPing'
 import { sendLocationToServer } from '../actions/sockets/location'
+import { sendNotification } from '../actions/notifications'
 
 const watchOptions = {
   enableHighAccuracy: true,
