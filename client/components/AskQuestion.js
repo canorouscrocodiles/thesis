@@ -8,7 +8,8 @@ class AskQuestion extends Component {
     this.state = {
       question: '',
       categories: ['Chipotle', 'Convention', 'Sports', 'Education', 'Advice', 'Traffic', 'Animals', 'Health', 'History', 'Tourism', 'Tech', 'Business', 'News', 'Food', 'Emergency', 'Music', 'Movies', 'TV', 'Life', 'Love', 'Politics'],
-      category: '1'
+      category: '1',
+      charCount: 300
     }
     this.handleQuestionChange = this.handleQuestionChange.bind(this)
     this.handleCategoryChange = this.handleCategoryChange.bind(this)
@@ -17,7 +18,8 @@ class AskQuestion extends Component {
   }
 
   handleQuestionChange (event) {
-    this.setState({ question: event.target.value })
+    let remainder = 300 - event.target.value.length
+    this.setState({ question: event.target.value, charCount: remainder })
   }
 
   handleCategoryChange (event) {
@@ -25,7 +27,7 @@ class AskQuestion extends Component {
   }
 
   resetValues () {
-    this.setState({ question: '', category: '1' })
+    this.setState({ question: '', category: '1', charCount: 300 })
   }
 
   submitQuestion () {
@@ -60,12 +62,13 @@ class AskQuestion extends Component {
 
   render () {
     return (
-      <li className="nav-link-right">
-        <input type='text' size="100" value={this.state.question} onChange={this.handleQuestionChange} name='question' placeholder='Ask a question...' />
+      <li className='nav-link-right'>
+        <input type='text' size='100' maxLength='300' value={this.state.question} onChange={this.handleQuestionChange} name='question' placeholder='Ask a question...' />
         <select value={this.state.category} onChange={this.handleCategoryChange}>
           {this.state.categories.map((category, id) => <option key={id} value={id + 1}>{category}</option>)}
         </select>
-        <span className="button" onClick={this.submitQuestion}>Ask</span>
+        <span className='button' onClick={this.submitQuestion}>Ask</span>
+        <p>{`${this.state.charCount} characters remaining`}</p>
       </li>
     )
   }

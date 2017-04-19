@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import ListEntry from './ListEntry'
-import CurrentLocation from './CurrentLocation'
 
 class PostList extends Component {
   locationLoaded () {
@@ -13,7 +12,7 @@ class PostList extends Component {
     )
   }
 
-  renderMessage() {
+  renderMessage () {
     if (!this.props.currentLocation) return <h3>Finding your location...</h3>
     return this.locationLoaded()
   }
@@ -22,7 +21,7 @@ class PostList extends Component {
     return (
       <div>
         {this.renderMessage()}
-        <div className="post-list">
+        <div className='post-list'>
           {this.props.questions.data.map(question => <ListEntry key={question.id} question={question} />)}
         </div>
       </div>
