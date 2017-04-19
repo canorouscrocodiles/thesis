@@ -9,6 +9,7 @@ import Menu from './Menu'
 import PostList from './PostList'
 import { testSocketPing } from '../actions/sockets/testPing'
 import { sendLocationToServer } from '../actions/sockets/location'
+import { sendNotification } from '../actions/notifications'
 
 const watchOptions = {
   enableHighAccuracy: true,
@@ -29,6 +30,7 @@ class App extends Component {
     this.watchPosition()
     this.removeLocationHash()
     this.setUserFromCookie()
+    Notification.requestPermission()
   }
 
   watchPosition () {
