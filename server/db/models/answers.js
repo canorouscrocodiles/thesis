@@ -18,12 +18,21 @@ const selectUserAnswers = (id) => db.manyOrNone(`
   WHERE u.id = ${id}
 `)
 
-const selectQuestionAnswers = (id) => db.manyOrNone(`
+const selectQuestionAnswers = (id, user_id) => {
+  if (user_id) {
+    return db.manyOrNone(`
+      SELECT a.id, a.question_id, a.created_timestamp AS timestamp, a.message, a.vote_count, u.username, u.id AS user_id, u.img_url AS avatar, v.vote_type AS users_vote_count
+      FROM answers AS a
+      INNER JOIN users AS u ON a.user_id = u.id
+      LEFT JOIN votes AS v ON v.user_id = ${user_id} AND v.answer_id = a.id
+      WHERE a.question_id = ${id}`)
+  }
+  return db.manyOrNone(`
   SELECT a.id, a.question_id, a.created_timestamp AS timestamp, a.message, a.vote_count, u.username, u.id AS user_id, u.img_url AS avatar
   FROM answers AS a
   INNER JOIN users AS u ON a.user_id = u.id
-  WHERE question_id = ${id}
-`)
+  WHERE question_id = ${id}`)
+}
 
 const insertAnswer = ({ message, user_id, question_id }) => db.oneOrNone(`
   INSERT INTO answers (message, user_id, question_id)

@@ -6,8 +6,8 @@ import AddAnswer from './AddAnswer'
 
 class AnswerList extends Component {
   componentWillMount () {
-    let id = this.props.id
-    this.props.fetchQuestionAnswers(id)
+    const { id, user_id } = this.props
+    this.props.fetchQuestionAnswers(id, user_id)
   }
 
   render () {
@@ -22,12 +22,15 @@ class AnswerList extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return { answers: state.answers.data }
+  return {
+    answers: state.answers.data,
+    user_id: state.user.data ? state.user.data.id : null
+  }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchQuestionAnswers: (id) => dispatch(fetchQuestionAnswers(id))
+    fetchQuestionAnswers: (id, user_id) => dispatch(fetchQuestionAnswers(id, user_id))
   }
 }
 

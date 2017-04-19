@@ -4,6 +4,7 @@ const questionHandler = require('./sockets/questions')
 const answerHandler = require('./sockets/answers')
 const socketTestActions = require('../client/actions/sockets/testPing')
 const locationHandler = require('./sockets/location')
+const updateVote = require('./sockets/votes')
 
 const allClients = {}
 
@@ -90,6 +91,10 @@ module.exports = socket => {
       case 'post/location':
         console.log(`User ${socket.id} updated his location to ${JSON.stringify(action.data)}. Adding it to the sockets table.`);
         locationHandler.updateLocation(socket, action.data)
+        break
+      case 'put/vote':
+        updateVote(socket, action.data)
+        console.log(`User ${socket.id} updated his vote to answer ${action.data.answer_id} with the vote type of ${action.data.vote_type}`);
         break
       default:
         break
