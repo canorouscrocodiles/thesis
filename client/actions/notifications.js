@@ -1,16 +1,15 @@
-export const sendNotification = ({user_id, message, question_id}) => {
-  let question = 'How did you get this working?'
+export const sendNotification = ({username, message, question_message}) => {
   let options = {
-    body: `${user_id} replied:
-  ${message}`
+    body: `${username} replied: ${message}`
   }
   if (Notification.permission === 'granted') {
-    let notification = new Notification(`${question}`, options)
-    notification.onclick = function (event) {
-      event.preventDefault()
-      console.log(`/question/${question_id}`)
-      window.open(`/question/${question_id}`)
-    }
+    let notification = new Notification(`${question_message}`, options)
+    // onclick is not yet ready
+    // notification.onclick = function (event) {
+    //   event.preventDefault()
+    //   console.log(`/question/${question_id}`)
+    //   window.open(`/question/${question_id}`)
+    // }
     setTimeout(notification.close.bind(notification), 5000)
   }
 }

@@ -31,9 +31,9 @@ export default (state = initialState, action) => {
       }
     case SUCCESSFUL_POST_ANSWER:
       let path = window.location.pathname.split('/')
-      let qID = path[2]
-      sendNotification(action.data)
+      let qID = parseInt(path[2])
       if (qID !== action.data.question_id) {
+        sendNotification(action.data)
         return { ...state }
       } else {
         return {

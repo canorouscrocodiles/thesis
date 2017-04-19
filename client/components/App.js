@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { Router, Route, Switch, Redirect } from 'react-router'
 import cookie from 'react-cookie'
 import { setUser } from '../actions/user'
 import { fetchingLocationName, fetchLocationError } from '../actions/location'
 import { fetchQuestions } from '../actions/questions'
 import GMap from './GMap'
 import Menu from './Menu'
+import QuestionPage from './QuestionPage'
 import PostList from './PostList'
 import { testSocketPing } from '../actions/sockets/testPing'
 import { sendLocationToServer } from '../actions/sockets/location'
@@ -67,7 +69,33 @@ class App extends Component {
       <div>
         <Menu username={this.props.user.username} />
         <GMap />
-        <PostList />
+        <Route exact path='/' component={PostList} />
+        <Route path='/question/:id' render={(props) => {
+          // Parse id from string to int
+          let id = parseInt(props.match.params.id)
+          // Get list of questions for user
+          let questions = this.props.questions
+          let allowedQuestion = false
+          // Iterate through question ids
+          if (questions.length > 0) {
+            for (let i = 0; i < questions.length; i++) {
+              // If question with matching id is found
+              if (questions[i].id === id) {
+                // Set allowedQuestion to true and break out of loop
+                allowedQuestion = true
+                break
+              }
+            }
+          } else {
+            return <Redirect to='/' />
+          }
+
+          if (allowedQuestion) {
+            return <QuestionPage {...props} />
+          } else {
+            return <Redirect to='/' />
+          }
+        }} />
       </div>
     )
   }
@@ -75,7 +103,8 @@ class App extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    user: state.user
+    user: state.user,
+    questions: state.questions.data
   }
 }
 

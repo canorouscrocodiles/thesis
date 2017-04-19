@@ -6,7 +6,8 @@ class AddAnswer extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      answer: ''
+      answer: '',
+      charCount: 300
     }
     this.handleAnswerChange = this.handleAnswerChange.bind(this)
     this.submitAnswer = this.submitAnswer.bind(this)
@@ -14,11 +15,12 @@ class AddAnswer extends Component {
   }
 
   handleAnswerChange (event) {
-    this.setState({ answer: event.target.value })
+    let remaining = 300 - event.target.value.length
+    this.setState({ answer: event.target.value, charCount: remaining })
   }
 
   resetValues () {
-    this.setState({ answer: '' })
+    this.setState({ answer: '', charCount: 300 })
   }
 
   submitAnswer () {
@@ -43,8 +45,9 @@ class AddAnswer extends Component {
   render () {
     return (
       <div>
-        <input type='text' value={this.state.answer} onChange={this.handleAnswerChange} name='answer' placeholder='Add an answer...' />
-        <span className="button" onClick={this.submitAnswer}>Respond!</span>
+        <textarea maxLength='300' cols='100' rows='4' value={this.state.answer} onChange={this.handleAnswerChange} name='answer' placeholder='Add an answer...' />
+        <span className='button' onClick={this.submitAnswer}>Respond!</span>
+        <p>{`${this.state.charCount} characters remaining`}</p>
       </div>
     )
   }
