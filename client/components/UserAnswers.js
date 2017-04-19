@@ -9,7 +9,7 @@ class UserAnswers extends Component {
 
     if (answers) {
       return (
-        <div>
+        <div className='post-list'>
           {answers.map(answer => <UserAnswerEntry key={answer.id} answer={answer} />)}
         </div>
       )

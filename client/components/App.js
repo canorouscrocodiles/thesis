@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Router, Route, Switch, Redirect } from 'react-router'
+import { Route, Redirect } from 'react-router'
 import cookie from 'react-cookie'
 import { setUser } from '../actions/user'
 import { fetchingLocationName, fetchLocationError } from '../actions/location'
@@ -9,9 +9,9 @@ import GMap from './GMap'
 import Menu from './Menu'
 import QuestionPage from './QuestionPage'
 import PostList from './PostList'
+import UserProfile from './UserProfile'
 import { testSocketPing } from '../actions/sockets/testPing'
 import { sendLocationToServer } from '../actions/sockets/location'
-import { sendNotification } from '../actions/notifications'
 
 const watchOptions = {
   enableHighAccuracy: true,
@@ -107,6 +107,7 @@ class App extends Component {
         <Menu username={this.props.user.username} />
         <GMap />
         <Route exact path='/' component={PostList} />
+        <Route path='/users/:id' component={UserProfile} />
         <Route path='/question/:id' render={(props) => {
           // Parse id from string to int
           let id = parseInt(props.match.params.id)
