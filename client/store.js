@@ -25,7 +25,6 @@ if (process.env.NODE_ENV === 'development') {
   enhancers = compose(middlewares)
 }
 
-
 // Possibly place pre-loaded state as 2nd arg here.
 // It can be retrieved from local storage (ie, maybe users location?) or from the server
 const store = createStore(rootReducer, enhancers)

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Router, Route, Switch, Redirect } from 'react-router'
+import { Route, Redirect } from 'react-router'
 import cookie from 'react-cookie'
 import { setUser } from '../actions/user'
 import { fetchingLocationName, fetchLocationError } from '../actions/location'
@@ -9,14 +9,14 @@ import GMap from './GMap'
 import Menu from './Menu'
 import QuestionPage from './QuestionPage'
 import PostList from './PostList'
+import UserProfile from './UserProfile'
 import { testSocketPing } from '../actions/sockets/testPing'
 import { sendLocationToServer } from '../actions/sockets/location'
-import { sendNotification } from '../actions/notifications'
 
 const watchOptions = {
   enableHighAccuracy: true,
   timeout: 60000,
-  maximumAge: 0
+  maximumAge: 10000
 }
 
 class App extends Component {
@@ -44,9 +44,46 @@ class App extends Component {
   }
 
   watchLocationSuccess (coords) {
+    // Get distance moved from current location.
+    // If not more than 1/16 mi then do not update questions
+    if (this.props.currentLocation.location) {
+      let distance = this.getDistanceMoved(
+        coords.coords.latitude,
+        coords.coords.longitude,
+        this.props.currentLocation.location.lat,
+        this.props.currentLocation.location.lng
+        )
+
+      if (distance >= 0.1) {
+        this.updateLocation(coords)
+      }
+    } else {
+      this.updateLocation(coords)
+    }
+  }
+
+  updateLocation (coords) {
     this.props.sendLocationToServer({lat: coords.coords.latitude, lng: coords.coords.longitude})
     this.props.fetchingLocationName({lat: coords.coords.latitude, lng: coords.coords.longitude})
     this.props.fetchQuestions({lat: coords.coords.latitude, lng: coords.coords.longitude})
+  }
+
+  getDistanceMoved (lat1, lon1, lat2, lon2) {
+    const R = 6371
+    const dLat = this.deg2rad(lat2 - lat1)
+    const dLon = this.deg2rad(lon2 - lon1)
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2)
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+    const d = R * c // Distance in km
+
+    return d
+  }
+
+  deg2rad (deg) {
+    return deg * (Math.PI / 180)
   }
 
   // To remove FB security hash on auth redirect
@@ -70,6 +107,7 @@ class App extends Component {
         <Menu username={this.props.user.username} />
         <GMap />
         <Route exact path='/' component={PostList} />
+        <Route path='/users/:id' component={UserProfile} />
         <Route path='/question/:id' render={(props) => {
           // Parse id from string to int
           let id = parseInt(props.match.params.id)
@@ -104,7 +142,8 @@ class App extends Component {
 const mapStateToProps = (state) => {
   return {
     user: state.user,
-    questions: state.questions.data
+    questions: state.questions.data,
+    currentLocation: state.currentLocation
   }
 }
 
