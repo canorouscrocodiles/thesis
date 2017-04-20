@@ -26,6 +26,8 @@ class App extends Component {
     this.watchPosition = this.watchPosition.bind(this)
     this.watchLocationSuccess = this.watchLocationSuccess.bind(this)
     this.watchLocationError = this.watchLocationError.bind(this)
+    this.renderQuestionPage = this.renderQuestionPage.bind(this)
+    this.renderUserProfilePage = this.renderUserProfilePage.bind(this)
   }
 
   componentWillMount () {
@@ -101,39 +103,54 @@ class App extends Component {
     }
   }
 
+  renderQuestionPage (props) {
+    // Parse id from string to int
+    let id = parseInt(props.match.params.id)
+
+    // Get list of questions for user
+    let questions = this.props.questions
+    let allowedQuestion = false
+
+    // Iterate through question ids
+    if (questions.length > 0) {
+      for (let i = 0; i < questions.length; i++) {
+        // If question with matching id is found
+        if (questions[i].id === id) {
+          // Set allowedQuestion to true and break out of loop
+          allowedQuestion = true
+          break
+        }
+      }
+    } else {
+      return <Redirect to='/' />
+    }
+
+    if (allowedQuestion) {
+      return <QuestionPage {...props} />
+    } else {
+      return <Redirect to='/' />
+    }
+  }
+
+  renderUserProfilePage (props) {
+    let id = parseInt(props.match.params.id)
+
+    if (this.props.user.data && id === parseInt(this.props.user.data.id)) {
+      return <UserProfile {...props} />
+    } else {
+      console.log('You cannot view this profile.')
+      return <Redirect to='/' />
+    }
+  }
+
   render () {
     return (
       <div>
         <Menu username={this.props.user.username} />
         <GMap />
         <Route exact path='/' component={PostList} />
-        <Route path='/users/:id' component={UserProfile} />
-        <Route path='/question/:id' render={(props) => {
-          // Parse id from string to int
-          let id = parseInt(props.match.params.id)
-          // Get list of questions for user
-          let questions = this.props.questions
-          let allowedQuestion = false
-          // Iterate through question ids
-          if (questions.length > 0) {
-            for (let i = 0; i < questions.length; i++) {
-              // If question with matching id is found
-              if (questions[i].id === id) {
-                // Set allowedQuestion to true and break out of loop
-                allowedQuestion = true
-                break
-              }
-            }
-          } else {
-            return <Redirect to='/' />
-          }
-
-          if (allowedQuestion) {
-            return <QuestionPage {...props} />
-          } else {
-            return <Redirect to='/' />
-          }
-        }} />
+        <Route path='/users/:id' component={this.renderUserProfilePage} />
+        <Route path='/question/:id' render={this.renderQuestionPage} />
       </div>
     )
   }
