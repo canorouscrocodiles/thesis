@@ -8,6 +8,7 @@ const selectQuestions = (coordinates) => db.manyOrNone(`
     FROM questions AS q
     INNER JOIN users AS u ON q.user_id = u.id
     INNER JOIN categories AS c ON q.category_id = c.id
+    WHERE q.active = 't'
   )
   SELECT *, ST_AsGeoJSON(coordinates)
   FROM questions
@@ -31,11 +32,14 @@ const updateQuestion = ({ id, message, category_id }) => db.none(`UPDATE questio
 
 const deleteQuestion = (id) => db.none(`DELETE FROM questions WHERE id = ${id}`)
 
+const deactivateQuestion = (id) => db.none(`UPDATE questions SET active = 'f' WHERE id = ${id}`)
+
 module.exports = {
   selectQuestions: selectQuestions,
   selectQuestion: selectQuestion,
   selectUserQuestions: selectUserQuestions,
   insertQuestion: insertQuestion,
   updateQuestion: updateQuestion,
-  deleteQuestion: deleteQuestion
+  deleteQuestion: deleteQuestion,
+  deactivateQuestion: deactivateQuestion
 }
