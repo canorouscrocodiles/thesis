@@ -6,15 +6,16 @@ import moment from 'moment'
 
 class MainQuestion extends Component {
   componentWillMount () {
-    console.log('Q PROPS', this.props)
+    this.props.selectSingleQuestion(this.props.id)
+  }
 
+  componentWillUpdate (nextProps) {
     let enterInfo = {
       user_id: this.props.user.data.id,
       question_id: this.props.id,
-      question_creator: this.props.user.data.id === this.props.question.user_id
+      question_creator: this.props.user.data.id === nextProps.question.user_id
     }
     this.props.enterRoom(enterInfo)
-    this.props.selectSingleQuestion(this.props.id)
   }
 
   componentWillUnmount () {

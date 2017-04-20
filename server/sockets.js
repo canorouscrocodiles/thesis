@@ -39,18 +39,11 @@ module.exports = socket => {
         break
       case 'enter/':
         console.log(`User id: ${action.data.user_id} with socket id: ${socket.id} is entering room with id ${action.data.question_id}`)
-        socket.join(action.data.question_id)
-        if (action.data.question_creator) {
-           // Update last viewed
-        }
+        questionHandler.enterRoom(socket, action)
         break
       case 'leave/':
         console.log(`User id: ${action.data.user_id} with socket id: ${socket.id} is leaving room with id ${action.data.question_id}`)
-        if (action.data.question_creator) {
-          // update last viewed
-        } else {
-          socket.leave(action.data.question_id)
-        }
+        questionHandler.leaveRoom(socket, action)
         break
       case 'post/ANSWER_TO_QUESTION':
         console.log(`User with socket id: ${socket.id} is posting answer ${action.data}`)
@@ -59,6 +52,7 @@ module.exports = socket => {
           .then(({ id }) => verifyUser(id))
           .then(validateUser)
           .then(() => answerHandler.postAnswer(socket, action.data))
+          .then(() => questionHandler.updateLastUpdatedTime(action.data.question_id))
           .catch(({name, message}) => {
             console.log(`${name} - ${message}`)
             socket.emit('action', { type: 'AUTHORIZATION ERROR' })
@@ -134,7 +128,7 @@ module.exports = socket => {
   })
 
   socket.on('disconnect', () => {
-    console.log(`client disconnected with id ${socket.id}`)
+    console.log(`Client disconnected with id ${socket.id}`)
     locationHandler.deleteLocation(socket.id)
   })
 }

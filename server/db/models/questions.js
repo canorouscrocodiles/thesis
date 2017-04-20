@@ -28,6 +28,10 @@ const selectQuestion = (id) => db.oneOrNone(`SELECT *, ST_AsGeoJSON(coordinates)
 
 const insertQuestion = ({ user_id, message, coordinates, location, category_id }) => db.none(`INSERT INTO questions (user_id, message, coordinates, location, category_id) VALUES (${user_id}, $$${message}$$, ST_SetSRID(ST_MakePoint(${coordinates.lng}, ${coordinates.lat}), 4326)::geography, $$${location}$$, ${category_id})`)
 
+const updateLastViewedTime = (id) => db.none(`UPDATE questions SET last_viewed_timestamp = now() WHERE id = ${id}`)
+
+const updateLastUpdatedTime = (id) => db.none(`UPDATE questions SET updated_timestamp = now() WHERE id = ${id}`)
+
 const updateQuestion = ({ id, message, category_id }) => db.none(`UPDATE questions SET message = $$${message}$$, category_id = ${category_id} WHERE id = ${id}`)
 
 const deleteQuestion = (id) => db.none(`DELETE FROM questions WHERE id = ${id}`)
@@ -41,6 +45,8 @@ module.exports = {
   selectQuestion: selectQuestion,
   selectUserQuestions: selectUserQuestions,
   insertQuestion: insertQuestion,
+  updateLastViewedTime: updateLastViewedTime,
+  updateLastUpdatedTime: updateLastUpdatedTime,
   updateQuestion: updateQuestion,
   deleteQuestion: deleteQuestion,
   deactivateQuestion: deactivateQuestion,

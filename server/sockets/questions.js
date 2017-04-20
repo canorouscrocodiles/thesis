@@ -8,15 +8,23 @@ const GET_QUESTION_SUCCESS = 'GET_QUESTION_SUCCESS'
 const GET_QUESTION_FAILURE = 'GET_QUESTION_FAILURE'
 
 const enterRoom = (socket, action) => {
-  // verify user, emit error if not valid or does not exists
-    // EMIT TO USER ONLY or DO NOT do THIS?
-  // verify question with id exists, if not emit error?
-  //  upon success, place user into question room
-  // if error, emit error to user?
-  socket.join(action.data.id)
+  socket.join(action.data.question_id)
+  if (action.data.question_creator) {
+    Questions.updateLastViewedTime(action.data.question_id)
+  }
 }
 
-const leaveRoom = (socket, action) => socket.leave(action.data.id)
+const leaveRoom = (socket, action) => {
+  if (action.data.question_creator) {
+    Questions.updateLastViewedTime(action.data.question_id)
+  } else {
+    socket.leave(action.data.question_id)
+  }
+}
+
+const updateLastUpdatedTime = (id) => {
+  Questions.updateLastUpdatedTime(id)
+}
 
 const selectQuestion = (socket, action) => {
   Questions.selectQuestion(action)
@@ -57,6 +65,7 @@ const updateQuestion = (socket, action) => {
 module.exports = {
   enterRoom: enterRoom,
   leaveRoom: leaveRoom,
+  updateLastUpdatedTime: updateLastUpdatedTime,
   selectQuestion: selectQuestion,
   insertQuestion: insertQuestion,
   updateQuestion: updateQuestion
