@@ -6,6 +6,8 @@ import moment from 'moment'
 
 class MainQuestion extends Component {
   componentWillMount () {
+    console.log('Q PROPS', this.props)
+
     let enterInfo = {
       user_id: this.props.user.data.id,
       question_id: this.props.id,
@@ -28,10 +30,10 @@ class MainQuestion extends Component {
     return (<div>Loading...</div>)
   }
 
-  renderCloseButton() {
+  renderCloseButton () {
     const { currentUserId, question } = this.props
     const { user_id } = question
-    if ( currentUserId === user_id) {
+    if (currentUserId === user_id) {
       return <button className='button' onClick={() => this.props.deactivateQuestion(question.id)}>Close question</button>
     } else {
       return null
@@ -54,7 +56,7 @@ class MainQuestion extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return { 
+  return {
     user: state.user,
     question: state.questions.selectedQuestion,
     currentUserId: state.user.data ? state.user.data.id : null
