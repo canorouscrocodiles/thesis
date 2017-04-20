@@ -12,8 +12,8 @@ export const POST_QUESTION_SUCCESS = 'POST_QUESTION_SUCCESS'
 export const GET_QUESTION_SUCCESS = 'GET_QUESTION_SUCCESS'
 const SOCKET_GET_QUESTION = 'get/question'
 
-export const enterRoom = (id) => ({ type: ENTER_QUESTION_ROOM_REQUEST, data: id })
-export const leaveRoom = (id) => ({ type: LEAVE_QUESTION_ROOM_REQUEST, data: id })
+export const enterRoom = (info) => ({ type: ENTER_QUESTION_ROOM_REQUEST, data: info })
+export const leaveRoom = (info) => ({ type: LEAVE_QUESTION_ROOM_REQUEST, data: info })
 const socketPostQuestion = (data) => ({ type: POST_QUESTION_REQUEST, data: data })
 const sendSocketFetchQuestion = (id) => ({ type: SOCKET_GET_QUESTION, data: id })
 

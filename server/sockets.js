@@ -37,14 +37,19 @@ module.exports = socket => {
 
         break
       case 'enter/':
-        console.log(`User with socket id: ${socket.id} is entering room with id ${action.data}`)
-        socket.join(action.data)
-        // questionHandler.enterRoom(action, socket)
+        console.log(`User id: ${action.data.user_id} with socket id: ${socket.id} is entering room with id ${action.data.question_id}`)
+        socket.join(action.data.question_id)
+        if (action.data.question_creator) {
+           // Update last viewed
+        }
         break
       case 'leave/':
-        console.log(`User with socket id: ${socket.id} is leaving room with id ${action.data}`)
-        socket.leave(action.data)
-
+        console.log(`User id: ${action.data.user_id} with socket id: ${socket.id} is leaving room with id ${action.data.question_id}`)
+        if (action.data.question_creator) {
+          // update last viewed
+        } else {
+          socket.leave(action.data.question_id)
+        }
         break
       case 'post/ANSWER_TO_QUESTION':
         console.log(`User with socket id: ${socket.id} is posting answer ${action.data}`)

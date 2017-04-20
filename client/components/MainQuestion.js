@@ -6,13 +6,22 @@ import moment from 'moment'
 
 class MainQuestion extends Component {
   componentWillMount () {
-    let id = this.props.id
-    this.props.enterRoom(id)
-    this.props.selectSingleQuestion(id)
+    let enterInfo = {
+      user_id: this.props.user.data.id,
+      question_id: this.props.id,
+      question_creator: this.props.user.data.id === this.props.question.user_id
+    }
+    this.props.enterRoom(enterInfo)
+    this.props.selectSingleQuestion(this.props.id)
   }
 
   componentWillUnmount () {
-    this.props.leaveRoom(this.props.id)
+    let leaveInfo = {
+      user_id: this.props.user.data.id,
+      question_id: this.props.id,
+      question_creator: this.props.user.data.id === this.props.question.user_id
+    }
+    this.props.leaveRoom(leaveInfo)
   }
 
   renderLoader () {
@@ -45,7 +54,8 @@ class MainQuestion extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return {
+  return { 
+    user: state.user,
     question: state.questions.selectedQuestion,
     currentUserId: state.user.data ? state.user.data.id : null
   }
