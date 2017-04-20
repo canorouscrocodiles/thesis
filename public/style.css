@@ -106,6 +106,10 @@ input, select, option {
   border: 1px solid #d6d6d6;
 }
 
+.infoListItem {
+  color: #ff0000;
+}
+
 .post-title {
   font-weight: bold;
   margin: 6px;

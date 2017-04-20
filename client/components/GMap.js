@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
+import utils from '../utils'
 
 // These are options used to initially render map
 // center defines the center of the map
@@ -23,8 +25,6 @@ let options = {
   ]
 }
 
-let markers = []
-
 class GMap extends Component {
   constructor (props) {
     super(props)
@@ -32,7 +32,14 @@ class GMap extends Component {
       map: null,
       lastWindow: null,
       markers: [],
-      userCircle: null
+      userCircle: null,
+      currentZoom: 16,
+      minDist: {
+        16: 30,
+        17: 25,
+        18: 20,
+        19: 15
+      }
     }
     this.loadMap = this.loadMap.bind(this)
     this.createMarker = this.createMarker.bind(this)
@@ -41,10 +48,10 @@ class GMap extends Component {
     this.createOrUpdateUserCircle = this.createOrUpdateUserCircle.bind(this)
     this.createInfoWindow = this.createInfoWindow.bind(this)
     this.addPoints = this.addPoints.bind(this)
+    this.updatePoints = this.updatePoints.bind(this)
     this.deletePoints = this.deletePoints.bind(this)
     this.closeInfos = this.closeInfos.bind(this)
     this.resetView = this.resetView.bind(this)
-    this.parseGeoJSON = this.parseGeoJSON.bind(this)
   }
 
   loadMap () {
@@ -52,6 +59,10 @@ class GMap extends Component {
     if (window.google) {
       // If so, create map object
       this.state.map = new window.google.maps.Map(document.getElementById('mapWindow'), options)
+      this.state.map.addListener('zoom_changed', () => {
+        this.state.currentZoom = this.state.map.getZoom()
+        this.updatePoints(this.state.map, this.props.questions.data, this.state.currentZoom, this.state.minDist[this.state.currentZoom], this.props.location)
+      })
     } else {
       // Else, call itself
       setTimeout(this.loadMap, 100)
@@ -80,12 +91,12 @@ class GMap extends Component {
     return marker
   }
 
-  createCircle (map, position, radius) {
+  createCircle (map, position, radius = 10, color = '#429bf4') {
     var circle = new window.google.maps.Circle({
       map: map,
       center: position,
       radius: radius,
-      fillColor: '#429bf4',
+      fillColor: color,
       fillOpacity: 1,
       strokeColor: '#ffffff',
       strokeOpacity: 0.2,
@@ -134,10 +145,19 @@ class GMap extends Component {
     }
   }
 
-  createInfoWindow (map, marker, content) {
+  createInfoWindow (map, marker, questions) {
     // Create a blank infoWindow
     let infoWindow = new window.google.maps.InfoWindow()
-    let innerHTML = `<h3>${content}</h3>`
+    let innerHTML = document.createElement('div')
+    let list = document.createElement('ul')
+    questions.forEach(question => {
+      let item = document.createElement('li')
+      item.className = 'infoListItem'
+      item.appendChild(document.createTextNode(`- ${question.question}`))
+      list.appendChild(item)
+    })
+    innerHTML.appendChild(list)
+
     // Set an event listener to listen for a click on the marker
     window.google.maps.event.addListener(marker, 'click', ((marker, content, infoWindow) => {
       // Here we are returning a function that retains access to the associated content and marker
@@ -174,18 +194,25 @@ class GMap extends Component {
     }
   }
 
-  addPoints (map, locations, index) {
+  addPoints (map, locations, color) {
+    // Delete all existing points
+    this.deletePoints(this.state.markers)
     // Initialize variables
     let marker
     // Loop through all locations
     locations.forEach((location) => {
-      let coordinates = this.parseGeoJSON(location)
       // Create the marker
-      marker = this.createCircle(map, coordinates, 10)
-      this.createInfoWindow(map, marker, location.message)
+      marker = this.createCircle(map, location.coordinates, location.radius, color)
+      this.createInfoWindow(map, marker, location.questions)
       // Push the marker into markers for later referencing
-      markers.push(marker)
+      this.state.markers.push(marker)
     })
+  }
+
+  updatePoints (map, points, zoom, minDist, location) {
+    var centroids = utils.clusterPoints(points, minDist, location)
+    var transformed = utils.transformClusterToPoints(centroids, zoom)
+    this.addPoints(map, transformed)
   }
 
   deletePoints (markers) {
@@ -202,19 +229,10 @@ class GMap extends Component {
     // Create a new bounds object
     let bounds = new window.google.maps.LatLngBounds()
     positions.forEach(position => {
-      let coordinates = this.parseGeoJSON(position)
+      let coordinates = utils.parseGeoJSON(position)
       bounds.extend(coordinates)
     })
     map.fitBounds(bounds)
-  }
-
-  parseGeoJSON (location) {
-    let geojson = JSON.parse(location.st_asgeojson)
-    let coordinates = {
-      lng: geojson.coordinates[0],
-      lat: geojson.coordinates[1]
-    }
-    return coordinates
   }
 
   componentDidMount () {
@@ -224,7 +242,9 @@ class GMap extends Component {
   componentWillUpdate (nextProps, nextState) {
     if (this.state.map) {
       this.createOrUpdateUserCircle(this.state.map, nextProps.location)
-      this.addPoints(this.state.map, nextProps.questions.data)
+      if (nextProps.location && nextProps.questions.data.length > 0) {
+        this.updatePoints(this.state.map, nextProps.questions.data, this.state.currentZoom, this.state.minDist[this.state.currentZoom], nextProps.location)
+      }
       this.state.map.setCenter(nextProps.location)
     }
   }
