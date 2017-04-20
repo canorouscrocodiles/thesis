@@ -26,7 +26,7 @@ const validateUser = data => {
     } else {
       resolve()
     }
-  });
+  })
 }
 
 module.exports = socket => {
