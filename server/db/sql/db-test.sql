@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS questions (
   user_id INTEGER NOT NULL REFERENCES users ON DELETE CASCADE,
   created_timestamp TIMESTAMP DEFAULT now() NOT NULL,
   updated_timestamp TIMESTAMP DEFAULT now() NOT NULL,
+  last_viewed_timestamp TIMESTAMP DEFAULT now() NOT NULL,
   message VARCHAR (300) NOT NULL,
   coordinates geography(POINT,4326) NOT NULL,
   location VARCHAR (100) NOT NULL,
