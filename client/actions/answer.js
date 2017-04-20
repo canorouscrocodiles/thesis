@@ -23,11 +23,11 @@ export const fetchUserAnswers = (id) => {
   }
 }
 
-export const fetchQuestionAnswers = (id) => {
+export const fetchQuestionAnswers = (id, user_id) => {
   return dispatch => {
     dispatch(signalAnswersRequest())
 
-    axios.get(`/api/questions/${id}/answers`)
+    axios.post(`/api/questions/${id}/answers`, { user_id: user_id })
       .then(answers => dispatch(setQuestionAnswers(answers.data)))
       .catch(error => dispatch(signalRequestError(error)))
   }

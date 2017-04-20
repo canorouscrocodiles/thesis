@@ -66,6 +66,14 @@ li.nav-link-left {
   border-radius: 4px;
 }
 
+.upvote {
+  background-color: green;
+}
+
+.downvote {
+  background-color: red;
+}
+
 input, select, option {
   padding: 8px;
   border-radius: 4px;

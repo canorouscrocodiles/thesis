@@ -10,7 +10,8 @@ const getAnswers = (req, res) => {
 
 const getQuestionAnswers = (req, res) => {
   const id = req.params.id
-  Answers.selectQuestionAnswers(id)
+  const user_id = req.body.user_id
+  Answers.selectQuestionAnswers(id, user_id)
     .then(answers => res.status(200).send(answers))
     .catch(err => ErrorResponseHandler(err, res, 500))
 }
