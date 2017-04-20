@@ -31,10 +31,16 @@ const createQuestion = (req, res) => {
 }
 
 const updateQuestion = (req, res) => {
-  const { id, message, coordinates, location, category_id } = req.body
-  Questions.updateQuestion({ id, message, coordinates, location, category_id })
-  .then(() => res.sendStatus(200))
-  .catch(err => ErrorResponseHandler(err, res, 500))
+  if (req.query.deactivate) {
+    Questions.deactivateQuestion(req.params.id)
+    .then(() => res.sendStatus(200))
+    .catch(err => ErrorResponseHandler(err, res, 500))
+  } else {
+    const { id, message, coordinates, location, category_id } = req.body
+    Questions.updateQuestion({ id, message, coordinates, location, category_id })
+    .then(() => res.sendStatus(200))
+    .catch(err => ErrorResponseHandler(err, res, 500))
+  }
 }
 
 const deleteQuestion = (req, res) => {
