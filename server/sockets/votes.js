@@ -36,7 +36,7 @@ module.exports = (socket, action) => {
     io.to(action.question_id).emit('action', { type: UPDATE_VOTE_SUCCESS, data: { question_id: action.question_id, answer_id: action.answer_id, vote_count: updatedVote.vote_count } })
   })
   .catch((error) => {
-    console.log(`Error on selecting, updating or inserting a row in votes table. ${error}`);
+    console.log(`Error on selecting, updating or inserting a row in votes table. ${error}`)
     io.to(socket.id).emit('action', { type: UPDATE_VOTE_FAILURE, data: error })
   })
 }

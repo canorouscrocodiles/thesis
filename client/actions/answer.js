@@ -6,11 +6,16 @@ export const USER_ANSWERS_REQUEST_RECEIVED = 'USER_ANSWERS_REQUEST_RECEIVED'
 export const ANSWERS_REQUEST_ERROR = 'ANSWERS_REQUEST_ERROR'
 export const SUCCESSFUL_POST_ANSWER = 'SUCCESSFUL_POST_ANSWER'
 export const FAILED_POST_ANSWER = 'FAILED_POST_ANSWER'
+export const SORT_ANSWERS = 'SORT_ANSWERS'
 
 const signalAnswersRequest = () => ({ type: ANSWERS_REQUEST_SENT })
 const signalRequestError = (error) => ({ type: ANSWERS_REQUEST_ERROR, data: error })
 const setUserAnswers = (answers) => ({ type: USER_ANSWERS_REQUEST_RECEIVED, data: answers })
 const setQuestionAnswers = (answers) => ({ type: QUESTION_ANSWERS_REQUEST_RECEIVED, data: answers })
+
+export const sortAnswers = (sortBy) => {
+  return { type: SORT_ANSWERS, sortBy: sortBy }
+}
 
 export const fetchUserAnswers = (id) => {
   return dispatch => {

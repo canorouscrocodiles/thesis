@@ -1,13 +1,62 @@
+import _ from 'lodash'
+import utils from '../utils'
 import {
-  QUESTIONS_REQUEST_SENT, QUESTIONS_REQUEST_ERROR, SELECT_SINGLE_QUESTION, SINGLE_QUESTION_RECEIVED
+  QUESTIONS_REQUEST_SENT,
+  QUESTIONS_REQUEST_ERROR,
+  SELECT_SINGLE_QUESTION,
+  SINGLE_QUESTION_RECEIVED,
+  SORT_QUESTIONS
 } from '../actions/questions'
 import { POST_QUESTION_SUCCESS, GET_QUESTION_SUCCESS, GET_CATEGORIES_SUCCESS, GET_CATEGORIES_FAILURE } from '../actions/sockets/questions'
 import { UPDATED_QUESTIONS_SUCCESS, UPDATED_QUESTIONS_FAILURE } from '../actions/sockets/location'
 const UPDATE_QUESTION_SUCCESS = 'UPDATE_QUESTION_SUCCESS'
-const initialState = {data: [], categoryList: [], selectedQuestion: {}, fetching: false, error: null}
+const initialState = {data: [], allQuestions: [], selectedQuestion: {}, sortBy: 'New', categories: [], categoryList: [], fetching: false, error: null}
+
+// Once a page reloads all questions come in and will be sorted by NEW
+// On sortBy change re-order all questions
+// If questions are updated re-order the questions coming in by sortBy
+
+const sortBy = {
+  New: ['timestamp', 'desc'],
+  Old: ['timestamp', 'asc'],
+  Trending: ['vote_count', 'desc'],
+  Distance: ['distance', 'asc']
+}
+
+const sortQuestions = (questions, sortBy, order) => _.orderBy(questions, [sortBy], [order])
+const calculateDistance = (questions, location) => {
+  questions.forEach(q => {
+    let coords = utils.parseGeoJSON(q.st_asgeojson)
+    q.distance = utils.haversine(location.lat, location.lng, coords.lat, coords.lng)
+  })
+}
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case SORT_QUESTIONS:
+      // Sort questions by the criteria set
+      let sortedQuestions = sortQuestions(state.allQuestions, sortBy[action.sortBy][0], sortBy[action.sortBy][1])
+
+      // Group the questions into categories
+      let grouped = _.groupBy(sortedQuestions, 'category')
+
+      // Create array for filtered questions
+      let results = []
+
+      // Loop through all categories
+      // If the key is in our grouped object then concat that array to our results
+      action.categories.forEach(category => {
+        if (grouped[category]) {
+          results = [...results, ...grouped[category]]
+        }
+      })
+
+      return {
+        ...state,
+        sortBy: action.sortBy,
+        categories: action.categories,
+        data: action.categories.length > 0 ? results : sortedQuestions
+      }
     case QUESTIONS_REQUEST_SENT:
       return {
         ...state,
@@ -42,9 +91,11 @@ export default (state = initialState, action) => {
         fetching: false
       }
     case UPDATED_QUESTIONS_SUCCESS:
+      calculateDistance(action.data, action.location)
       return {
         ...state,
         data: action.data,
+        allQuestions: action.data,
         fetching: false
       }
     case UPDATED_QUESTIONS_FAILURE:

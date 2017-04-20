@@ -1,6 +1,7 @@
 var findCentroid = function (points) {
   var numCords = points.length
-  var sumLats = 0, sumLongs = 0
+  var sumLats = 0
+  var sumLongs = 0
   for (var i = 0; i < numCords; i++) {
     sumLats += points[i].coordinates.lat
     sumLongs += points[i].coordinates.lng
@@ -15,15 +16,33 @@ Haversine formula implementation from https://rosettacode.org/wiki/Haversine_for
 Takes in 4 arguments, (latitude1, longitude1, latitude2, longitude2) and returns km
 */
 
-var haversine = function () {
-  var radians = Array.prototype.map.call(arguments, function (deg) { return deg / 180.0 * Math.PI })
-  var lat1 = radians[0], lon1 = radians[1], lat2 = radians[2], lon2 = radians[3]
-  var R = 6372.8 // km
-  var dLat = lat2 - lat1
-  var dLon = lon2 - lon1
-  var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2)
-  var c = 2 * Math.asin(Math.sqrt(a))
-  return R * c
+// var haversine = function () {
+//   var radians = Array.prototype.map.call(arguments, function (deg) { return deg / 180.0 * Math.PI })
+//   var lat1 = radians[0], lon1 = radians[1], lat2 = radians[2], lon2 = radians[3]
+//   var R = 6372.8 // km
+//   var dLat = lat2 - lat1
+//   var dLon = lon2 - lon1
+//   var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2)
+//   var c = 2 * Math.asin(Math.sqrt(a))
+//   return R * c
+// }
+
+const deg2rad = (deg) => {
+  return deg * (Math.PI / 180)
+}
+
+const haversine = (lat1, lon1, lat2, lon2) => {
+  const R = 6372.8
+  const dLat = deg2rad(lat2 - lat1)
+  const dLon = deg2rad(lon2 - lon1)
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2)
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+  const d = R * c // Distance in km
+
+  return d
 }
 
 class LinkedList {

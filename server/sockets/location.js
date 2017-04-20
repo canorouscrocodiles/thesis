@@ -8,10 +8,10 @@ const updateLocation = (socket, {user_id, coordinates}) => {
   Location.updateLocation(socket.id, user_id, coordinates)
   .then(() => Questions.selectQuestions(coordinates))
   .then((questions) => {
-    io.to(socket.id).emit('action', { type: UPDATED_QUESTIONS_SUCCESS, data: questions })
+    io.to(socket.id).emit('action', { type: UPDATED_QUESTIONS_SUCCESS, data: questions, location: coordinates })
   })
   .catch(error => {
-    console.log(`Error updating location or selecting nearby questions. Error: ${error}`);
+    console.log(`Error updating location or selecting nearby questions. Error: ${error}`)
     io.to(socket.id).emit('action', { type: UPDATED_QUESTIONS_FAILURE, data: error })
   })
 }
@@ -19,10 +19,10 @@ const updateLocation = (socket, {user_id, coordinates}) => {
 const deleteLocation = (id) => {
   Location.deleteLocation(id)
   .then(() => {
-    console.log(`Successfully deleted socket with id ${id}`);
+    console.log(`Successfully deleted socket with id ${id}`)
   })
   .catch(error => {
-    console.log(`Error deleting: ${error}`);
+    console.log(`Error deleting: ${error}`)
   })
 }
 
