@@ -7,6 +7,11 @@ const router = require('./router')
 const authRouter = require('./authRouter')
 const passport = require('passport')
 const FacebookStrategy = require('passport-facebook').Strategy
+const truncateSocketTable = require('./db/scripts')
+
+truncateSocketTable()
+.then(() => console.log('Sockets table is truncated'))
+.catch((error) => console.log(`Failed to truncate sockets table with error ${error}`))
 
 const app = express()
 const server = require('http').Server(app)
