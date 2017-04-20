@@ -149,7 +149,7 @@ class App extends Component {
         <Menu username={this.props.user.username} />
         <GMap />
         <Route exact path='/' component={PostList} />
-        <Route path='/users/:id' component={this.renderUserProfilePage} />
+        <Route path='/users/:id' render={this.renderUserProfilePage} />
         <Route path='/question/:id' render={this.renderQuestionPage} />
       </div>
     )
