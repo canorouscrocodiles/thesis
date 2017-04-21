@@ -2,7 +2,6 @@ const jwt = require('jsonwebtoken')
 const { verifyUser } = require('./db/models/users')
 const questionHandler = require('./sockets/questions')
 const answerHandler = require('./sockets/answers')
-const socketTestActions = require('../client/actions/sockets/testPing')
 const locationHandler = require('./sockets/location')
 const updateVote = require('./sockets/votes')
 
@@ -26,17 +25,13 @@ const validateUser = data => {
     } else {
       resolve()
     }
-  });
+  })
 }
 
 module.exports = socket => {
   console.log(`Client connected with id: ${socket.id}`)
   socket.on('action', action => {
     switch (action.type) {
-      case 'get/helloworld':
-        socket.emit('action', { type: socketTestActions.SERVER_TO_CLIENT_TEST_PING, data: 'Client to Server and server to client ping success!' })
-
-        break
       case 'enter/':
         console.log(`User id: ${action.data.user_id} with socket id: ${socket.id} is entering room with id ${action.data.question_id}`)
         if (!socket.rooms[action.data.question_id]) {
@@ -82,17 +77,10 @@ module.exports = socket => {
             questionHandler.selectQuestion(socket, action.data)
             console.log(`User with socket id: ${socket.id} is requesting question with id ${action.data}`)
           })
-          .catch(() => socket.emit('action'), { type: 'AUTHORIZATION ERROR' })
+          .catch(() => socket.emit('action', { type: 'AUTHORIZATION ERROR' }))
         break
       case 'post/location':
-        verifyJWT(action.token)
-          .then(({ id }) => verifyUser(id))
-          .then(validateUser)
-          .then(() => {
-            locationHandler.updateLocation(socket, action.data)
-            console.log(`User ${socket.id} updated his location to ${JSON.stringify(action.data)}. Adding it to the sockets table.`);
-          })
-          .catch(() => socket.emit('action'), { type: 'AUTHORIZATION ERROR' })
+        locationHandler.updateLocation(socket, action.data)
         break
       case 'put/vote':
         verifyJWT(action.token)
@@ -100,9 +88,9 @@ module.exports = socket => {
           .then(validateUser)
           .then(() => {
             updateVote(socket, action.data)
-            console.log(`User ${socket.id} updated his vote to answer ${action.data.answer_id} with the vote type of ${action.data.vote_type}`);
+            console.log(`User ${socket.id} updated his vote to answer ${action.data.answer_id} with the vote type of ${action.data.vote_type}`)
           })
-          .catch(() => socket.emit('action'), { type: 'AUTHORIZATION ERROR' })
+          .catch(() => socket.emit('action', { type: 'AUTHORIZATION ERROR' }))
         break
       case 'put/question':
         verifyJWT(action.token)
@@ -112,7 +100,7 @@ module.exports = socket => {
             questionHandler.updateQuestion(socket, action.data)
             console.log(`User ${socket.id} updated his question`)
           })
-          .catch(() => socket.emit('action'), { type: 'AUTHORIZATION ERROR' })
+          .catch(() => socket.emit('action', { type: 'AUTHORIZATION ERROR' }))
         break
       case 'put/answer':
         verifyJWT(action.token)
@@ -122,7 +110,7 @@ module.exports = socket => {
             answerHandler.updateAnswer(socket, action.data)
             console.log(`User ${socket.id} updated his answer`)
           })
-          .catch(() => socket.emit('action'), { type: 'AUTHORIZATION ERROR' })
+          .catch(() => socket.emit('action', { type: 'AUTHORIZATION ERROR' }))
         break
       default:
         break
