@@ -20,6 +20,6 @@ export const postQuestionAnswer = (data) => {
 export const socketUpdateAnswer = data => {
   return dispatch => {
     dispatch({ type: UPDATE_ANSWER_REQUEST })
-    dispatch({ type: SEND_UPDATE_ANSWER, data: data})
+    dispatch({ type: SEND_UPDATE_ANSWER, data: data })
   }
 }

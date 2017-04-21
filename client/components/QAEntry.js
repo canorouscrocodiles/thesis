@@ -5,11 +5,52 @@ import updateVote from '../actions/sockets/votes'
 import { socketUpdateAnswer } from '../actions/sockets/answer'
 
 class QAEntry extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
+    this.state = {
+      message: null,
+      charCount: 300,
+      editing: false
+    }
+    this.handleAnswerChange = this.handleAnswerChange.bind(this)
+    this.updateAnswer = this.updateAnswer.bind(this)
+    this.cancelUpdate = this.cancelUpdate.bind(this)
+    this.renderEditButton = this.renderEditButton.bind(this)
   }
 
-  renderVotingStyles(conditionalClassname, dependentOn, defaultClassName = 'button') {
+  handleAnswerChange (event) {
+    let remaining = 300 - event.target.value.length
+    this.setState({ message: event.target.value, charCount: remaining })
+  }
+
+  updateAnswer () {
+    const { dispatch, socketUpdateAnswer } = this.props
+    if (this.state.message !== null) {
+      if (this.state.message.length < 1) {
+        this.state.message = null
+      } else {
+        this.props.answer.message = this.state.message
+        dispatch(socketUpdateAnswer(this.props.answer.message))
+      }
+    }
+    this.setState({ editing: false })
+  }
+
+  cancelUpdate () {
+    this.setState({ message: null, editing: false })
+  }
+
+  renderEditButton () {
+    const { id } = this.props.user.data
+    const { user_id } = this.props.answer
+    if (id === user_id) {
+      return <button className='button' onClick={() => this.setState({editing: true})}>Edit</button>
+    } else {
+      return null
+    }
+  }
+
+  renderVotingStyles (conditionalClassname, dependentOn, defaultClassName = 'button') {
     const { users_vote_count } = this.props
     if (users_vote_count === dependentOn) {
       return `${defaultClassName} ${conditionalClassname}`
@@ -18,7 +59,7 @@ class QAEntry extends Component {
     }
   }
 
-  renderVoteButtons() {
+  renderVoteButtons () {
     const { dispatch, updateVote } = this.props
     return (
       <div>
@@ -28,26 +69,44 @@ class QAEntry extends Component {
     )
   }
 
-  render() {
+  render () {
     const humanTime = moment(this.props.answer.timestamp).fromNow()
-    return (
-      <div className='list-entry'>
-        <p>{this.props.answer.vote_count}</p>
-        {this.renderVoteButtons()}
-        <div>
-          <p>{this.props.answer.username}</p>
-          <img src={this.props.answer.avatar} />
-          <p className='post-title'>{this.props.answer.message}</p>
-          <p>{humanTime}</p>
+    if (!this.state.editing) {
+      return (
+        <div className='list-entry'>
+          <p>{this.props.answer.vote_count}</p>
+          {this.renderVoteButtons()}
+          <div>
+            <p>{this.props.answer.username}</p>
+            <img src={this.props.answer.avatar} />
+            <p className='post-title'>{this.state.message !== null ? this.state.message : this.props.answer.message}</p>
+            {this.renderEditButton()}
+            <p>{humanTime}</p>
+          </div>
         </div>
-      </div>
-    )
+      )
+    } else {
+      return (
+        <div className='list-entry'>
+          <p>{this.props.answer.vote_count}</p>
+          {this.renderVoteButtons()}
+          <div>
+            <p>{this.props.answer.username}</p>
+            <img src={this.props.answer.avatar} />
+            <textarea maxLength='300' cols='100' rows='4' value={this.state.message !== null ? this.state.message : this.props.answer.message} onChange={this.handleAnswerChange} name='answer' placeholder='Edit answer...' />
+            <p>{`${this.state.charCount} characters remaining`}</p>
+            <span className='button' onClick={this.updateAnswer}>Save</span>
+            <span className='button' onClick={this.cancelUpdate}>Cancel</span>
+          </div>
+        </div>
+      )
+    }
   }
 }
 
 const mapStateToProps = (state, ownProps) => {
   const id = state.user.data && state.user.data.id ? state.user.data.id : null
-  return { user_id: id, users_vote_count: ownProps.answer.users_vote_count }
+  return { user: state.user, user_id: id, users_vote_count: ownProps.answer.users_vote_count }
 }
 
 const mergeProps = (stateProps, dispatchProps, ownProps) => {
@@ -56,7 +115,7 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
     ...dispatchProps,
     ...ownProps,
     updateVote: stateProps.user_id ? (vote_type) => updateVote(ownProps.answer.id, ownProps.answer.question_id, stateProps.user_id, vote_type) : null,
-    socketUpdateAnswer: stateProps.user_id === ownProps.answer.user_id ? (message) => socketUpdateAnswer({ id: ownProps.answer.id, question_id: ownProps.answer.question_id, message: message }) : null
+    socketUpdateAnswer: (message) => socketUpdateAnswer({ id: ownProps.answer.id, question_id: ownProps.answer.question_id, message: message })
   }
 }
 
