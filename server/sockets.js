@@ -90,7 +90,7 @@ module.exports = socket => {
           .then(validateUser)
           .then(() => {
             locationHandler.updateLocation(socket, action.data)
-            console.log(`User ${socket.id} updated his location to ${JSON.stringify(action.data)}. Adding it to the sockets table.`);
+            console.log(`User ${socket.id} updated his location to ${JSON.stringify(action.data.coordinates)}. Adding it to the sockets table.`);
           })
           .catch(() => socket.emit('action'), { type: 'AUTHORIZATION ERROR' })
         break
