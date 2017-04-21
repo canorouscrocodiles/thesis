@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { selectSingleQuestion, deactivateQuestion } from '../actions/questions'
-import { enterRoom, leaveRoom } from '../actions/sockets/questions'
+import { enterRoom, leaveRoom, socketUpdateQuestion } from '../actions/sockets/questions'
 import moment from 'moment'
 
 class MainQuestion extends Component {
@@ -68,7 +68,8 @@ const mapDispatchToProps = (dispatch) => {
     selectSingleQuestion: (id) => dispatch(selectSingleQuestion(id)),
     enterRoom: (id) => dispatch(enterRoom(id)),
     leaveRoom: (id) => dispatch(leaveRoom(id)),
-    deactivateQuestion: (id) => dispatch(deactivateQuestion(id))
+    deactivateQuestion: (id) => dispatch(deactivateQuestion(id)),
+    socketUpdateQuestion: data => dispatch(socketUpdateQuestion(data))
   }
 }
 

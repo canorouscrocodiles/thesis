@@ -4,9 +4,12 @@ import thunk from 'redux-thunk'
 import { createLogger } from 'redux-logger'
 import rootReducer from './reducers/index'
 import reduxSocket from 'redux-socket.io'
+import cookie from 'react-cookie'
 
 const socket = io('/')
 const pessimisticExecute = (action, emit, next, dispatch) => {
+  let token = cookie.select(/(onpoint-bearer)/g)['onpoint-bearer']
+  action.token = token
   emit('action', action)
 }
 const socketMiddleware = reduxSocket(socket, ['post/', 'get/', 'put/', 'delete/', 'enter/', 'leave/'], { execute: pessimisticExecute })

@@ -1,7 +1,6 @@
 const io = require('../index').io
 const Answers = require('../db/models/answers')
 
-//  ------------- NOT TESTED -------------------
 module.exports.postAnswer = (socket, action) => {
   const { message, user_id, question_id } = action
   Answers.insertAnswer({message, user_id, question_id})
@@ -19,4 +18,15 @@ module.exports.postAnswer = (socket, action) => {
         error: 'Failed to insert answer into DB'
       })
     })
+}
+
+module.exports.updateAnswer = (socket, action) => {
+  Answers.updateAnswer(action)
+  .then(() => {
+    io.to(action.question_id).emit('action', { type: 'UPDATE_ANSWER_SUCCESS', data: action })
+  })
+  .catch(error => {
+    console.log(`Failed to update answer ${error}`)
+    socket.emit('action', { type: 'UPDATE_ANSWER_FAILURE', error: `Failed to update answer ${error}` })
+  })
 }
