@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import updateVote from '../actions/sockets/votes'
+import { socketUpdateAnswer } from '../actions/sockets/answer'
 
 class QAEntry extends Component {
   constructor(props) {
@@ -54,7 +55,8 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
     ...stateProps,
     ...dispatchProps,
     ...ownProps,
-    updateVote: stateProps.user_id ? (vote_type) => updateVote(ownProps.answer.id, ownProps.answer.question_id, stateProps.user_id, vote_type) : null
+    updateVote: stateProps.user_id ? (vote_type) => updateVote(ownProps.answer.id, ownProps.answer.question_id, stateProps.user_id, vote_type) : null,
+    socketUpdateAnswer: stateProps.user_id === ownProps.answer.user_id ? (message) => socketUpdateAnswer({ id: ownProps.answer.id, question_id: ownProps.answer.question_id, message: message }) : null
   }
 }
 

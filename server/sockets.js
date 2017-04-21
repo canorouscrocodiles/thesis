@@ -101,6 +101,14 @@ module.exports = socket => {
         updateVote(socket, action.data)
         console.log(`User ${socket.id} updated his vote to answer ${action.data.answer_id} with the vote type of ${action.data.vote_type}`);
         break
+      case 'put/question':
+        questionHandler.updateQuestion(socket, action.data)
+        console.log(`User ${socket.id} updated his question`);
+        break
+      case 'put/answer':
+        answerHandler.updateAnswer(socket, action.data)
+        console.log(`User ${socket.id} updated his answer`);
+        break
       default:
         break
         // socket.emit('action', { type: socketActions.SERVER_TO_CLIENT_FAILURE, error: 'No socket route match'})

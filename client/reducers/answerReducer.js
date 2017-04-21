@@ -6,6 +6,7 @@ import { UPDATE_USER_VOTE } from '../actions/sockets/votes'
 import { sendNotification } from '../actions/notifications'
 const UPDATE_VOTE_SUCCESS = 'UPDATE_VOTE_SUCCESS'
 const UPDATE_VOTE_FAILURE = 'UPDATE_VOTE_FAILURE'
+const UPDATE_ANSWER_SUCCESS = 'UPDATE_ANSWER_SUCCESS'
 const initialState = { data: [], userAnswers: [], fetching: false, error: null }
 
 export default (state = initialState, action) => {
@@ -72,6 +73,19 @@ export default (state = initialState, action) => {
           )
         ]
       }
+    case UPDATE_ANSWER_SUCCESS:
+    return {
+      ...state,
+      data: [
+        ...state.data.map(answer => answer.id === action.data.id ?
+          {
+            ...answer,
+            message: action.data.message
+          } :
+          answer
+        )
+      ]
+    }
     default:
       return state
   }

@@ -2,6 +2,8 @@ const Questions = require('../db/models/questions')
 const io = require('../index').io
 const POST_QUESTION_SUCCESS = 'POST_QUESTION_SUCCESS'
 const POST_QUESTION_FAILURE = 'POST_QUESTION_FAILURE'
+const UPDATE_QUESTION_SUCCESS = 'UPDATE_QUESTION_SUCCESS'
+const UPDATE_QUESTION_FAILURE = 'UPDATE_QUESTION_FAILURE'
 const GET_QUESTION_SUCCESS = 'GET_QUESTION_SUCCESS'
 const GET_QUESTION_FAILURE = 'GET_QUESTION_FAILURE'
 
@@ -37,14 +39,19 @@ const insertQuestion = (socket, action) => {
     })
     .catch((error) => {
       console.log(`Failed to insert question and query all questions. Error: ${error}`)
-      io.emit('action', { type: POST_QUESTION_FAILURE, error: `Failed to insert question and query all questions. Error: ${error}` })
+      socket.emit('action', { type: POST_QUESTION_FAILURE, error: `Failed to insert question and query all questions. Error: ${error}` })
     })
 }
 
 const updateQuestion = (socket, action) => {
-  //  verify user
-  //  update question in DB
-  //  emit update to all users
+  Questions.updateQuestion(action)
+  .then(() => {
+    io.to(action.id).emit('action', { type: UPDATE_QUESTION_SUCCESS, data: action })
+  })
+  .catch((error) => {
+    console.log(`Failed to update question. ${error}`)
+    socket.emit('action', { type: UPDATE_QUESTION_FAILURE, error: `Failed to update question ${error}` })
+  })
 }
 
 module.exports = {
