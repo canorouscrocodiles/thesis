@@ -34,6 +34,8 @@ const deleteQuestion = (id) => db.none(`DELETE FROM questions WHERE id = ${id}`)
 
 const deactivateQuestion = (id) => db.none(`UPDATE questions SET active = 'f' WHERE id = ${id}`)
 
+const deactivateQuestions = () => db.none(`UPDATE questions SET active = 'f' WHERE updated_timestamp <= NOW() - INTERVAL '48 hour'`)
+
 module.exports = {
   selectQuestions: selectQuestions,
   selectQuestion: selectQuestion,
@@ -41,5 +43,6 @@ module.exports = {
   insertQuestion: insertQuestion,
   updateQuestion: updateQuestion,
   deleteQuestion: deleteQuestion,
-  deactivateQuestion: deactivateQuestion
+  deactivateQuestion: deactivateQuestion,
+  deactivateQuestions: deactivateQuestions
 }

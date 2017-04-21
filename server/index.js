@@ -8,6 +8,8 @@ const authRouter = require('./authRouter')
 const passport = require('passport')
 const FacebookStrategy = require('passport-facebook').Strategy
 const truncateSocketTable = require('./db/scripts')
+const cron = require('node-cron')
+const db = require('./db/models/questions')
 
 truncateSocketTable()
 .then(() => console.log('Sockets table is truncated'))
@@ -22,7 +24,15 @@ module.exports.io = io
 const socket = require('./sockets')
 
 if (!module.parent) {
-  server.listen(port, () => console.log(`Listening on port: ${port} in ${process.env.NODE_ENV} environment`))
+  server.listen(port, () => {
+    console.log(`Listening on port: ${port} in ${process.env.NODE_ENV} environment`)
+
+    cron.schedule('0 0 * * *', () => {
+      return db.deactivateQuestions()
+      .then(() => console.log('Cron job has deactivated all questions with no new answers within the last 48 hours'))
+      .catch((error) => console.log(`Cron job failed to deactivate inactive questions with error ${error}`))
+    }, true)
+  })
 }
 
 let fbOptions = {
