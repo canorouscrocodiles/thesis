@@ -21,10 +21,6 @@ p {
   line-height: 1.5em;
 }
 
-textarea {
-    resize: none;
-}
-
 #title {
   margin: 10px 10px 0;
   color: white;
@@ -74,13 +70,17 @@ li.nav-link-left {
   background-color: red;
 }
 
-input, select, option {
+input, select, option, textarea {
   padding: 8px;
   border-radius: 4px;
   box-shadow: none;
   border: 0 solid #fff;
   margin: 4px;
   outline: none;
+}
+
+textarea {
+  resize: none;
 }
 
 #menu {

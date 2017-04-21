@@ -39,7 +39,9 @@ module.exports = socket => {
         break
       case 'enter/':
         console.log(`User id: ${action.data.user_id} with socket id: ${socket.id} is entering room with id ${action.data.question_id}`)
-        questionHandler.enterRoom(socket, action)
+        if (!socket.rooms[action.data.question_id]) {
+          questionHandler.enterRoom(socket, action)
+        }
         break
       case 'leave/':
         console.log(`User id: ${action.data.user_id} with socket id: ${socket.id} is leaving room with id ${action.data.question_id}`)
@@ -108,7 +110,7 @@ module.exports = socket => {
           .then(validateUser)
           .then(() => {
             questionHandler.updateQuestion(socket, action.data)
-            console.log(`User ${socket.id} updated his question`);
+            console.log(`User ${socket.id} updated his question`)
           })
           .catch(() => socket.emit('action'), { type: 'AUTHORIZATION ERROR' })
         break
@@ -118,7 +120,7 @@ module.exports = socket => {
           .then(validateUser)
           .then(() => {
             answerHandler.updateAnswer(socket, action.data)
-            console.log(`User ${socket.id} updated his answer`);
+            console.log(`User ${socket.id} updated his answer`)
           })
           .catch(() => socket.emit('action'), { type: 'AUTHORIZATION ERROR' })
         break
