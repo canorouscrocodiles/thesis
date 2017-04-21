@@ -6,8 +6,6 @@ const socketTestActions = require('../client/actions/sockets/testPing')
 const locationHandler = require('./sockets/location')
 const updateVote = require('./sockets/votes')
 
-const allClients = {}
-
 const verifyJWT = token => {
   return new Promise((resolve, reject) => {
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
@@ -20,16 +18,19 @@ const verifyJWT = token => {
   })
 }
 
+const validateUser = data => {
+  return new Promise((resolve, reject) => {
+    let exists = data[0].exists
+    if (!exists) {
+      reject(new Error(`Authentication Error: User doesn't exist in DB`))
+    } else {
+      resolve()
+    }
+  });
+}
+
 module.exports = socket => {
   console.log(`Client connected with id: ${socket.id}`)
-  socket.user = 'anonymous'
-  socket.join(socket.user)
-
-  allClients[socket.user] = socket.id
-  console.log(`All clients: ${JSON.stringify(allClients)}`)
-  socket.emit('echo', 'Hello World')
-  socket.emit('clients', allClients)
-
   socket.on('action', action => {
     switch (action.type) {
       case 'get/helloworld':
@@ -54,64 +55,81 @@ module.exports = socket => {
       case 'post/ANSWER_TO_QUESTION':
         console.log(`User with socket id: ${socket.id} is posting answer ${action.data}`)
 
-        verifyJWT(action.data.token)
+        verifyJWT(action.token)
           .then(({ id }) => verifyUser(id))
-          .then(data => {
-            let exists = data[0].exists
-            if (!exists) {
-              throw new Error(`Authentication Error: User doesn't exist in DB`)
-            }
-          })
+          .then(validateUser)
           .then(() => answerHandler.postAnswer(socket, action.data))
           .catch(({name, message}) => {
             console.log(`${name} - ${message}`)
-            // Emit Authentication error to client
-            socket.emit('action', { type: socketTestActions.SERVER_TO_CLIENT_TEST_PING, data: 'Authorization Error' })
+            socket.emit('action', { type: 'AUTHORIZATION ERROR' })
           })
 
         break
       case 'post/question':
         console.log(`User with socket id: ${socket.id} is posting a question`)
 
-        verifyJWT(action.data.token)
+        verifyJWT(action.token)
           .then(({ id }) => verifyUser(id))
-          .then(data => {
-            let exists = data[0].exists
-            if (!exists) {
-              throw new Error(`Authentication Error: User doesn't exist in DB`)
-            }
-          })
+          .then(validateUser)
           .then(() => questionHandler.insertQuestion(socket, action.data))
           .catch(({name, message}) => {
             console.log(`${name} - ${message}`)
-            // Emit authentication error to client
-            socket.emit('action', { type: socketTestActions.SERVER_TO_CLIENT_TEST_PING, data: 'Authorization Error' })
+            socket.emit('action', { type: 'AUTHORIZATION ERROR' })
           })
 
         break
       case 'get/question':
-        console.log(`User with socket id: ${socket.id} is requesting question with id ${action.data}`)
-        questionHandler.selectQuestion(socket, action.data)
+        verifyJWT(action.token)
+          .then(({ id }) => verifyUser(id))
+          .then(validateUser)
+          .then(() => {
+            questionHandler.selectQuestion(socket, action.data)
+            console.log(`User with socket id: ${socket.id} is requesting question with id ${action.data}`)
+          })
+          .catch(() => socket.emit('action'), { type: 'AUTHORIZATION ERROR' })
         break
       case 'post/location':
-        console.log(`User ${socket.id} updated his location to ${JSON.stringify(action.data)}. Adding it to the sockets table.`);
-        locationHandler.updateLocation(socket, action.data)
+        verifyJWT(action.token)
+          .then(({ id }) => verifyUser(id))
+          .then(validateUser)
+          .then(() => {
+            locationHandler.updateLocation(socket, action.data)
+            console.log(`User ${socket.id} updated his location to ${JSON.stringify(action.data)}. Adding it to the sockets table.`);
+          })
+          .catch(() => socket.emit('action'), { type: 'AUTHORIZATION ERROR' })
         break
       case 'put/vote':
-        updateVote(socket, action.data)
-        console.log(`User ${socket.id} updated his vote to answer ${action.data.answer_id} with the vote type of ${action.data.vote_type}`);
+        verifyJWT(action.token)
+          .then(({ id }) => verifyUser(id))
+          .then(validateUser)
+          .then(() => {
+            updateVote(socket, action.data)
+            console.log(`User ${socket.id} updated his vote to answer ${action.data.answer_id} with the vote type of ${action.data.vote_type}`);
+          })
+          .catch(() => socket.emit('action'), { type: 'AUTHORIZATION ERROR' })
         break
       case 'put/question':
-        questionHandler.updateQuestion(socket, action.data)
-        console.log(`User ${socket.id} updated his question`);
+        verifyJWT(action.token)
+          .then(({ id }) => verifyUser(id))
+          .then(validateUser)
+          .then(() => {
+            questionHandler.updateQuestion(socket, action.data)
+            console.log(`User ${socket.id} updated his question`);
+          })
+          .catch(() => socket.emit('action'), { type: 'AUTHORIZATION ERROR' })
         break
       case 'put/answer':
-        answerHandler.updateAnswer(socket, action.data)
-        console.log(`User ${socket.id} updated his answer`);
+        verifyJWT(action.token)
+          .then(({ id }) => verifyUser(id))
+          .then(validateUser)
+          .then(() => {
+            answerHandler.updateAnswer(socket, action.data)
+            console.log(`User ${socket.id} updated his answer`);
+          })
+          .catch(() => socket.emit('action'), { type: 'AUTHORIZATION ERROR' })
         break
       default:
         break
-        // socket.emit('action', { type: socketActions.SERVER_TO_CLIENT_FAILURE, error: 'No socket route match'})
     }
   })
 
