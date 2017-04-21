@@ -12,6 +12,7 @@ import PostList from './PostList'
 import UserProfile from './UserProfile'
 import { testSocketPing } from '../actions/sockets/testPing'
 import { sendLocationToServer } from '../actions/sockets/location'
+import { getCategories } from '../actions/sockets/questions'
 
 const watchOptions = {
   enableHighAccuracy: true,
@@ -34,6 +35,7 @@ class App extends Component {
     this.watchPosition()
     this.removeLocationHash()
     this.setUserFromCookie()
+    this.props.getCategories()
     Notification.requestPermission()
   }
 
@@ -171,7 +173,8 @@ const mapDispatchToProps = dispatch => {
     fetchLocationError: error => dispatch(fetchLocationError(error)),
     testSocketPing: () => dispatch(testSocketPing()),
     fetchQuestions: location => dispatch(fetchQuestions(location)),
-    sendLocationToServer: (data) => dispatch(sendLocationToServer(data))
+    sendLocationToServer: (data) => dispatch(sendLocationToServer(data)),
+    getCategories: () => dispatch(getCategories())
   }
 }
 

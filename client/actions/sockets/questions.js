@@ -13,6 +13,9 @@ export const POST_QUESTION_SUCCESS = 'POST_QUESTION_SUCCESS'
 export const GET_QUESTION_SUCCESS = 'GET_QUESTION_SUCCESS'
 const SOCKET_GET_QUESTION = 'get/question'
 const SOCKET_UPDATE_QUESTION = 'put/question'
+export const GET_CATEGORIES_REQUEST = 'get/categories'
+export const GET_CATEGORIES_SUCCESS = 'GET_CATEGORIES_SUCCESS'
+export const GET_CATEGORIES_FAILURE = 'GET_CATEGORIES_FAILURE'
 
 export const enterRoom = (info) => ({ type: ENTER_QUESTION_ROOM_REQUEST, data: info })
 export const leaveRoom = (info) => ({ type: LEAVE_QUESTION_ROOM_REQUEST, data: info })
@@ -20,6 +23,7 @@ const socketPostQuestion = (data) => ({ type: POST_QUESTION_REQUEST, data: data 
 const sendSocketFetchQuestion = (id) => ({ type: SOCKET_GET_QUESTION, data: id })
 const signalQuestionsUpdateRequest = () => ({ type: UPDATE_QUESTION_REQUEST })
 const sendSocketUpdateQuestion = (data) => ({ type: SOCKET_UPDATE_QUESTION, data: data })
+export const getCategories = () => ({ type: GET_CATEGORIES_REQUEST })
 
 export const postQuestion = data => {
   // Extend data with JWT

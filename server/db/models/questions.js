@@ -40,6 +40,8 @@ const deactivateQuestion = (id) => db.none(`UPDATE questions SET active = 'f' WH
 
 const deactivateQuestions = () => db.none(`UPDATE questions SET active = 'f' WHERE updated_timestamp <= NOW() - INTERVAL '48 hour'`)
 
+const getCategories = () => db.manyOrNone(`SELECT * FROM categories`)
+
 module.exports = {
   selectQuestions: selectQuestions,
   selectQuestion: selectQuestion,
@@ -50,5 +52,6 @@ module.exports = {
   updateQuestion: updateQuestion,
   deleteQuestion: deleteQuestion,
   deactivateQuestion: deactivateQuestion,
-  deactivateQuestions: deactivateQuestions
+  deactivateQuestions: deactivateQuestions,
+  getCategories: getCategories
 }

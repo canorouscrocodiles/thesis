@@ -6,6 +6,8 @@ const UPDATE_QUESTION_SUCCESS = 'UPDATE_QUESTION_SUCCESS'
 const UPDATE_QUESTION_FAILURE = 'UPDATE_QUESTION_FAILURE'
 const GET_QUESTION_SUCCESS = 'GET_QUESTION_SUCCESS'
 const GET_QUESTION_FAILURE = 'GET_QUESTION_FAILURE'
+const GET_CATEGORIES_SUCCESS = 'GET_CATEGORIES_SUCCESS'
+const GET_CATEGORIES_FAILURE = 'GET_CATEGORIES_FAILURE'
 
 const enterRoom = (socket, action) => {
   socket.join(action.data.question_id)
@@ -62,11 +64,23 @@ const updateQuestion = (socket, action) => {
   })
 }
 
+const getCategories = (socket) => {
+  Questions.getCategories()
+  .then((action) => {
+    socket.emit('action', { type: GET_CATEGORIES_SUCCESS, data: action })
+  })
+  .catch((error) => {
+    console.log(`Failed to get categories. ${error}`)
+    socket.emit('action', { type: GET_CATEGORIES_FAILURE, error: `Failed to get categories. ${error}` })
+  })
+}
+
 module.exports = {
   enterRoom: enterRoom,
   leaveRoom: leaveRoom,
   updateLastUpdatedTime: updateLastUpdatedTime,
   selectQuestion: selectQuestion,
   insertQuestion: insertQuestion,
-  updateQuestion: updateQuestion
+  updateQuestion: updateQuestion,
+  getCategories: getCategories
 }
