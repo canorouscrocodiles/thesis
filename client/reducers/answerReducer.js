@@ -11,10 +11,13 @@ import {
 import utils from '../utils'
 import { UPDATE_USER_VOTE } from '../actions/sockets/votes'
 import { sendNotification } from '../actions/notifications'
+import { getUnread } from '../actions/sockets/answer'
 const UPDATE_VOTE_SUCCESS = 'UPDATE_VOTE_SUCCESS'
 const UPDATE_VOTE_FAILURE = 'UPDATE_VOTE_FAILURE'
 const UPDATE_ANSWER_SUCCESS = 'UPDATE_ANSWER_SUCCESS'
-const initialState = { data: [], userAnswers: [], sortBy: 'New', fetching: false, error: null }
+const UNREAD_ANSWERS_SUCCESS = 'UNREAD_ANSWERS_SUCCESS'
+const UNREAD_ANSWERS_FAILURE = 'UNREAD_ANSWERS_FAILURE'
+const initialState = { data: [], unread: [], userAnswers: [], sortBy: 'New', fetching: false, error: null }
 
 const sortBy = {
   New: ['timestamp', 'desc'],
@@ -64,6 +67,7 @@ export default (state = initialState, action) => {
       let qID = parseInt(path[2])
       if (qID !== action.data.question_id) {
         sendNotification(action.data)
+        getUnread()
         return { ...state }
       } else {
         return {
@@ -100,18 +104,28 @@ export default (state = initialState, action) => {
         ]
       }
     case UPDATE_ANSWER_SUCCESS:
-    return {
-      ...state,
-      data: [
-        ...state.data.map(answer => answer.id === action.data.id ?
-          {
-            ...answer,
-            message: action.data.message
-          } :
-          answer
-        )
-      ]
-    }
+      return {
+        ...state,
+        data: [
+          ...state.data.map(answer => answer.id === action.data.id ?
+            {
+              ...answer,
+              message: action.data.message
+            } :
+            answer
+          )
+        ]
+      }
+    case UNREAD_ANSWERS_SUCCESS:
+      return {
+        ...state,
+        unread: action.data
+      }
+    case UNREAD_ANSWERS_FAILURE:
+      return {
+        ...state,
+        error: action.data
+      }
     default:
       return state
   }

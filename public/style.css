@@ -90,6 +90,29 @@ textarea {
   height: 50px;
 }
 
+#inboxImg {
+  height: 50px;
+}
+
+#inboxList {
+  display: none;
+  height: 300px;
+  position: absolute;
+  position-top: 0px;
+  position-left: 30px;
+  background-color: #ffffff;
+  z-index: 999;
+  overflow: auto;
+}
+
+#inboxLabel {
+  color: #ffffff;
+  font-size: 1em;
+  position: relative;
+  top: -23px;
+  left: -32px;
+}
+
 .post-list {
   float: left;
   margin: 0 auto;

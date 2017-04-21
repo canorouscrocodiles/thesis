@@ -34,6 +34,10 @@ const selectQuestionAnswers = (id, user_id) => {
   WHERE question_id = ${id}`)
 }
 
+const selectUnreadAnswers = (user_id) => {
+  return db.manyOrNone(`SELECT q.id, q.message AS question_message, a.message AS answer_message FROM questions AS q INNER JOIN answers AS a ON a.question_id = q.id WHERE q.user_id = ${user_id} AND q.updated_timestamp > q.last_viewed_timestamp AND a.updated_timestamp > q.last_viewed_timestamp`)
+}
+
 const insertAnswer = ({ message, user_id, question_id }) => db.oneOrNone(`
   INSERT INTO answers (message, user_id, question_id)
   VALUES ($$${message}$$, ${user_id}, ${question_id})
@@ -42,13 +46,14 @@ const insertAnswer = ({ message, user_id, question_id }) => db.oneOrNone(`
 
 const deleteAnswer = (id) => db.none(`DELETE FROM answers WHERE id = ${id}`)
 
-const updateAnswer = ({ message, id }) => db.none(`UPDATE answers SET message = $$${message}$$ WHERE id = ${id}`)
+const updateAnswer = ({ message, id }) => db.none(`UPDATE answers SET message = $$${message}$$, updated_timestamp = now() WHERE id = ${id}`)
 
 module.exports = {
   selectAnswers: selectAnswers,
   selectIndividualAnswer: selectIndividualAnswer,
   selectQuestionAnswers: selectQuestionAnswers,
   selectUserAnswers: selectUserAnswers,
+  selectUnreadAnswers: selectUnreadAnswers,
   insertAnswer: insertAnswer,
   deleteAnswer: deleteAnswer,
   updateAnswer: updateAnswer
