@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { loggingOut } from '../actions/auth'
 import AskQuestion from './AskQuestion'
+import Inbox from './Inbox'
 
 class Menu extends Component {
   userProfileButton () {
@@ -28,6 +29,7 @@ class Menu extends Component {
           <li className='nav-link-left'><Link className='link' to='/'><h2 id='title'>OnPoint 👇</h2></Link></li>
           { this.props.user ? this.userProfileButton() : this.loggedOutButton() }
           <AskQuestion />
+          <Inbox />
         </ul>
       </div>
     )
