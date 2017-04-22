@@ -4,8 +4,8 @@ const Questions = require('../db/models/questions')
 const UPDATED_QUESTIONS_SUCCESS = 'UPDATED_QUESTIONS_SUCCESS'
 const UPDATED_QUESTIONS_FAILURE = 'UPDATED_QUESTIONS_FAILURE'
 
-const updateLocation = (socket, coordinates) => {
-  Location.updateLocation(socket.id, coordinates)
+const updateLocation = (socket, {user_id, coordinates}) => {
+  Location.updateLocation(socket.id, user_id, coordinates)
   .then(() => Questions.selectQuestions(coordinates))
   .then((questions) => {
     io.to(socket.id).emit('action', { type: UPDATED_QUESTIONS_SUCCESS, data: questions })
