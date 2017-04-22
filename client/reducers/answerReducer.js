@@ -1,16 +1,39 @@
+import _ from 'lodash'
 import {
-  ANSWERS_REQUEST_SENT, USER_ANSWERS_REQUEST_RECEIVED,
-  ANSWERS_REQUEST_ERROR, QUESTION_ANSWERS_REQUEST_RECEIVED, SUCCESSFUL_POST_ANSWER, FAILED_POST_ANSWER
+  ANSWERS_REQUEST_SENT,
+  USER_ANSWERS_REQUEST_RECEIVED,
+  ANSWERS_REQUEST_ERROR,
+  QUESTION_ANSWERS_REQUEST_RECEIVED,
+  SUCCESSFUL_POST_ANSWER,
+  FAILED_POST_ANSWER,
+  SORT_ANSWERS
 } from '../actions/answer'
+import utils from '../utils'
 import { UPDATE_USER_VOTE } from '../actions/sockets/votes'
 import { sendNotification } from '../actions/notifications'
 const UPDATE_VOTE_SUCCESS = 'UPDATE_VOTE_SUCCESS'
 const UPDATE_VOTE_FAILURE = 'UPDATE_VOTE_FAILURE'
 const UPDATE_ANSWER_SUCCESS = 'UPDATE_ANSWER_SUCCESS'
-const initialState = { data: [], userAnswers: [], fetching: false, error: null }
+const initialState = { data: [], userAnswers: [], sortBy: 'New', fetching: false, error: null }
+
+const sortBy = {
+  New: ['timestamp', 'desc'],
+  Old: ['timestamp', 'asc'],
+  Trending: ['vote_count', 'desc']
+}
+
+const sortAnswers = (answers, sortBy, order) => _.orderBy(answers, [sortBy], [order])
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case SORT_ANSWERS:
+      let sortedAnswers = sortAnswers(state.data, sortBy[action.sortBy][0], sortBy[action.sortBy][1])
+
+      return {
+        ...state,
+        sortBy: action.sortBy,
+        data: sortedAnswers
+      }
     case ANSWERS_REQUEST_SENT:
       return {
         ...state,
@@ -23,9 +46,12 @@ export default (state = initialState, action) => {
         fetching: false
       }
     case QUESTION_ANSWERS_REQUEST_RECEIVED:
+      // Add distance property to answers?
+      let initialAnswers = sortAnswers(action.data, sortBy[state.sortBy][0], sortBy[state.sortBy][1])
+
       return {
         ...state,
-        data: action.data,
+        data: initialAnswers,
         fetching: false
       }
     case ANSWERS_REQUEST_ERROR:

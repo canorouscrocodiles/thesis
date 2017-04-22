@@ -4,6 +4,7 @@ import { Route, Redirect } from 'react-router'
 import cookie from 'react-cookie'
 import { setUser } from '../actions/user'
 import { fetchingLocationName, fetchLocationError } from '../actions/location'
+import utils from '../utils'
 import GMap from './GMap'
 import Menu from './Menu'
 import QuestionPage from './QuestionPage'
@@ -15,7 +16,7 @@ import { getCategories } from '../actions/sockets/questions'
 const watchOptions = {
   enableHighAccuracy: true,
   timeout: 60000,
-  maximumAge: 10000
+  maximumAge: 0
 }
 
 class App extends Component {
@@ -46,16 +47,16 @@ class App extends Component {
 
   watchLocationSuccess (coords) {
     // Get distance moved from current location.
-    // If not more than 1/16 mi then do not update questions
+    // If not more than 1/16 mi (~100m) then do not update questions
     if (this.props.currentLocation.location) {
-      let distance = this.getDistanceMoved(
+      let distance = utils.haversine(
         coords.coords.latitude,
         coords.coords.longitude,
         this.props.currentLocation.location.lat,
         this.props.currentLocation.location.lng
-        )
+        ) * 1000
 
-      if (distance >= 0.1) {
+      if (distance >= 100) {
         this.updateLocation(coords)
       }
     } else {
@@ -66,24 +67,6 @@ class App extends Component {
   updateLocation (coords) {
     this.props.sendLocationToServer({user_id: this.props.user.data.id, coordinates: {lat: coords.coords.latitude, lng: coords.coords.longitude}})
     this.props.fetchingLocationName({lat: coords.coords.latitude, lng: coords.coords.longitude})
-  }
-
-  getDistanceMoved (lat1, lon1, lat2, lon2) {
-    const R = 6371
-    const dLat = this.deg2rad(lat2 - lat1)
-    const dLon = this.deg2rad(lon2 - lon1)
-    const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) *
-      Math.sin(dLon / 2) * Math.sin(dLon / 2)
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-    const d = R * c // Distance in km
-
-    return d
-  }
-
-  deg2rad (deg) {
-    return deg * (Math.PI / 180)
   }
 
   // To remove FB security hash on auth redirect
