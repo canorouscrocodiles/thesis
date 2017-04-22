@@ -11,7 +11,7 @@ const selectIndividualAnswer = (id) => db.oneOrNone(`
 `)
 
 const selectUserAnswers = (id) => db.manyOrNone(`
-  SELECT a.id, a.question_id, a.created_timestamp AS timestamp, a.message, a.vote_count, u.username, u.id AS user_id, u.img_url AS avatar, q.message as question_message
+  SELECT a.id, a.question_id, a.created_timestamp AS timestamp, a.message, a.vote_count, u.username, u.id AS user_id, u.img_url AS avatar, q.message as question_message, q.active as active_question
   FROM answers AS a
   INNER JOIN users AS u ON a.user_id = u.id
   INNER JOIN questions AS q ON a.question_id = q.id

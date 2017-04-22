@@ -43,7 +43,8 @@ class QAEntry extends Component {
   renderEditButton () {
     const { id } = this.props.user.data
     const { user_id } = this.props.answer
-    if (id === user_id) {
+    const { activeQuestion } = this.props
+    if (id === user_id && activeQuestion) {
       return <button className='button' onClick={() => this.setState({editing: true})}>Edit</button>
     } else {
       return null
@@ -60,7 +61,8 @@ class QAEntry extends Component {
   }
 
   renderVoteButtons () {
-    const { dispatch, updateVote } = this.props
+    const { dispatch, updateVote, activeQuestion } = this.props
+    if (!activeQuestion) return null
     return (
       <div>
         <button className={this.renderVotingStyles('upvote', 1)} onClick={() => updateVote && dispatch(updateVote(1))}>Vote Up</button>

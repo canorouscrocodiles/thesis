@@ -8,8 +8,8 @@ class Menu extends Component {
   userProfileButton () {
     return (
       <li className='nav-link-right'>
-        <img src={`http://graph.facebook.com/${this.props.user.id}/picture?type=square`} />
-        <Link className='link' to={`/users/${this.props.user.id}`}>{this.props.user.username}</Link>
+        <Link className='link' to={`/users/${this.props.user.id}`}><img src={`http://graph.facebook.com/${this.props.user.id}/picture?type=square`} /></Link>
+        <span>{this.props.user.username}</span>
         <Link className='link' onClick={this.props.loggingOut} to='/'>(Logout)</Link>
       </li>
     )

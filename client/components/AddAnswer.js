@@ -43,6 +43,8 @@ class AddAnswer extends Component {
   }
 
   render () {
+    const { activeQuestion } = this.props
+    if (!activeQuestion) return null
     return (
       <div>
         <textarea maxLength='300' cols='100' rows='4' value={this.state.answer} onChange={this.handleAnswerChange} name='answer' placeholder='Add an answer...' />

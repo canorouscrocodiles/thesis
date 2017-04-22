@@ -10,7 +10,7 @@ import {
 import { POST_QUESTION_SUCCESS, GET_QUESTION_SUCCESS, GET_CATEGORIES_SUCCESS, GET_CATEGORIES_FAILURE } from '../actions/sockets/questions'
 import { UPDATED_QUESTIONS_SUCCESS, UPDATED_QUESTIONS_FAILURE } from '../actions/sockets/location'
 const UPDATE_QUESTION_SUCCESS = 'UPDATE_QUESTION_SUCCESS'
-const initialState = {data: [], allQuestions: [], selectedQuestion: {}, sortBy: 'New', categories: [], categoryList: [], fetching: false, error: null}
+const initialState = {data: [], allQuestions: [], categoryList: [], sortBy: 'New', categories: [], selectedQuestion: null, fetching: false, error: null}
 
 // Once a page reloads all questions come in and will be sorted by NEW
 // On sortBy change re-order all questions

@@ -29,15 +29,24 @@ class AnswerList extends Component {
     this.setState({ option: index })
   }
 
+  selectQuestion () {
+    let { question, userQuestion } = this.props
+    if (!question) {
+      question = userQuestion
+    }
+    return question
+  }
+
   render () {
+    const question = this.selectQuestion()
     return (
       <div className='post-list'>
         <h4>Answers</h4>
-        <AddAnswer id={this.props.id} />
+        <AddAnswer id={this.props.id} activeQuestion={question.active} />
         <select value={this.state.option} onChange={this.handleOptionChange}>
           {this.state.sortOptions.map((option, i) => <option key={i} value={i}>{option}</option>)}
         </select>
-        {this.props.answers.map(answer => <QAEntry key={answer.id} answer={answer} />)}
+        {this.props.answers.map(answer => <QAEntry key={answer.id} answer={answer} activeQuestion={question.active} />)}
       </div>
     )
   }
@@ -47,6 +56,8 @@ const mapStateToProps = (state) => {
   return {
     answers: state.answers.data,
     sortBy: state.answers.sortBy,
+    userQuestion: state.user.selectedQuestion,
+    question: state.questions.selectedQuestion,
     user_id: state.user.data ? state.user.data.id : null
   }
 }
