@@ -5,17 +5,11 @@ export const QUESTIONS_REQUEST_ERROR = 'QUESTIONS_REQUEST_ERROR'
 export const SELECT_SINGLE_QUESTION = 'SELECT_SINGLE_QUESTION'
 export const SINGLE_QUESTION_RECEIVED = 'SINGLE_QUESTION_RECEIVED'
 export const SORT_QUESTIONS = 'SORT_QUESTIONS'
-export const QUESTION_DEACTIVATE_REQUEST = 'QUESTION_DEACTIVATE_REQUEST'
-export const QUESTION_DEACTIVATE_SUCCESS = 'QUESTION_DEACTIVATE_SUCCESS'
-export const QUESTION_DEACTIVATE_FAILURE = 'QUESTION_DEACTIVATE_FAILURE'
 
 export const signalQuestionsRequest = () => ({ type: QUESTIONS_REQUEST_SENT })
 export const selectSingleQuestion = (id) => ({ type: SELECT_SINGLE_QUESTION, data: id })
 const setSingleQuestion = question => ({ type: SINGLE_QUESTION_RECEIVED, data: question })
 const signalRequestError = (error) => ({ type: QUESTIONS_REQUEST_ERROR, data: error })
-const signalQuestionDeactivation = () => ({ type: QUESTION_DEACTIVATE_REQUEST })
-const signalQuestionDeactivationSuccess = () => ({ type: QUESTION_DEACTIVATE_SUCCESS })
-const signalQuestionDeactivationFailure = () => ({ type: QUESTION_DEACTIVATE_FAILURE })
 
 export const sortQuestions = (sortBy, categories) => {
   return {
@@ -36,15 +30,5 @@ export const fetchSingleQuestion = (id) => {
         dispatch(setSingleQuestion(question.data))
       })
       .catch((error) => dispatch(signalRequestError(error)))
-  }
-}
-
-export const deactivateQuestion = (id) => {
-  return dispatch => {
-    dispatch(signalQuestionDeactivation())
-
-    axios.put(`/api/questions/${id}?deactivate=true`)
-      .then(() => dispatch(signalQuestionDeactivationSuccess()))
-      .catch(() => dispatch(signalQuestionDeactivationFailure()))
   }
 }

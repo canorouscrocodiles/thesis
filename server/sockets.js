@@ -116,6 +116,13 @@ module.exports = socket => {
       case 'get/categories':
         questionHandler.getCategories(socket)
         break
+      case 'put/deactivate-question':
+        verifyJWT(action.token)
+          .then(({ id }) => verifyUser(id))
+          .then(validateUser)
+          .then(() => questionHandler.deactivateQuestion(socket, action.data))
+          .catch(() => socket.emit('action', { type: 'AUTHORIZATION ERROR' })
+        break
       case 'get/unread':
         verifyJWT(action.token)
           .then(({ id }) => verifyUser(id))

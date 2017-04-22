@@ -10,6 +10,8 @@ import {
 import { POST_QUESTION_SUCCESS, GET_QUESTION_SUCCESS, GET_CATEGORIES_SUCCESS, GET_CATEGORIES_FAILURE } from '../actions/sockets/questions'
 import { UPDATED_QUESTIONS_SUCCESS, UPDATED_QUESTIONS_FAILURE } from '../actions/sockets/location'
 const UPDATE_QUESTION_SUCCESS = 'UPDATE_QUESTION_SUCCESS'
+const SELECTED_QUESTION_DEACTIVATION_SUCCESS = 'SELECTED_QUESTION_DEACTIVATION_SUCCESS'
+const QUESTION_DEACTIVATION_SUCCESS = 'QUESTION_DEACTIVATION_SUCCESS'
 const initialState = {data: [], allQuestions: [], categoryList: [], sortBy: 'New', categories: [], selectedQuestion: null, fetching: false, error: null}
 
 // Once a page reloads all questions come in and will be sorted by NEW
@@ -122,6 +124,20 @@ export default (state = initialState, action) => {
       return {
         ...state,
         error: action.data
+      }
+    case SELECTED_QUESTION_DEACTIVATION_SUCCESS:
+      return {
+        ...state,
+        selectedQuestion: {
+          ...state.selectedQuestion,
+          active: false
+        }
+      }
+    case QUESTION_DEACTIVATION_SUCCESS:
+      return {
+        ...state,
+        data: [...state.data.filter(question => question.id !== action.data)],
+        allQuestions: [...state.allQuestions.filter(question => question.id !== action.data)]
       }
     default:
       return state

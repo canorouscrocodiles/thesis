@@ -16,6 +16,8 @@ const SOCKET_UPDATE_QUESTION = 'put/question'
 export const GET_CATEGORIES_REQUEST = 'get/categories'
 export const GET_CATEGORIES_SUCCESS = 'GET_CATEGORIES_SUCCESS'
 export const GET_CATEGORIES_FAILURE = 'GET_CATEGORIES_FAILURE'
+export const QUESTION_DEACTIVATE_REQUEST = 'QUESTION_DEACTIVATE_REQUEST'
+const SOCKET_DEACTIVATE_QUESTION = 'put/deactivate-question'
 
 export const enterRoom = (info) => ({ type: ENTER_QUESTION_ROOM_REQUEST, data: info })
 export const leaveRoom = (info) => ({ type: LEAVE_QUESTION_ROOM_REQUEST, data: info })
@@ -24,6 +26,8 @@ const sendSocketFetchQuestion = (id) => ({ type: SOCKET_GET_QUESTION, data: id }
 const signalQuestionsUpdateRequest = () => ({ type: UPDATE_QUESTION_REQUEST })
 const sendSocketUpdateQuestion = (data) => ({ type: SOCKET_UPDATE_QUESTION, data: data })
 export const getCategories = () => ({ type: GET_CATEGORIES_REQUEST })
+const signalQuestionDeactivation = () => ({ type: QUESTION_DEACTIVATE_REQUEST })
+const sendSocketQuestionDeactivation = (id) => ({ type: SOCKET_DEACTIVATE_QUESTION, data: id })
 
 export const postQuestion = data => {
   // Extend data with JWT
@@ -49,5 +53,12 @@ export const socketUpdateQuestion = data => {
   return dispatch => {
     dispatch(signalQuestionsUpdateRequest())
     dispatch(sendSocketUpdateQuestion(data))
+  }
+}
+
+export const deactivateQuestion = (id) => {
+  return dispatch => {
+    dispatch(signalQuestionDeactivation())
+    dispatch(sendSocketQuestionDeactivation(id))
   }
 }
