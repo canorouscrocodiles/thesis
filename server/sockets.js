@@ -112,6 +112,9 @@ module.exports = socket => {
           })
           .catch(() => socket.emit('action', { type: 'AUTHORIZATION ERROR' }))
         break
+      case 'get/categories':
+        questionHandler.getCategories(socket)
+        break
       default:
         break
     }

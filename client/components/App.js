@@ -10,6 +10,7 @@ import QuestionPage from './QuestionPage'
 import PostList from './PostList'
 import UserProfile from './UserProfile'
 import { sendLocationToServer } from '../actions/sockets/location'
+import { getCategories } from '../actions/sockets/questions'
 
 const watchOptions = {
   enableHighAccuracy: true,
@@ -31,6 +32,7 @@ class App extends Component {
     this.watchPosition()
     this.removeLocationHash()
     this.setUserFromCookie()
+    this.props.getCategories()
     Notification.requestPermission()
   }
 
@@ -62,7 +64,7 @@ class App extends Component {
   }
 
   updateLocation (coords) {
-    this.props.sendLocationToServer({lat: coords.coords.latitude, lng: coords.coords.longitude})
+    this.props.sendLocationToServer({user_id: this.props.user.data.id, coordinates: {lat: coords.coords.latitude, lng: coords.coords.longitude}})
     this.props.fetchingLocationName({lat: coords.coords.latitude, lng: coords.coords.longitude})
   }
 
@@ -165,7 +167,8 @@ const mapDispatchToProps = dispatch => {
     setUser: user => dispatch(setUser(user)),
     fetchingLocationName: coords => dispatch(fetchingLocationName(coords)),
     fetchLocationError: error => dispatch(fetchLocationError(error)),
-    sendLocationToServer: (coords) => dispatch(sendLocationToServer(coords))
+    sendLocationToServer: (data) => dispatch(sendLocationToServer(data)),
+    getCategories: () => dispatch(getCategories())
   }
 }
 

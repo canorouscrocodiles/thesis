@@ -1,10 +1,10 @@
 import {
   QUESTIONS_REQUEST_SENT, QUESTIONS_REQUEST_ERROR, SELECT_SINGLE_QUESTION, SINGLE_QUESTION_RECEIVED
 } from '../actions/questions'
-import { POST_QUESTION_SUCCESS, GET_QUESTION_SUCCESS } from '../actions/sockets/questions'
+import { POST_QUESTION_SUCCESS, GET_QUESTION_SUCCESS, GET_CATEGORIES_SUCCESS, GET_CATEGORIES_FAILURE } from '../actions/sockets/questions'
 import { UPDATED_QUESTIONS_SUCCESS, UPDATED_QUESTIONS_FAILURE } from '../actions/sockets/location'
 const UPDATE_QUESTION_SUCCESS = 'UPDATE_QUESTION_SUCCESS'
-const initialState = {data: [], selectedQuestion: {}, fetching: false, error: null}
+const initialState = {data: [], categoryList: [], selectedQuestion: {}, fetching: false, error: null}
 
 export default (state = initialState, action) => {
   switch (action.type) {
@@ -61,6 +61,16 @@ export default (state = initialState, action) => {
           category_id: action.data.category_id,
           message: action.data.message
         }
+      }
+    case GET_CATEGORIES_SUCCESS:
+      return {
+        ...state,
+        categoryList: action.data
+      }
+    case GET_CATEGORIES_FAILURE:
+      return {
+        ...state,
+        error: action.data
       }
     default:
       return state
