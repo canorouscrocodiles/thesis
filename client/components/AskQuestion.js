@@ -32,6 +32,10 @@ class AskQuestion extends Component {
 
   submitQuestion () {
     let district, city
+    if (!this.props.user.data) {
+      console.log('User must be logged in to ask a question')
+      return
+    }
 
     // Parse location_name data
     if (this.props.location_name) {

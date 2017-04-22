@@ -41,6 +41,7 @@ class QAEntry extends Component {
   }
 
   renderEditButton () {
+    if (!this.props.user.data) { return null }
     const { id } = this.props.user.data
     const { user_id } = this.props.answer
     const { activeQuestion } = this.props
