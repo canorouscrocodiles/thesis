@@ -115,6 +115,9 @@ module.exports = socket => {
       case 'get/categories':
         questionHandler.getCategories(socket)
         break
+      case 'put/deactivate-question':
+        questionHandler.deactivateQuestion(socket, action.data)
+        break
       default:
         break
     }

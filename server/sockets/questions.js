@@ -1,4 +1,5 @@
 const Questions = require('../db/models/questions')
+const Sockets = require('../db/models/sockets')
 const io = require('../index').io
 const POST_QUESTION_SUCCESS = 'POST_QUESTION_SUCCESS'
 const POST_QUESTION_FAILURE = 'POST_QUESTION_FAILURE'
@@ -8,6 +9,9 @@ const GET_QUESTION_SUCCESS = 'GET_QUESTION_SUCCESS'
 const GET_QUESTION_FAILURE = 'GET_QUESTION_FAILURE'
 const GET_CATEGORIES_SUCCESS = 'GET_CATEGORIES_SUCCESS'
 const GET_CATEGORIES_FAILURE = 'GET_CATEGORIES_FAILURE'
+const QUESTION_DEACTIVATION_FAILURE = 'QUESTION_DEACTIVATION_FAILURE'
+const SELECTED_QUESTION_DEACTIVATION_SUCCESS = 'SELECTED_QUESTION_DEACTIVATION_SUCCESS'
+const QUESTION_DEACTIVATION_SUCCESS = 'QUESTION_DEACTIVATION_SUCCESS'
 
 const enterRoom = (socket, action) => {
   socket.join(action.data.question_id)
@@ -75,6 +79,38 @@ const getCategories = (socket) => {
   })
 }
 
+const deactivateQuestion = (socket, question_id) => {
+  Questions.deactivateQuestion(question_id)
+  .then(() => {
+    // Emit to all users viewing the question of deactivate question
+    io.to(question_id).emit('action', { type: SELECTED_QUESTION_DEACTIVATION_SUCCESS, data: question_id })
+    return Sockets.selectCoordinates(socket.id)
+  })
+  .then(results => {
+    const coordinates = parseGeoJSON(results.coordinates)
+    return Sockets.findSockets(coordinates)
+  })
+  .then(sockets => {
+    // Emit to all users within radius of deactivated question
+    sockets.forEach(s => {
+      io.to(s.id).emit('action', { type: QUESTION_DEACTIVATION_SUCCESS, data: question_id })
+    })
+  })
+  .catch(error => {
+    console.log(`Failed to deactivate question ${error}`)
+    socket.emit('action', { type: QUESTION_DEACTIVATION_FAILURE, error: `Failed to deactivate question ${error}` })
+  })
+}
+
+var parseGeoJSON = function (location) {
+  let geojson = JSON.parse(location)
+  let coordinates = {
+    lng: geojson.coordinates[0],
+    lat: geojson.coordinates[1]
+  }
+  return coordinates
+}
+
 module.exports = {
   enterRoom: enterRoom,
   leaveRoom: leaveRoom,
@@ -82,5 +118,6 @@ module.exports = {
   selectQuestion: selectQuestion,
   insertQuestion: insertQuestion,
   updateQuestion: updateQuestion,
-  getCategories: getCategories
+  getCategories: getCategories,
+  deactivateQuestion: deactivateQuestion
 }

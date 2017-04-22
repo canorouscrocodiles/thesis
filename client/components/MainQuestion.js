@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { selectSingleQuestion, deactivateQuestion } from '../actions/questions'
+import { selectSingleQuestion } from '../actions/questions'
 import { selectSingleUserQuestion } from '../actions/user'
-import { enterRoom, leaveRoom, socketUpdateQuestion } from '../actions/sockets/questions'
+import { enterRoom, leaveRoom, socketUpdateQuestion, deactivateQuestion } from '../actions/sockets/questions'
 import moment from 'moment'
 
 class MainQuestion extends Component {
@@ -31,19 +31,23 @@ class MainQuestion extends Component {
   }
 
   componentWillUpdate (nextProps) {
+    const user_id = this.props.user.data ? this.props.user.data.id : null
+    const question_owner_id = nextProps.question ? nextProps.question.user_id : null
     let enterInfo = {
       user_id: this.props.user.data.id,
       question_id: this.props.id,
-      question_creator: this.props.user.data.id === nextProps.question.user_id
+      question_creator: user_id === question_owner_id
     }
     this.props.enterRoom(enterInfo)
   }
 
   componentWillUnmount () {
+    const user_id = this.props.user.data ? this.props.user.data.id : null
+    const question_owner_id = this.props.question ? this.props.question.user_id : null
     let leaveInfo = {
       user_id: this.props.user.data.id,
       question_id: this.props.id,
-      question_creator: this.props.user.data.id === this.props.question.user_id
+      question_creator: user_id === question_owner_id
     }
     this.props.leaveRoom(leaveInfo)
   }
