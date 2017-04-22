@@ -12,6 +12,7 @@ const GET_CATEGORIES_FAILURE = 'GET_CATEGORIES_FAILURE'
 const QUESTION_DEACTIVATION_FAILURE = 'QUESTION_DEACTIVATION_FAILURE'
 const SELECTED_QUESTION_DEACTIVATION_SUCCESS = 'SELECTED_QUESTION_DEACTIVATION_SUCCESS'
 const QUESTION_DEACTIVATION_SUCCESS = 'QUESTION_DEACTIVATION_SUCCESS'
+const NEW_QUESTION_POSTED = 'NEW_QUESTION_POSTED'
 
 const enterRoom = (socket, action) => {
   socket.join(action.data.question_id)
@@ -45,11 +46,27 @@ const selectQuestion = (socket, action) => {
 }
 
 const insertQuestion = (socket, action) => {
+  let targetQuestion = null
+
   Questions.insertQuestion(action)
-    .then(() => Questions.selectQuestions(action.coordinates))
-    .then((questions) => {
-      io.emit('action', { type: POST_QUESTION_SUCCESS, data: questions })
-      // TODO: emit question to all users within radius not all users as done above
+    .then(({id}) => Questions.selectOneQuestion(id))
+    .then(question => {
+      targetQuestion = question
+      // Run query to find all users within 0.25mi of action.coordinates
+      return Sockets.findSockets(action.coordinates)
+    })
+    .then(users => {
+      console.log(`Users found ${JSON.stringify(users)}`)
+
+      // Iterate over users emiting to each of them the targetQuestion
+      if (users.length > 0) {
+        let userIds = users.map(user => user.id)
+        userIds.forEach(id => {
+          io.to(id).emit('action', { type: POST_QUESTION_SUCCESS, data: targetQuestion })
+          // Emit second action to tell everyone that questions have been updated
+          io.to(id).emit('action', { type: NEW_QUESTION_POSTED })
+        })
+      }
     })
     .catch((error) => {
       console.log(`Failed to insert question and query all questions. Error: ${error}`)
