@@ -110,10 +110,21 @@ module.exports = socket => {
             answerHandler.updateAnswer(socket, action.data)
             console.log(`User ${socket.id} updated his answer`)
           })
+          .then(() => questionHandler.updateLastUpdatedTime(action.data.question_id))
           .catch(() => socket.emit('action', { type: 'AUTHORIZATION ERROR' }))
         break
       case 'get/categories':
         questionHandler.getCategories(socket)
+        break
+      case 'get/unread':
+        verifyJWT(action.token)
+          .then(({ id }) => verifyUser(id))
+          .then(validateUser)
+          .then(() => {
+            answerHandler.getUnreadAnswers(socket, action.data)
+            console.log(`User ${socket.id} getting unread answers`)
+          })
+          .catch(() => socket.emit('action', { type: 'AUTHORIZATION ERROR' })
         break
       default:
         break
