@@ -4,7 +4,7 @@ const db = require('../index')
 
 const selectQuestions = (coordinates) => db.manyOrNone(`
   WITH questions AS (
-    SELECT q.id, q.user_id, q.created_timestamp AS timestamp, q.message, q.coordinates, q.location, q.vote_count, q.view_count, q.category_id, u.username, u.img_url AS avatar, c.name AS category
+    SELECT q.id, q.user_id, q.created_timestamp AS timestamp, q.message, q.coordinates, q.location, q.vote_count, q.view_count, q.active, q.category_id, u.username, u.img_url AS avatar, c.name AS category
     FROM questions AS q
     INNER JOIN users AS u ON q.user_id = u.id
     INNER JOIN categories AS c ON q.category_id = c.id

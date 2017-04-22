@@ -5,7 +5,7 @@ import MainQuestion from './MainQuestion'
 export default (props) => {
   return (
     <div>
-      <MainQuestion id={props.match.params.id} />
+      <MainQuestion id={props.match.params.id} from={props.from} />
       <AnswerList id={props.match.params.id} />
     </div>
   )
