@@ -4,28 +4,28 @@ import { sortQuestions } from '../actions/questions'
 import ListEntry from './ListEntry'
 import Select from 'react-select'
 
-const options = [ { label: 'Advice', value: 'advice' },
-  { label: 'Animals', value: 'animals' },
-  { label: 'Business', value: 'business' },
-  { label: 'Chipotle', value: 'chipotle' },
-  { label: 'Convention', value: 'convention' },
-  { label: 'Education', value: 'education' },
-  { label: 'Emergency', value: 'emergency' },
-  { label: 'Food', value: 'food' },
-  { label: 'Health', value: 'health' },
-  { label: 'History', value: 'history' },
-  { label: 'Life', value: 'life' },
-  { label: 'Love', value: 'love' },
-  { label: 'Movies', value: 'movies' },
-  { label: 'Music', value: 'music' },
-  { label: 'News', value: 'news' },
-  { label: 'Politics', value: 'politics' },
-  { label: 'Sports', value: 'sports' },
-  { label: 'TV', value: 'tv' },
-  { label: 'Tech', value: 'tech' },
-  { label: 'Tourism', value: 'tourism' },
-  { label: 'Traffic', value: 'traffic' }
-]
+// const options = [ { label: 'Advice', value: 'advice' },
+//   { label: 'Animals', value: 'animals' },
+//   { label: 'Business', value: 'business' },
+//   { label: 'Chipotle', value: 'chipotle' },
+//   { label: 'Convention', value: 'convention' },
+//   { label: 'Education', value: 'education' },
+//   { label: 'Emergency', value: 'emergency' },
+//   { label: 'Food', value: 'food' },
+//   { label: 'Health', value: 'health' },
+//   { label: 'History', value: 'history' },
+//   { label: 'Life', value: 'life' },
+//   { label: 'Love', value: 'love' },
+//   { label: 'Movies', value: 'movies' },
+//   { label: 'Music', value: 'music' },
+//   { label: 'News', value: 'news' },
+//   { label: 'Politics', value: 'politics' },
+//   { label: 'Sports', value: 'sports' },
+//   { label: 'TV', value: 'tv' },
+//   { label: 'Tech', value: 'tech' },
+//   { label: 'Tourism', value: 'tourism' },
+//   { label: 'Traffic', value: 'traffic' }
+// ]
 
 class PostList extends Component {
   constructor (props) {
@@ -94,7 +94,7 @@ class PostList extends Component {
           multi
           value={this.state.value}
           placeholder='Filter categories'
-          options={options}
+          options={this.props.categoryOptions}
           onChange={this.handleSelectChange}
         />
         <div className='post-list'>
@@ -110,7 +110,8 @@ const mapStateToProps = (state) => {
     questions: state.questions,
     currentLocation: state.currentLocation,
     sortBy: state.questions.sortBy,
-    categories: state.questions.categories
+    categories: state.questions.categories,
+    categoryOptions: state.questions.categoryOptions
   }
 }
 

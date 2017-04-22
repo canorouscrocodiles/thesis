@@ -10,7 +10,7 @@ import {
 import { POST_QUESTION_SUCCESS, GET_QUESTION_SUCCESS, GET_CATEGORIES_SUCCESS, GET_CATEGORIES_FAILURE } from '../actions/sockets/questions'
 import { UPDATED_QUESTIONS_SUCCESS, UPDATED_QUESTIONS_FAILURE } from '../actions/sockets/location'
 const UPDATE_QUESTION_SUCCESS = 'UPDATE_QUESTION_SUCCESS'
-const initialState = {data: [], allQuestions: [], selectedQuestion: {}, sortBy: 'New', categories: [], categoryList: [], fetching: false, error: null}
+const initialState = {data: [], allQuestions: [], selectedQuestion: {}, sortBy: 'New', categories: [], categoryList: [], categoryOptions: [], fetching: false, error: null}
 
 // Once a page reloads all questions come in and will be sorted by NEW
 // On sortBy change re-order all questions
@@ -91,11 +91,19 @@ export default (state = initialState, action) => {
         fetching: false
       }
     case UPDATED_QUESTIONS_SUCCESS:
+      let filteredCategories = Object.keys(_.groupBy(action.data, 'category')).map(cat => {
+        return {
+          label: cat,
+          value: cat.toLowerCase()
+        }
+      })
+      console.log(filteredCategories)
       calculateDistance(action.data, action.location)
       return {
         ...state,
         data: action.data,
         allQuestions: action.data,
+        categoryOptions: filteredCategories,
         fetching: false
       }
     case UPDATED_QUESTIONS_FAILURE:
@@ -114,9 +122,10 @@ export default (state = initialState, action) => {
         }
       }
     case GET_CATEGORIES_SUCCESS:
+      let data = action.data.map(x => x.name)
       return {
         ...state,
-        categoryList: action.data
+        categoryList: data
       }
     case GET_CATEGORIES_FAILURE:
       return {
