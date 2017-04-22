@@ -145,10 +145,10 @@ var clusterPoints = function (points, minDist, startPoint) {
 }
 
 var zoomRef = {
-  16: {constant: 1.4, radius: 25},
-  17: {constant: 1.3, radius: 20},
-  18: {constant: 1.2, radius: 15},
-  19: {constant: 1.1, radius: 10}
+  16: {constant: 1.25, radius: 10},
+  17: {constant: 1.25, radius: 7},
+  18: {constant: 1.25, radius: 4},
+  19: {constant: 1.25, radius: 3}
 }
 
 var defineRadius = function (num, constant, startingRadius) {
