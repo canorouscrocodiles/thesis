@@ -65,7 +65,8 @@ class App extends Component {
   }
 
   updateLocation (coords) {
-    this.props.sendLocationToServer({user_id: this.props.user.data.id, coordinates: {lat: coords.coords.latitude, lng: coords.coords.longitude}})
+    const user_id = this.props.user.data ? this.props.user.data.id : null
+    this.props.sendLocationToServer({user_id: user_id, coordinates: {lat: coords.coords.latitude, lng: coords.coords.longitude}})
     this.props.fetchingLocationName({lat: coords.coords.latitude, lng: coords.coords.longitude})
   }
 
