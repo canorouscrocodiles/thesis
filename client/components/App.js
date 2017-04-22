@@ -65,7 +65,8 @@ class App extends Component {
   }
 
   updateLocation (coords) {
-    this.props.sendLocationToServer({user_id: this.props.user.data.id, coordinates: {lat: coords.coords.latitude, lng: coords.coords.longitude}})
+    const user_id = this.props.user.data ? this.props.user.data.id : null
+    this.props.sendLocationToServer({user_id: user_id, coordinates: {lat: coords.coords.latitude, lng: coords.coords.longitude}})
     this.props.fetchingLocationName({lat: coords.coords.latitude, lng: coords.coords.longitude})
   }
 
@@ -87,18 +88,27 @@ class App extends Component {
   renderQuestionPage (props) {
     // Parse id from string to int
     let id = parseInt(props.match.params.id)
-
+    const userQuestions = this.props.user.questions
     // Get list of questions for user
     let questions = this.props.questions
     let allowedQuestion = false
+    let from
 
     // Iterate through question ids
-    if (questions.length > 0) {
+    if (questions.length > 0 || userQuestions.length > 0) {
       for (let i = 0; i < questions.length; i++) {
         // If question with matching id is found
         if (questions[i].id === id) {
           // Set allowedQuestion to true and break out of loop
           allowedQuestion = true
+          from = 'home'
+          break
+        }
+      }
+      for (var i = 0; i < userQuestions.length; i++) {
+        if (userQuestions[i].id === id) {
+          allowedQuestion = true
+          from = 'profile'
           break
         }
       }
@@ -107,7 +117,7 @@ class App extends Component {
     }
 
     if (allowedQuestion) {
-      return <QuestionPage {...props} />
+      return <QuestionPage {...props} from={from} />
     } else {
       return <Redirect to='/' />
     }

@@ -6,6 +6,8 @@ export const SET_USER = 'SET_USER'
 export const FETCH_USER_ERROR = 'FETCH_USER_ERROR'
 export const SET_USER_QUESTIONS = 'SET_USER_QUESTIONS'
 export const SET_USER_ANSWERS = 'SET_USER_ANSWERS'
+export const SELECT_SINGLE_USER_QUESTION = 'SELECT_SINGLE_USER_QUESTION'
+export const selectSingleUserQuestion = (id) => ({ type: SELECT_SINGLE_USER_QUESTION, data: id })
 
 const fetchingUser = () => {
   return {

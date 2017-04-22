@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { selectSingleQuestion, deactivateQuestion } from '../actions/questions'
+import { selectSingleUserQuestion } from '../actions/user'
 import { enterRoom, leaveRoom, socketUpdateQuestion } from '../actions/sockets/questions'
 import moment from 'moment'
 
@@ -21,7 +22,12 @@ class MainQuestion extends Component {
   }
 
   componentWillMount () {
-    this.props.selectSingleQuestion(this.props.id)
+    const { from } = this.props
+    if (from === 'home') {
+      this.props.selectSingleQuestion(this.props.id)
+    } else {
+      this.props.selectSingleUserQuestion(this.props.id)
+    }
   }
 
   componentWillUpdate (nextProps) {
@@ -72,9 +78,10 @@ class MainQuestion extends Component {
   }
 
   renderEditButton () {
-    const { currentUserId, question } = this.props
+    const question = this.selectQuestion()
+    const { currentUserId } = this.props
     const { user_id } = question
-    if (currentUserId === user_id) {
+    if (currentUserId === user_id && question.active) {
       return <button className='button' onClick={() => this.setState({editing: true})}>Edit</button>
     } else {
       return null
@@ -82,19 +89,37 @@ class MainQuestion extends Component {
   }
 
   renderCloseButton () {
-    const { currentUserId, question } = this.props
+    const question = this.selectQuestion()
+    const { currentUserId } = this.props
     const { user_id } = question
-    if (currentUserId === user_id) {
+    if (currentUserId === user_id && question.active) {
       return <button className='button' onClick={() => this.props.deactivateQuestion(question.id)}>Close question</button>
     } else {
       return null
     }
   }
 
+  selectQuestion () {
+    let { question, userQuestion } = this.props
+    if (!question) {
+      question = userQuestion
+    }
+    return question
+  }
+
+  renderActivityLabel () {
+    const question = this.selectQuestion()
+    if (question.active) {
+      return null
+    } else {
+      return <h3>This question is now closed</h3>
+    }
+  }
+
   render () {
-    const { question } = this.props
-    let humanTime = moment(question.timestamp).fromNow()
+    const question = this.selectQuestion()
     if (!question) { return this.renderLoader() }
+    let humanTime = moment(question.timestamp).fromNow()
     if (!this.state.editing) {
       return (
         <div>
@@ -103,6 +128,7 @@ class MainQuestion extends Component {
           <p>{humanTime} - {this.state.category_id !== null ? this.state.categories[this.state.category_id - 1] : question.category}</p>
           {this.renderEditButton()}
           {this.renderCloseButton()}
+          {this.renderActivityLabel()}
         </div>
       )
     } else {
@@ -124,6 +150,7 @@ class MainQuestion extends Component {
 const mapStateToProps = (state) => {
   return {
     user: state.user,
+    userQuestion: state.user.selectedQuestion,
     question: state.questions.selectedQuestion,
     currentUserId: state.user.data ? state.user.data.id : null
   }
@@ -132,6 +159,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     selectSingleQuestion: (id) => dispatch(selectSingleQuestion(id)),
+    selectSingleUserQuestion: (id) => dispatch(selectSingleUserQuestion(id)),
     enterRoom: (id) => dispatch(enterRoom(id)),
     leaveRoom: (id) => dispatch(leaveRoom(id)),
     deactivateQuestion: (id) => dispatch(deactivateQuestion(id)),
