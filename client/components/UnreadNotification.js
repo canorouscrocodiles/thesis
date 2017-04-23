@@ -16,6 +16,11 @@ class UnreadNotification extends Component {
     this.props.sortQuestions('New', [])
   }
 
+  componentWillUnmount () {
+    this.props.markQuestionsAsRead()
+    this.props.sortQuestions('New', [])
+  }
+
   render () {
     return (
       <div onClick={this.setUnreadToFalse}>There are new questions!</div>

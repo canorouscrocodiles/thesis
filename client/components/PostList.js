@@ -50,7 +50,6 @@ class PostList extends Component {
   }
 
   handleOptionChange (event) {
-    debugger
     this.props.changeOption(event.target.value)
 
     let selectedCategories = this.props.value.map(x => x.value)
