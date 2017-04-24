@@ -15,6 +15,12 @@ class Inbox extends Component {
     }
   }
 
+  componentWillUpdate (nextProps) {
+    if (nextProps.unreadExists && this.props.user.data) {
+      this.props.getUnread(this.props.user.data.id)
+    }
+  }
+
   showMessages () {
     let list = document.getElementById('inboxList')
     if (list.style.display === 'none' || list.style.length < 1) {
@@ -52,7 +58,8 @@ class Inbox extends Component {
 const mapStateToProps = (state) => {
   return {
     user: state.user,
-    unread: state.answers.unread
+    unread: state.answers.unread,
+    unreadExists: state.answers.unreadExist
   }
 }
 
