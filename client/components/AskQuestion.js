@@ -2,12 +2,21 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { postQuestion } from '../actions/sockets/questions'
 
+const defaultCategories = [
+  'Advice',
+  'Animals',
+  'Business',
+  'Chipotle',
+  'Concerts',
+  'Convention'
+]
+
 class AskQuestion extends Component {
   constructor (props) {
     super(props)
     this.state = {
       question: '',
-      categories: ['Chipotle', 'Convention', 'Sports', 'Education', 'Advice', 'Traffic', 'Animals', 'Health', 'History', 'Tourism', 'Tech', 'Business', 'News', 'Food', 'Emergency', 'Music', 'Movies', 'TV', 'Life', 'Love', 'Politics'],
+      categories: defaultCategories,
       category: '1',
       charCount: 300
     }
@@ -15,6 +24,12 @@ class AskQuestion extends Component {
     this.handleCategoryChange = this.handleCategoryChange.bind(this)
     this.submitQuestion = this.submitQuestion.bind(this)
     this.resetValues = this.resetValues.bind(this)
+  }
+
+  componentWillUpdate (nextProps, nextState) {
+    if (nextProps.categories.length > 0 && this.props.categories.length === 0) {
+      this.setState({ categories: nextProps.categories })
+    }
   }
 
   handleQuestionChange (event) {
@@ -79,7 +94,12 @@ class AskQuestion extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return { user: state.user, location: state.currentLocation.location, location_name: state.currentLocation.name }
+  return {
+    user: state.user,
+    location: state.currentLocation.location,
+    location_name: state.currentLocation.name,
+    categories: state.questions.categoryList
+  }
 }
 
 const mapDispatchToProps = dispatch => {

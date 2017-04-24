@@ -24,9 +24,21 @@ const selectUserQuestions = (id) => db.manyOrNone(`
   WHERE q.user_id = ${id}
 `)
 
+const selectOneQuestion = (id) => db.oneOrNone(`
+  SELECT q.id, q.user_id, q.created_timestamp AS timestamp, q.message, q.coordinates, q.location, q.vote_count, q.view_count, q.category_id, u.username, u.img_url AS avatar, c.name AS category, ST_AsGeoJSON(coordinates)
+  FROM questions AS q
+  INNER JOIN users AS u ON q.user_id = u.id
+  INNER JOIN categories AS c ON q.category_id = c.id
+  WHERE q.active = 't' AND q.id = ${id}
+`)
+
 const selectQuestion = (id) => db.oneOrNone(`SELECT *, ST_AsGeoJSON(coordinates) from questions where id = ${id}`)
 
-const insertQuestion = ({ user_id, message, coordinates, location, category_id }) => db.none(`INSERT INTO questions (user_id, message, coordinates, location, category_id) VALUES (${user_id}, $$${message}$$, ST_SetSRID(ST_MakePoint(${coordinates.lng}, ${coordinates.lat}), 4326)::geography, $$${location}$$, ${category_id})`)
+const insertQuestion = ({ user_id, message, coordinates, location, category_id }) => db.oneOrNone(`
+  INSERT INTO questions (user_id, message, coordinates, location, category_id)
+  VALUES (${user_id}, $$${message}$$, ST_SetSRID(ST_MakePoint(${coordinates.lng}, ${coordinates.lat}), 4326)::geography, $$${location}$$, ${category_id})
+  RETURNING id
+`)
 
 const updateLastViewedTime = (id) => db.none(`UPDATE questions SET last_viewed_timestamp = now() WHERE id = ${id}`)
 
@@ -45,6 +57,7 @@ const getCategories = () => db.manyOrNone(`SELECT * FROM categories`)
 module.exports = {
   selectQuestions: selectQuestions,
   selectQuestion: selectQuestion,
+  selectOneQuestion: selectOneQuestion,
   selectUserQuestions: selectUserQuestions,
   insertQuestion: insertQuestion,
   updateLastViewedTime: updateLastViewedTime,

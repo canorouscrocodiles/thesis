@@ -1,31 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { sortQuestions } from '../actions/questions'
-import ListEntry from './ListEntry'
 import Select from 'react-select'
-
-const options = [ { label: 'Advice', value: 'advice' },
-  { label: 'Animals', value: 'animals' },
-  { label: 'Business', value: 'business' },
-  { label: 'Chipotle', value: 'chipotle' },
-  { label: 'Convention', value: 'convention' },
-  { label: 'Education', value: 'education' },
-  { label: 'Emergency', value: 'emergency' },
-  { label: 'Food', value: 'food' },
-  { label: 'Health', value: 'health' },
-  { label: 'History', value: 'history' },
-  { label: 'Life', value: 'life' },
-  { label: 'Love', value: 'love' },
-  { label: 'Movies', value: 'movies' },
-  { label: 'Music', value: 'music' },
-  { label: 'News', value: 'news' },
-  { label: 'Politics', value: 'politics' },
-  { label: 'Sports', value: 'sports' },
-  { label: 'TV', value: 'tv' },
-  { label: 'Tech', value: 'tech' },
-  { label: 'Tourism', value: 'tourism' },
-  { label: 'Traffic', value: 'traffic' }
-]
+import { sortQuestions, changeOption, changeValue } from '../actions/questions'
+import ListEntry from './ListEntry'
+import UnreadNotification from './UnreadNotification'
 
 class PostList extends Component {
   constructor (props) {
@@ -41,25 +19,28 @@ class PostList extends Component {
   }
 
   componentWillMount () {
-    let index = this.state.sortOptions.findIndex(x => x === this.props.sortBy)
-    this.setState({ option: index })
+    let index = this.props.sortOptions.findIndex(x => x === this.props.sortBy)
+    this.props.changeOption(index)
 
     let value = this.props.categories.map(x => ({ label: x, value: x }))
-    this.setState({ value })
+    this.props.changeValue(value)
   }
 
   handleOptionChange (event) {
-    this.setState({ option: event.target.value })
-    let selectedCategories = this.state.value.map(x => x.value)
-    this.props.sortQuestions(this.state.sortOptions[event.target.value], selectedCategories)
+    this.props.changeOption(event.target.value)
+
+    let selectedCategories = this.props.value.map(x => x.value)
+    this.props.sortQuestions(this.props.sortOptions[event.target.value], selectedCategories)
   }
 
   handleSelectChange (value) {
     console.log('You\'ve selected:', value)
-    this.setState({ value })
+    this.props.changeValue(value)
+
     let selectedCategories = value.map(x => x.value)
     console.log('sortBy ', this.state.sortOptions[this.state.option])
-    this.props.sortQuestions(this.state.sortOptions[this.state.option], selectedCategories)
+
+    this.props.sortQuestions(this.props.sortOptions[this.props.option], selectedCategories)
   }
 
   locationLoaded () {
@@ -83,20 +64,27 @@ class PostList extends Component {
     return this.locationLoaded()
   }
 
+  renderUnread () {
+    if (this.props.unread) {
+      return <UnreadNotification />
+    }
+  }
+
   render () {
     return (
       <div>
         {this.renderMessage()}
-        <select value={this.state.option} onChange={this.handleOptionChange}>
-          {this.state.sortOptions.map((option, i) => <option key={i} value={i}>{option}</option>)}
+        <select value={this.props.option} onChange={this.handleOptionChange}>
+          {this.props.sortOptions.map((option, i) => <option key={i} value={i}>{option}</option>)}
         </select>
         <Select
           multi
-          value={this.state.value}
+          value={this.props.value}
           placeholder='Filter categories'
-          options={options}
+          options={this.props.categoryOptions}
           onChange={this.handleSelectChange}
         />
+        {this.renderUnread()}
         <div className='post-list'>
           {this.props.questions.data.map(question => <ListEntry key={question.id} question={question} />)}
         </div>
@@ -110,13 +98,20 @@ const mapStateToProps = (state) => {
     questions: state.questions,
     currentLocation: state.currentLocation,
     sortBy: state.questions.sortBy,
-    categories: state.questions.categories
+    categories: state.questions.categories,
+    categoryOptions: state.questions.categoryOptions,
+    unread: state.questions.unread,
+    value: state.questions.value,
+    sortOptions: state.questions.sortOptions,
+    option: state.questions.option
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    sortQuestions: (sortBy, categories) => dispatch(sortQuestions(sortBy, categories))
+    sortQuestions: (sortBy, categories) => dispatch(sortQuestions(sortBy, categories)),
+    changeOption: (option) => dispatch(changeOption(option)),
+    changeValue: (value) => dispatch(changeValue(value))
   }
 }
 

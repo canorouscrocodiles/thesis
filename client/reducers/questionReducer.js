@@ -5,18 +5,38 @@ import {
   QUESTIONS_REQUEST_ERROR,
   SELECT_SINGLE_QUESTION,
   SINGLE_QUESTION_RECEIVED,
-  SORT_QUESTIONS
+  SORT_QUESTIONS,
+  MARK_QUESTIONS_AS_READ,
+  CHANGE_OPTION,
+  CHANGE_VALUE
 } from '../actions/questions'
-import { POST_QUESTION_SUCCESS, GET_QUESTION_SUCCESS, GET_CATEGORIES_SUCCESS, GET_CATEGORIES_FAILURE } from '../actions/sockets/questions'
+import {
+  POST_QUESTION_SUCCESS,
+  GET_QUESTION_SUCCESS,
+  GET_CATEGORIES_SUCCESS,
+  GET_CATEGORIES_FAILURE
+} from '../actions/sockets/questions'
 import { UPDATED_QUESTIONS_SUCCESS, UPDATED_QUESTIONS_FAILURE } from '../actions/sockets/location'
 const UPDATE_QUESTION_SUCCESS = 'UPDATE_QUESTION_SUCCESS'
 const SELECTED_QUESTION_DEACTIVATION_SUCCESS = 'SELECTED_QUESTION_DEACTIVATION_SUCCESS'
 const QUESTION_DEACTIVATION_SUCCESS = 'QUESTION_DEACTIVATION_SUCCESS'
-const initialState = {data: [], allQuestions: [], categoryList: [], sortBy: 'New', categories: [], selectedQuestion: null, fetching: false, error: null}
+const NEW_QUESTION_POSTED = 'NEW_QUESTION_POSTED'
 
-// Once a page reloads all questions come in and will be sorted by NEW
-// On sortBy change re-order all questions
-// If questions are updated re-order the questions coming in by sortBy
+const initialState = {
+  data: [],
+  allQuestions: [],
+  selectedQuestion: null,
+  sortBy: 'New',
+  categories: [],
+  categoryList: [],
+  categoryOptions: [],
+  unread: false,
+  value: [],
+  sortOptions: [ 'New', 'Trending', 'Distance', 'Old' ],
+  option: 0,
+  fetching: false,
+  error: null
+}
 
 const sortBy = {
   New: ['timestamp', 'desc'],
@@ -48,8 +68,8 @@ export default (state = initialState, action) => {
       // Loop through all categories
       // If the key is in our grouped object then concat that array to our results
       action.categories.forEach(category => {
-        if (grouped[category]) {
-          results = [...results, ...grouped[category]]
+        if (grouped[_.capitalize(category)]) {
+          results = [...results, ...grouped[_.capitalize(category)]]
         }
       })
 
@@ -87,17 +107,36 @@ export default (state = initialState, action) => {
         selectedQuestion: singleQuestion
       }
     case POST_QUESTION_SUCCESS:
+      let updatedData = state.data.slice()
+      let updatedAllQuestions = state.allQuestions.slice()
+      updatedData.push(action.data)
+      updatedAllQuestions.push(action.data)
+
+      console.log(`
+        New question coming in: ${JSON.stringify(action.data)}
+        Updated data: ${JSON.stringify(updatedData)}
+        Updated all questions: ${JSON.stringify(updatedAllQuestions)}
+      `)
+
       return {
         ...state,
-        data: action.data,
+        allQuestions: updatedAllQuestions,
         fetching: false
       }
     case UPDATED_QUESTIONS_SUCCESS:
+      let filteredCategories = Object.keys(_.groupBy(action.data, 'category')).map(cat => {
+        return {
+          label: cat,
+          value: cat.toLowerCase()
+        }
+      })
+      console.log(filteredCategories)
       calculateDistance(action.data, action.location)
       return {
         ...state,
         data: action.data,
         allQuestions: action.data,
+        categoryOptions: filteredCategories,
         fetching: false
       }
     case UPDATED_QUESTIONS_FAILURE:
@@ -116,9 +155,10 @@ export default (state = initialState, action) => {
         }
       }
     case GET_CATEGORIES_SUCCESS:
+      let data = action.data.map(x => x.name)
       return {
         ...state,
-        categoryList: action.data
+        categoryList: data
       }
     case GET_CATEGORIES_FAILURE:
       return {
@@ -138,6 +178,29 @@ export default (state = initialState, action) => {
         ...state,
         data: [...state.data.filter(question => question.id !== action.data)],
         allQuestions: [...state.allQuestions.filter(question => question.id !== action.data)]
+      }
+    case NEW_QUESTION_POSTED:
+      console.log('NEW QUESTION POSTED')
+      return {
+        ...state,
+        unread: true
+      }
+    case MARK_QUESTIONS_AS_READ:
+      return {
+        ...state,
+        unread: false,
+        option: 0,
+        value: []
+      }
+    case CHANGE_OPTION:
+      return {
+        ...state,
+        option: action.data
+      }
+    case CHANGE_VALUE:
+      return {
+        ...state,
+        value: action.data
       }
     default:
       return state
