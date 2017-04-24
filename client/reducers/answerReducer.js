@@ -31,7 +31,6 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case SORT_ANSWERS:
       let sortedAnswers = sortAnswers(state.data, sortBy[action.sortBy][0], sortBy[action.sortBy][1])
-
       return {
         ...state,
         sortBy: action.sortBy,

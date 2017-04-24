@@ -29,6 +29,14 @@ class AnswerList extends Component {
     this.setState({ option: index })
   }
 
+  componentWillReceiveProps (nextProps) {
+    console.log('Component Updated ', nextProps)
+    debugger
+    if (nextProps.answers.length !== this.props.answers.length) {
+      this.props.sortAnswers(this.state.sortOptions[this.state.option])
+    }
+  }
+
   selectQuestion () {
     let { question, userQuestion } = this.props
     if (!question) {
