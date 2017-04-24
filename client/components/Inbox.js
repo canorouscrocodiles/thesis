@@ -10,7 +10,7 @@ class Inbox extends Component {
   }
 
   componentWillMount () {
-    if (this.props.user) {
+    if (this.props.user.data) {
       this.props.getUnread(this.props.user.data.id)
     }
   }
