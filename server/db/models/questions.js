@@ -25,7 +25,7 @@ const selectUserQuestions = (id) => db.manyOrNone(`
 `)
 
 const selectOneQuestion = (id) => db.oneOrNone(`
-  SELECT q.id, q.user_id, q.created_timestamp AS timestamp, q.message, q.coordinates, q.location, q.vote_count, q.view_count, q.category_id, u.username, u.img_url AS avatar, c.name AS category, ST_AsGeoJSON(coordinates)
+  SELECT q.id, q.user_id, q.created_timestamp AS timestamp, q.message, q.coordinates, q.location, q.vote_count, q.view_count, q.category_id, q.active, u.username, u.img_url AS avatar, c.name AS category, ST_AsGeoJSON(coordinates)
   FROM questions AS q
   INNER JOIN users AS u ON q.user_id = u.id
   INNER JOIN categories AS c ON q.category_id = c.id
