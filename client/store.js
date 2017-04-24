@@ -17,7 +17,7 @@ const socketMiddleware = reduxSocket(socket, ['post/', 'get/', 'put/', 'delete/'
 const logger = createLogger()
 const middlewares = applyMiddleware(thunk, logger, socketMiddleware)
 
-let enhancers = compose(middlewares)
+let enhancers
 if (process.env.NODE_ENV === 'development') {
   const reduxDevTool = window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
   enhancers = compose(
