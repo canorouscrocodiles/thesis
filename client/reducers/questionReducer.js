@@ -52,6 +52,16 @@ const calculateDistance = (questions, location) => {
     q.distance = utils.haversine(location.lat, location.lng, coords.lat, coords.lng)
   })
 }
+const filterCategories = (arr) => {
+  let results = Object.keys(_.groupBy(arr, 'category')).map(cat => {
+    return {
+      label: cat,
+      value: cat.toLowerCase()
+    }
+  })
+
+  return _.sortBy(results, 'label', 'asc')
+}
 
 export default (state = initialState, action) => {
   switch (action.type) {
@@ -107,36 +117,23 @@ export default (state = initialState, action) => {
         selectedQuestion: singleQuestion
       }
     case POST_QUESTION_SUCCESS:
-      let updatedData = state.data.slice()
       let updatedAllQuestions = state.allQuestions.slice()
-      updatedData.push(action.data)
       updatedAllQuestions.push(action.data)
-
-      console.log(`
-        New question coming in: ${JSON.stringify(action.data)}
-        Updated data: ${JSON.stringify(updatedData)}
-        Updated all questions: ${JSON.stringify(updatedAllQuestions)}
-      `)
 
       return {
         ...state,
         allQuestions: updatedAllQuestions,
+        categoryOptions: filterCategories(updatedAllQuestions),
         fetching: false
       }
     case UPDATED_QUESTIONS_SUCCESS:
-      let filteredCategories = Object.keys(_.groupBy(action.data, 'category')).map(cat => {
-        return {
-          label: cat,
-          value: cat.toLowerCase()
-        }
-      })
-      console.log(filteredCategories)
       calculateDistance(action.data, action.location)
+
       return {
         ...state,
         data: action.data,
         allQuestions: action.data,
-        categoryOptions: filteredCategories,
+        categoryOptions: filterCategories(action.data),
         fetching: false
       }
     case UPDATED_QUESTIONS_FAILURE:
