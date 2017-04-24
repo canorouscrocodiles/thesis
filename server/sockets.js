@@ -121,7 +121,7 @@ module.exports = socket => {
           .then(({ id }) => verifyUser(id))
           .then(validateUser)
           .then(() => questionHandler.deactivateQuestion(socket, action.data))
-          .catch(() => socket.emit('action', { type: 'AUTHORIZATION ERROR' })
+          .catch(() => socket.emit('action', { type: 'AUTHORIZATION ERROR' }))
         break
       case 'get/unread':
         verifyJWT(action.token)
@@ -131,7 +131,7 @@ module.exports = socket => {
             answerHandler.getUnreadAnswers(socket, action.data)
             console.log(`User ${socket.id} getting unread answers`)
           })
-          .catch(() => socket.emit('action', { type: 'AUTHORIZATION ERROR' })
+          .catch(() => socket.emit('action', { type: 'AUTHORIZATION ERROR' }))
         break
       default:
         break

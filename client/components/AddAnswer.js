@@ -24,8 +24,10 @@ class AddAnswer extends Component {
   }
 
   submitAnswer () {
-    // Form message data
-    // For now, user_id is hardcoded. We will want to reference this.state.user.user in the future
+    if (!this.props.user) {
+      console.log('User must be logged in to post an answer')
+      return
+    }
     let data = {
       user_id: this.props.user.id,
       message: this.state.answer,

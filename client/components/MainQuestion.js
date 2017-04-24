@@ -34,7 +34,7 @@ class MainQuestion extends Component {
     const user_id = this.props.user.data ? this.props.user.data.id : null
     const question_owner_id = nextProps.question ? nextProps.question.user_id : null
     let enterInfo = {
-      user_id: this.props.user.data.id,
+      user_id: user_id,
       question_id: this.props.id,
       question_creator: user_id === question_owner_id
     }
@@ -45,7 +45,7 @@ class MainQuestion extends Component {
     const user_id = this.props.user.data ? this.props.user.data.id : null
     const question_owner_id = this.props.question ? this.props.question.user_id : null
     let leaveInfo = {
-      user_id: this.props.user.data.id,
+      user_id: user_id,
       question_id: this.props.id,
       question_creator: user_id === question_owner_id
     }
