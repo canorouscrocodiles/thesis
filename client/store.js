@@ -18,15 +18,15 @@ const logger = createLogger()
 const middlewares = applyMiddleware(thunk, logger, socketMiddleware)
 
 let enhancers = compose(middlewares)
-// if (process.env.NODE_ENV === 'development') {
-//   const reduxDevTool = window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-//   enhancers = compose(
-//     middlewares,
-//     reduxDevTool
-//   )
-// } else {
-//   enhancers = compose(middlewares)
-// }
+if (process.env.NODE_ENV === 'development') {
+  const reduxDevTool = window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  enhancers = compose(
+    middlewares,
+    reduxDevTool
+  )
+} else {
+  enhancers = compose(middlewares)
+}
 
 // Possibly place pre-loaded state as 2nd arg here.
 // It can be retrieved from local storage (ie, maybe users location?) or from the server
