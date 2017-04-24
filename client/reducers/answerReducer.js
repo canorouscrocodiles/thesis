@@ -8,7 +8,6 @@ import {
   FAILED_POST_ANSWER,
   SORT_ANSWERS
 } from '../actions/answer'
-import utils from '../utils'
 import { UPDATE_USER_VOTE } from '../actions/sockets/votes'
 import { sendNotification } from '../actions/notifications'
 import { getUnread } from '../actions/sockets/answer'
@@ -31,7 +30,6 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case SORT_ANSWERS:
       let sortedAnswers = sortAnswers(state.data, sortBy[action.sortBy][0], sortBy[action.sortBy][1])
-
       return {
         ...state,
         sortBy: action.sortBy,
@@ -49,7 +47,6 @@ export default (state = initialState, action) => {
         fetching: false
       }
     case QUESTION_ANSWERS_REQUEST_RECEIVED:
-      // Add distance property to answers?
       let initialAnswers = sortAnswers(action.data, sortBy[state.sortBy][0], sortBy[state.sortBy][1])
 
       return {
