@@ -121,7 +121,6 @@ INSERT INTO categories (name)
   ('Advice'),
   ('Animals'),
   ('Business'),
-  ('Chipotle'),
   ('Concerts'),
   ('Convention'),
   ('Education'),
