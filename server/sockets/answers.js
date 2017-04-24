@@ -7,10 +7,7 @@ module.exports.postAnswer = (socket, action) => {
   Answers.insertAnswer({message, user_id, question_id})
     .then(({id}) => Answers.selectIndividualAnswer(id))
     .then((answer) => {
-      io.to(question_id).emit('action', {
-        type: 'SUCCESSFUL_POST_ANSWER',
-        data: answer
-      })
+      io.to(question_id).emit('action', { type: 'SUCCESSFUL_POST_ANSWER', data: answer })
     })
     .catch(error => {
       console.log(`Error: ${error}`)
