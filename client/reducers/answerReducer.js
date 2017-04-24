@@ -17,7 +17,7 @@ const UPDATE_VOTE_FAILURE = 'UPDATE_VOTE_FAILURE'
 const UPDATE_ANSWER_SUCCESS = 'UPDATE_ANSWER_SUCCESS'
 const UNREAD_ANSWERS_SUCCESS = 'UNREAD_ANSWERS_SUCCESS'
 const UNREAD_ANSWERS_FAILURE = 'UNREAD_ANSWERS_FAILURE'
-const initialState = { data: [], unread: [], userAnswers: [], sortBy: 'New', fetching: false, error: null }
+const initialState = { data: [], unread: [], unreadExist: false, userAnswers: [], sortBy: 'New', fetching: false, error: null }
 
 const sortBy = {
   New: ['timestamp', 'desc'],
@@ -67,8 +67,9 @@ export default (state = initialState, action) => {
       let qID = parseInt(path[2])
       if (qID !== action.data.question_id) {
         sendNotification(action.data)
-        getUnread()
-        return { ...state }
+        return { ...state,
+          unreadExist: true
+        }
       } else {
         return {
           ...state,
@@ -119,7 +120,8 @@ export default (state = initialState, action) => {
     case UNREAD_ANSWERS_SUCCESS:
       return {
         ...state,
-        unread: action.data
+        unread: action.data,
+        unreadExist: false
       }
     case UNREAD_ANSWERS_FAILURE:
       return {

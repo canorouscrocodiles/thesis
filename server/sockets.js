@@ -128,8 +128,8 @@ module.exports = socket => {
           .then(({ id }) => verifyUser(id))
           .then(validateUser)
           .then(() => {
-            answerHandler.getUnreadAnswers(socket, action.data)
             console.log(`User ${socket.id} getting unread answers`)
+            answerHandler.getUnreadAnswers(socket, action.data)
           })
           .catch(() => socket.emit('action', { type: 'AUTHORIZATION ERROR' }))
         break
