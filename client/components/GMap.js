@@ -13,7 +13,7 @@ let options = {
   minZoom: 16,
   maxZoom: 19,
   zoom: 16,
-  draggable: false,
+  draggable: true,
   streetViewControl: false,
   styles: [
     {
@@ -35,10 +35,10 @@ class GMap extends Component {
       userCircle: null,
       currentZoom: 16,
       minDist: {
-        16: 30,
+        16: 50,
         17: 25,
-        18: 20,
-        19: 15
+        18: 15,
+        19: 10
       }
     }
     this.loadMap = this.loadMap.bind(this)
