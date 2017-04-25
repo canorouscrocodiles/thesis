@@ -45,6 +45,11 @@ class App extends Component {
   }
 
   watchPosition () {
+    let coords = window.localStorage.getItem('coordinates')
+    let transformedCoords = JSON.parse(coords)
+    if (transformedCoords) {
+      this.updateLocation(transformedCoords)
+    }
     navigator.geolocation.watchPosition(this.watchLocationSuccess, this.watchLocationError, watchOptions)
   }
 
@@ -55,6 +60,11 @@ class App extends Component {
   watchLocationSuccess (coords) {
     // Get distance moved from current location.
     // If not more than 1/16 mi (~100m) then do not update questions
+    let transformedCoords = {
+      latitude: coords.coords.latitude,
+      longitude: coords.coords.longitude
+    }
+    window.localStorage.setItem('coordinates', JSON.stringify(transformedCoords))
     if (this.props.currentLocation.location) {
       let distance = utils.haversine(
         coords.coords.latitude,
@@ -64,17 +74,17 @@ class App extends Component {
         ) * 1000
 
       if (distance >= 100) {
-        this.updateLocation(coords)
+        this.updateLocation(transformedCoords)
       }
     } else {
-      this.updateLocation(coords)
+      this.updateLocation(transformedCoords)
     }
   }
 
   updateLocation (coords) {
     const user_id = this.props.user.data ? this.props.user.data.id : null
-    this.props.sendLocationToServer({user_id: user_id, coordinates: {lat: coords.coords.latitude, lng: coords.coords.longitude}})
-    this.props.fetchingLocationName({lat: coords.coords.latitude, lng: coords.coords.longitude})
+    this.props.sendLocationToServer({user_id: user_id, coordinates: {lat: coords.latitude, lng: coords.longitude}})
+    this.props.fetchingLocationName({lat: coords.latitude, lng: coords.longitude})
   }
 
   // To remove FB security hash on auth redirect
