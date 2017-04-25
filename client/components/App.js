@@ -41,7 +41,7 @@ class App extends Component {
     this.props.getCategories()
     this.props.findAndJoin(cookie.select(/(onpoint-id)/g)['onpoint-id'])
     Notification.requestPermission()
-    setTimeout(function () { this.displayError('You need to log in') }.bind(this), 2000)
+    //setTimeout(function () { this.displayError('You need to log in') }.bind(this), 2000)
   }
 
   watchPosition () {
