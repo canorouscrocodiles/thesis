@@ -236,7 +236,7 @@ class GMap extends Component {
   }
 
   componentDidMount () {
-    //this.loadMap()
+    this.loadMap()
   }
 
   componentWillUpdate (nextProps, nextState) {
