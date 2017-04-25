@@ -70,6 +70,27 @@ class PostList extends Component {
     }
   }
 
+  renderPostList () {
+    if (this.props.questions.data.length === 0 && this.props.currentLocation.location) {
+      return (
+        <div>
+          <p>😞 There are no questions around you. 😞</p>
+          <p>Post a question you want answered!</p>
+        </div>
+      )
+    } else if (this.props.questions.data.length === 0) {
+      return (
+        <div>LOADING QUESTIONS...</div>
+      )
+    } else {
+      return (
+        <div className='post-list'>
+          {this.props.questions.data.map(question => <ListEntry key={question.id} question={question} />)}
+        </div>
+      )
+    }
+  }
+
   render () {
     return (
       <div>
@@ -85,9 +106,7 @@ class PostList extends Component {
           onChange={this.handleSelectChange}
         />
         {this.renderUnread()}
-        <div className='post-list'>
-          {this.props.questions.data.map(question => <ListEntry key={question.id} question={question} />)}
-        </div>
+        {this.renderPostList()}
       </div>
     )
   }
