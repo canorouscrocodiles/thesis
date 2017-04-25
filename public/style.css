@@ -133,9 +133,10 @@ textarea {
   color: #ff0000;
 }
 
-.post-title {
+.post-title, .bold-link {
   font-weight: bold;
   margin: 6px;
+  cursor: pointer;
 }
 
 .question-location {

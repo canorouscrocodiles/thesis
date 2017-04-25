@@ -1,12 +1,15 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import { getUnread } from '../actions/sockets/answer'
+import { removeQuestionFromInbox } from '../actions/inbox'
 
 class Inbox extends Component {
   constructor (props) {
     super(props)
     this.state = {}
     this.showMessages = this.showMessages.bind(this)
+    this.handleClick = this.handleClick.bind(this)
   }
 
   componentWillMount () {
@@ -30,6 +33,12 @@ class Inbox extends Component {
     }
   }
 
+  handleClick (id) {
+    this.showMessages()
+    this.props.removeQuestionFromInbox(id)
+    this.props.history.push(`/question/${id}`)
+  }
+
   render () {
     return (
       <div>
@@ -41,7 +50,7 @@ class Inbox extends Component {
               if (id > 0) {
                 return (
                   <div key={entry.id}>
-                    <p>{entry.question}</p>
+                    <p className='bold-link' onClick={() => this.handleClick(entry.id)}>{entry.question}</p>
                     {entry.answers.map((answer, id) => <p key={`${id}`}>{answer}</p>)}
                     <br />
                   </div>
@@ -65,8 +74,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getUnread: (id) => dispatch(getUnread(id))
+    getUnread: (id) => dispatch(getUnread(id)),
+    removeQuestionFromInbox: id => dispatch(removeQuestionFromInbox(id))
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Inbox)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Inbox))

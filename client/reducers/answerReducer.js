@@ -8,6 +8,7 @@ import {
   FAILED_POST_ANSWER,
   SORT_ANSWERS
 } from '../actions/answer'
+import { REMOVE_QUESTION_FROM_INBOX } from '../actions/inbox'
 import { UPDATE_USER_VOTE } from '../actions/sockets/votes'
 import { sendNotification } from '../actions/notifications'
 import { getUnread } from '../actions/sockets/answer'
@@ -119,6 +120,14 @@ export default (state = initialState, action) => {
         ...state,
         unread: action.data,
         unreadExist: false
+      }
+    case REMOVE_QUESTION_FROM_INBOX:
+      const index = state.unread.findIndex(message => message.id === action.data)
+      let newUnread = [ ...state.unread.slice(0, index), ...state.unread.slice(index + 1)]
+      newUnread[0] = state.unread[0] - 1
+      return {
+        ...state,
+        unread: newUnread
       }
     case UNREAD_ANSWERS_FAILURE:
       return {
