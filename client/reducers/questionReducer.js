@@ -3,7 +3,6 @@ import utils from '../utils'
 import {
   QUESTIONS_REQUEST_SENT,
   QUESTIONS_REQUEST_ERROR,
-  SELECT_SINGLE_QUESTION,
   SINGLE_QUESTION_RECEIVED,
   SORT_QUESTIONS,
   MARK_QUESTIONS_AS_READ,
@@ -25,7 +24,6 @@ const NEW_QUESTION_POSTED = 'NEW_QUESTION_POSTED'
 const initialState = {
   data: [],
   allQuestions: [],
-  selectedQuestion: null,
   sortBy: 'New',
   categories: [],
   categoryList: [],
@@ -109,12 +107,6 @@ export default (state = initialState, action) => {
       return {
         ...state,
         selectedQuestion: action.data
-      }
-    case SELECT_SINGLE_QUESTION:
-      const singleQuestion = state.data.find(question => question.id === parseInt(action.data))
-      return {
-        ...state,
-        selectedQuestion: singleQuestion
       }
     case POST_QUESTION_SUCCESS:
       let updatedAllQuestions = state.allQuestions.slice()

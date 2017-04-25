@@ -12,7 +12,6 @@ class AnswerList extends Component {
       sortOptions: [ 'New', 'Trending', 'Old' ],
       option: 0
     }
-
     this.handleOptionChange = this.handleOptionChange.bind(this)
   }
 
@@ -24,7 +23,6 @@ class AnswerList extends Component {
   componentWillMount () {
     const { id, user_id } = this.props
     this.props.fetchQuestionAnswers(id, user_id)
-
     let index = this.state.sortOptions.findIndex(x => x === this.props.sortBy)
     this.setState({ option: index })
   }
@@ -35,16 +33,8 @@ class AnswerList extends Component {
     }
   }
 
-  selectQuestion () {
-    let { question, userQuestion } = this.props
-    if (!question) {
-      question = userQuestion
-    }
-    return question
-  }
-
   render () {
-    const question = this.selectQuestion()
+    const { question } = this.props
     return (
       <div className='post-list'>
         <h4>Answers</h4>
@@ -62,8 +52,6 @@ const mapStateToProps = (state) => {
   return {
     answers: state.answers.data,
     sortBy: state.answers.sortBy,
-    userQuestion: state.user.selectedQuestion,
-    question: state.questions.selectedQuestion,
     user_id: state.user.data ? state.user.data.id : null
   }
 }

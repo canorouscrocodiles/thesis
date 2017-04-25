@@ -1,6 +1,6 @@
-import { FETCHING_USER, SET_USER, FETCH_USER_ERROR, SET_USER_QUESTIONS, SET_USER_ANSWERS, SELECT_SINGLE_USER_QUESTION } from '../actions/user'
+import { FETCHING_USER, SET_USER, FETCH_USER_ERROR, SET_USER_QUESTIONS, SET_USER_ANSWERS } from '../actions/user'
 
-const initialState = {data: null, questions: [], selectedQuestion: null, answers: null, fetching: false, error: null}
+const initialState = {data: null, questions: [], answers: null, fetching: false, error: null}
 
 export default (state = initialState, action) => {
   switch (action.type) {
@@ -32,12 +32,6 @@ export default (state = initialState, action) => {
         ...state,
         error: action.data,
         fetching: false
-      }
-    case SELECT_SINGLE_USER_QUESTION:
-      const singleQuestion = state.questions.find(question => question.id === parseInt(action.data))
-      return {
-        ...state,
-        selectedQuestion: singleQuestion
       }
     default:
       return state
