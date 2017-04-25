@@ -18,6 +18,7 @@ export const GET_CATEGORIES_SUCCESS = 'GET_CATEGORIES_SUCCESS'
 export const GET_CATEGORIES_FAILURE = 'GET_CATEGORIES_FAILURE'
 export const QUESTION_DEACTIVATE_REQUEST = 'QUESTION_DEACTIVATE_REQUEST'
 const SOCKET_DEACTIVATE_QUESTION = 'put/deactivate-question'
+const FIND_AND_JOIN = 'get/findAndJoin'
 
 export const enterRoom = (info) => ({ type: ENTER_QUESTION_ROOM_REQUEST, data: info })
 export const leaveRoom = (info) => ({ type: LEAVE_QUESTION_ROOM_REQUEST, data: info })
@@ -28,6 +29,7 @@ const sendSocketUpdateQuestion = (data) => ({ type: SOCKET_UPDATE_QUESTION, data
 export const getCategories = () => ({ type: GET_CATEGORIES_REQUEST })
 const signalQuestionDeactivation = () => ({ type: QUESTION_DEACTIVATE_REQUEST })
 const sendSocketQuestionDeactivation = (id) => ({ type: SOCKET_DEACTIVATE_QUESTION, data: id })
+export const findAndJoin = (id) => ({ type: FIND_AND_JOIN, data: id })
 
 export const postQuestion = data => {
   // Extend data with JWT

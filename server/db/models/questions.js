@@ -54,6 +54,8 @@ const deactivateQuestions = () => db.none(`UPDATE questions SET active = 'f' WHE
 
 const getCategories = () => db.manyOrNone(`SELECT * FROM categories`)
 
+const findUserQuestions = id => db.manyOrNone(`SELECT id FROM questions WHERE user_id = '${id}'`)
+
 module.exports = {
   selectQuestions: selectQuestions,
   selectQuestion: selectQuestion,
@@ -66,5 +68,6 @@ module.exports = {
   deleteQuestion: deleteQuestion,
   deactivateQuestion: deactivateQuestion,
   deactivateQuestions: deactivateQuestions,
-  getCategories: getCategories
+  getCategories: getCategories,
+  findUserQuestions: findUserQuestions
 }

@@ -11,7 +11,7 @@ import QuestionPage from './QuestionPage'
 import PostList from './PostList'
 import UserProfile from './UserProfile'
 import { sendLocationToServer } from '../actions/sockets/location'
-import { getCategories } from '../actions/sockets/questions'
+import { getCategories, findAndJoin } from '../actions/sockets/questions'
 
 const watchOptions = {
   enableHighAccuracy: true,
@@ -34,6 +34,7 @@ class App extends Component {
     this.removeLocationHash()
     this.setUserFromCookie()
     this.props.getCategories()
+    this.props.findAndJoin(cookie.select(/(onpoint-id)/g)['onpoint-id'])
     Notification.requestPermission()
   }
 
@@ -155,7 +156,8 @@ const mapDispatchToProps = dispatch => {
     fetchingLocationName: coords => dispatch(fetchingLocationName(coords)),
     fetchLocationError: error => dispatch(fetchLocationError(error)),
     sendLocationToServer: (data) => dispatch(sendLocationToServer(data)),
-    getCategories: () => dispatch(getCategories())
+    getCategories: () => dispatch(getCategories()),
+    findAndJoin: (id) => dispatch(findAndJoin(id))
   }
 }
 
