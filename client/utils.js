@@ -16,17 +16,6 @@ Haversine formula implementation from https://rosettacode.org/wiki/Haversine_for
 Takes in 4 arguments, (latitude1, longitude1, latitude2, longitude2) and returns km
 */
 
-// var haversine = function () {
-//   var radians = Array.prototype.map.call(arguments, function (deg) { return deg / 180.0 * Math.PI })
-//   var lat1 = radians[0], lon1 = radians[1], lat2 = radians[2], lon2 = radians[3]
-//   var R = 6372.8 // km
-//   var dLat = lat2 - lat1
-//   var dLon = lon2 - lon1
-//   var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2)
-//   var c = 2 * Math.asin(Math.sqrt(a))
-//   return R * c
-// }
-
 const deg2rad = (deg) => {
   return deg * (Math.PI / 180)
 }
@@ -145,10 +134,10 @@ var clusterPoints = function (points, minDist, startPoint) {
 }
 
 var zoomRef = {
-  16: {constant: 1.25, radius: 10},
-  17: {constant: 1.25, radius: 7},
-  18: {constant: 1.25, radius: 4},
-  19: {constant: 1.25, radius: 3}
+  16: {constant: 1.125, radius: 9},
+  17: {constant: 1.210, radius: 8.5},
+  18: {constant: 1.245, radius: 8},
+  19: {constant: 1.252, radius: 7.5}
 }
 
 var defineRadius = function (num, constant, startingRadius) {
