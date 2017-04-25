@@ -236,7 +236,7 @@ class GMap extends Component {
   }
 
   componentDidMount () {
-    this.loadMap()
+    //this.loadMap()
   }
 
   componentWillUpdate (nextProps, nextState) {
@@ -252,7 +252,9 @@ class GMap extends Component {
   render () {
     return (
       <div id='mapWindow'>
-        Map loading...
+        <div className='map-loader-position'>
+          <div className='ld ld-ball ld-broadcast' style={{'font-size': '32px', color: '#23d9a1'}} /><div>Map Loading...</div>
+        </div>
       </div>
     )
   }
