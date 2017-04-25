@@ -41,7 +41,6 @@ class GMap extends Component {
       }
     }
     this.loadMap = this.loadMap.bind(this)
-    this.createMarker = this.createMarker.bind(this)
     this.createCircle = this.createCircle.bind(this)
     this.createUserCircle = this.createUserCircle.bind(this)
     this.createOrUpdateUserCircle = this.createOrUpdateUserCircle.bind(this)
@@ -68,40 +67,18 @@ class GMap extends Component {
     }
   }
 
-  // Creates markers given a map, position and icon
-  createMarker (map, pos, icon, content, isUser) {
-    // Create new marker
-    let marker = new window.google.maps.Marker({
-      map: map,
-      position: pos,
-      icon: {
-        path: window.google.maps.SymbolPath.CIRCLE,
-        scale: 1
-      }
-    })
-    // Map determines which map object to set the marker on
-    // Position determines the latitude and longitude of marker
-    // Format for pos: {lat: xx.xxxx, lng: xx.xxxx} lat and lng should be floating numbers
-
-    // If content was passed in, create an infoWindow for the marker
-    if (content) {
-      this.createInfoWindow(map, marker, content)
-    }
-
-    if (isUser) {
-      marker.set('clickable', false)
-      this.createCircle(map, marker, 402)
-    }
-
-    // Return marker object
-    return marker
-  }
-
   createCircle (map, position, radius = 10, color = '#429bf4', count) {
     if (count === 1) {
       count = ' '
     } else {
       count = count.toString()
+    }
+
+    let fontSize = '12px'
+
+    // Starting font size plus constant * number of questions
+    if (count > 1) {
+      fontSize = `${(12 + (0.35 * count))}px`
     }
 
     let circle = new window.google.maps.Marker({
@@ -118,7 +95,7 @@ class GMap extends Component {
       label: {
         text: count,
         color: 'white',
-        fontSize: '12px',
+        fontSize: fontSize,
         fontWeight: 'bold'
       },
       clickable: true,
@@ -167,7 +144,12 @@ class GMap extends Component {
   }
 
   createOrUpdateUserCircle (map, position) {
-    this.createUserCircle(map, position, 402)
+    if (this.state.userCircle) {
+      this.state.userCircle.inner.setPosition(position)
+      this.state.userCircle.outer.setCenter(position)
+    } else {
+      this.createUserCircle(map, position, 402)
+    }
   }
 
   createInfoWindow (map, marker, questions) {
