@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
 import utils from '../utils'
 
 // These are options used to initially render map
@@ -35,10 +34,10 @@ class GMap extends Component {
       userCircle: null,
       currentZoom: 16,
       minDist: {
-        16: 50,
-        17: 25,
-        18: 15,
-        19: 10
+        16: 58,
+        17: 35,
+        18: 20,
+        19: 8
       }
     }
     this.loadMap = this.loadMap.bind(this)
@@ -72,9 +71,16 @@ class GMap extends Component {
   // Creates markers given a map, position and icon
   createMarker (map, pos, icon, content, isUser) {
     // Create new marker
-    let marker = new window.google.maps.Marker({ map: map, position: pos, icon: icon })
-    // map determines which map object to set the marker on
-    // position determines the latitude and longitude of marker
+    let marker = new window.google.maps.Marker({
+      map: map,
+      position: pos,
+      icon: {
+        path: window.google.maps.SymbolPath.CIRCLE,
+        scale: 1
+      }
+    })
+    // Map determines which map object to set the marker on
+    // Position determines the latitude and longitude of marker
     // Format for pos: {lat: xx.xxxx, lng: xx.xxxx} lat and lng should be floating numbers
 
     // If content was passed in, create an infoWindow for the marker
@@ -91,31 +97,54 @@ class GMap extends Component {
     return marker
   }
 
-  createCircle (map, position, radius = 10, color = '#429bf4') {
-    var circle = new window.google.maps.Circle({
+  createCircle (map, position, radius = 10, color = '#429bf4', count) {
+    if (count === 1) {
+      count = ' '
+    } else {
+      count = count.toString()
+    }
+
+    let circle = new window.google.maps.Marker({
       map: map,
-      center: position,
-      radius: radius,
-      fillColor: color,
-      fillOpacity: 1,
-      strokeColor: '#ffffff',
-      strokeOpacity: 0.2,
-      strokeWeight: 2
+      position: position,
+      icon: {
+        path: window.google.maps.SymbolPath.CIRCLE,
+        scale: radius,
+        fillColor: '#75aaff',
+        fillOpacity: 0.9,
+        strokeColor: '#5e9cff',
+        strokeWeight: 1
+      },
+      label: {
+        text: count,
+        color: 'white',
+        fontSize: '12px',
+        fontWeight: 'bold'
+      },
+      clickable: true,
+      flat: true,
+      optimized: false // Test this
     })
+
     return circle
   }
 
   createUserCircle (map, position, radius) {
-    let innerCircle = new window.google.maps.Circle({
+    let innerCircle = new window.google.maps.Marker({
       map: map,
-      center: position,
-      radius: 10,
-      fillColor: '#ff0000',
-      fillOpacity: 1,
-      strokeColor: '#ffffff',
-      strokeOpacity: 1,
-      strokeWeight: 2,
-      clickable: false
+      position: position,
+      icon: {
+        path: window.google.maps.SymbolPath.CIRCLE,
+        scale: 10,
+        fillColor: 'red',
+        fillOpacity: 1,
+        strokeColor: 'white',
+        strokeWeight: 2
+      },
+      clickable: false,
+      flat: true,
+      zIndex: 0,
+      optimized: false
     })
 
     let outerCircle = new window.google.maps.Circle({
@@ -125,9 +154,10 @@ class GMap extends Component {
       fillColor: '#429bf4',
       fillOpacity: 0,
       strokeColor: '#429bf4',
-      strokeOpacity: 0.5,
-      strokeWeight: 2,
-      clickable: false
+      strokeOpacity: 0.50,
+      strokeWeight: 1.25,
+      clickable: false,
+      zIndex: 0
     })
 
     this.state.userCircle = {
@@ -137,12 +167,7 @@ class GMap extends Component {
   }
 
   createOrUpdateUserCircle (map, position) {
-    if (this.state.userCircle) {
-      this.state.userCircle.inner.setCenter(position)
-      this.state.userCircle.outer.setCenter(position)
-    } else {
-      this.createUserCircle(map, position, 402)
-    }
+    this.createUserCircle(map, position, 402)
   }
 
   createInfoWindow (map, marker, questions) {
@@ -173,7 +198,7 @@ class GMap extends Component {
           // Set the infoWindow's content
           infoWindow.setContent(content)
           // Set the infoWindow's associated map and position
-          infoWindow.setPosition(marker.center)
+          infoWindow.setPosition(marker.position)
           infoWindow.open(map)
           // Set lastWindow to reference the current infoWindow
           this.state.lastWindow = infoWindow
@@ -202,7 +227,7 @@ class GMap extends Component {
     // Loop through all locations
     locations.forEach((location) => {
       // Create the marker
-      marker = this.createCircle(map, location.coordinates, location.radius, color)
+      marker = this.createCircle(map, location.coordinates, location.radius, color, location.questions.length)
       this.createInfoWindow(map, marker, location.questions)
       // Push the marker into markers for later referencing
       this.state.markers.push(marker)
