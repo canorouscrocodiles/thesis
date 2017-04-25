@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { selectSingleQuestion } from '../actions/questions'
-import { selectSingleUserQuestion } from '../actions/user'
 import { enterRoom, leaveRoom, socketUpdateQuestion, deactivateQuestion } from '../actions/sockets/questions'
 import moment from 'moment'
 
@@ -22,32 +20,21 @@ class MainQuestion extends Component {
   }
 
   componentWillMount () {
-    const { from } = this.props
-    if (from === 'home') {
-      this.props.selectSingleQuestion(this.props.id)
-    } else {
-      this.props.selectSingleUserQuestion(this.props.id)
-    }
-  }
-
-  componentWillUpdate (nextProps) {
     const user_id = this.props.user.data ? this.props.user.data.id : null
-    const question_owner_id = nextProps.question ? nextProps.question.user_id : null
     let enterInfo = {
       user_id: user_id,
       question_id: this.props.id,
-      question_creator: user_id === question_owner_id
+      question_creator: user_id === this.props.question.user_id
     }
     this.props.enterRoom(enterInfo)
   }
 
   componentWillUnmount () {
     const user_id = this.props.user.data ? this.props.user.data.id : null
-    const question_owner_id = this.props.question ? this.props.question.user_id : null
     let leaveInfo = {
       user_id: user_id,
       question_id: this.props.id,
-      question_creator: user_id === question_owner_id
+      question_creator: user_id === this.props.question.user_id
     }
     this.props.leaveRoom(leaveInfo)
   }
@@ -82,10 +69,10 @@ class MainQuestion extends Component {
   }
 
   renderEditButton () {
-    const question = this.selectQuestion()
-    const { currentUserId } = this.props
+    const { question, user } = this.props
+    const id = user.data ? user.data.id : null
     const { user_id } = question
-    if (currentUserId === user_id && question.active) {
+    if (id === user_id && question.active) {
       return <button className='button' onClick={() => this.setState({editing: true})}>Edit</button>
     } else {
       return null
@@ -93,26 +80,18 @@ class MainQuestion extends Component {
   }
 
   renderCloseButton () {
-    const question = this.selectQuestion()
-    const { currentUserId } = this.props
+    const { question, user } = this.props
+    const id = user.data ? user.data.id : null
     const { user_id } = question
-    if (currentUserId === user_id && question.active) {
+    if (id === user_id && question.active) {
       return <button className='button' onClick={() => this.props.deactivateQuestion(question.id)}>Close question</button>
     } else {
       return null
     }
   }
 
-  selectQuestion () {
-    let { question, userQuestion } = this.props
-    if (!question) {
-      question = userQuestion
-    }
-    return question
-  }
-
   renderActivityLabel () {
-    const question = this.selectQuestion()
+    const { question } = this.props
     if (question.active) {
       return null
     } else {
@@ -121,7 +100,7 @@ class MainQuestion extends Component {
   }
 
   render () {
-    const question = this.selectQuestion()
+    const { question } = this.props
     if (!question) { return this.renderLoader() }
     let humanTime = moment(question.timestamp).fromNow()
     if (!this.state.editing) {
@@ -153,17 +132,12 @@ class MainQuestion extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    user: state.user,
-    userQuestion: state.user.selectedQuestion,
-    question: state.questions.selectedQuestion,
-    currentUserId: state.user.data ? state.user.data.id : null
+    user: state.user
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    selectSingleQuestion: (id) => dispatch(selectSingleQuestion(id)),
-    selectSingleUserQuestion: (id) => dispatch(selectSingleUserQuestion(id)),
     enterRoom: (id) => dispatch(enterRoom(id)),
     leaveRoom: (id) => dispatch(leaveRoom(id)),
     deactivateQuestion: (id) => dispatch(deactivateQuestion(id)),

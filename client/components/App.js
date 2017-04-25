@@ -86,38 +86,32 @@ class App extends Component {
   }
 
   renderQuestionPage (props) {
-    // Parse id from string to int
-    let id = parseInt(props.match.params.id)
+    const id = parseInt(props.match.params.id)
     const userQuestions = this.props.user.questions
-    // Get list of questions for user
-    let questions = this.props.questions
-    let allowedQuestion = false
-    let from
+    const questions = this.props.questions
+    let question
 
-    // Iterate through question ids
     if (questions.length > 0 || userQuestions.length > 0) {
       for (let i = 0; i < questions.length; i++) {
-        // If question with matching id is found
         if (questions[i].id === id) {
-          // Set allowedQuestion to true and break out of loop
-          allowedQuestion = true
-          from = 'home'
+          question = questions[i]
           break
         }
       }
-      for (var i = 0; i < userQuestions.length; i++) {
-        if (userQuestions[i].id === id) {
-          allowedQuestion = true
-          from = 'profile'
-          break
+      if (question) {
+        for (var i = 0; i < userQuestions.length; i++) {
+          if (userQuestions[i].id === id) {
+            question = userQuestions[i]
+            break
+          }
         }
       }
     } else {
       return <Redirect to='/' />
     }
 
-    if (allowedQuestion) {
-      return <QuestionPage {...props} from={from} />
+    if (question) {
+      return <QuestionPage {...props} id={id} question={question} />
     } else {
       return <Redirect to='/' />
     }
