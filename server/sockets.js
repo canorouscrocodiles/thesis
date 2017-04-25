@@ -32,6 +32,9 @@ module.exports = socket => {
   console.log(`Client connected with id: ${socket.id}`)
   socket.on('action', action => {
     switch (action.type) {
+      case 'get/findAndJoin':
+        questionHandler.findAndJoin(socket, action.data)
+        break
       case 'enter/':
         console.log(`User id: ${action.data.user_id} with socket id: ${socket.id} is entering room with id ${action.data.question_id}`)
         if (!socket.rooms[action.data.question_id]) {

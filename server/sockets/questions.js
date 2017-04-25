@@ -128,6 +128,15 @@ var parseGeoJSON = function (location) {
   return coordinates
 }
 
+const findAndJoin = (socket, id) => {
+  Questions.findUserQuestions(id)
+  .then((ids) => {
+    ids.forEach(id => {
+      socket.join(id.id)
+    })
+  })
+}
+
 module.exports = {
   enterRoom: enterRoom,
   leaveRoom: leaveRoom,
@@ -136,5 +145,6 @@ module.exports = {
   insertQuestion: insertQuestion,
   updateQuestion: updateQuestion,
   getCategories: getCategories,
-  deactivateQuestion: deactivateQuestion
+  deactivateQuestion: deactivateQuestion,
+  findAndJoin: findAndJoin
 }
