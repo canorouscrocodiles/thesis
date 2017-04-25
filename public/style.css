@@ -1,3 +1,8 @@
+html {
+  width: 100%;
+  height: 100%;
+}
+
 h1, h2, h3, h4, h5, h6, ul, li, a, p, input, select, div, span, option {
   padding: 0;
   margin: 0;
@@ -144,6 +149,25 @@ textarea {
   color: #989898;
 }
 
+.default-loader {
+  color: #23d9a1;
+  font-size: 26px;
+}
+
+.map-loader-position {
+  margin: auto;
+}
+
+.error-notification {
+  position: fixed;
+  width: 100%;
+  background: #474747;
+  padding: 0.5em;
+}
+
+.error-text {
+  color: #23d9a1;
+}
 
 /**
  * React Select

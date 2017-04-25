@@ -5,6 +5,7 @@ import cookie from 'react-cookie'
 import { setUser } from '../actions/user'
 import { fetchingLocationName, fetchLocationError } from '../actions/location'
 import utils from '../utils'
+import ErrorNotification from './ErrorNotification'
 import GMap from './GMap'
 import Menu from './Menu'
 import QuestionPage from './QuestionPage'
@@ -22,11 +23,15 @@ const watchOptions = {
 class App extends Component {
   constructor (props) {
     super(props)
+    this.state = {
+      error: null
+    }
     this.watchPosition = this.watchPosition.bind(this)
     this.watchLocationSuccess = this.watchLocationSuccess.bind(this)
     this.watchLocationError = this.watchLocationError.bind(this)
     this.renderQuestionPage = this.renderQuestionPage.bind(this)
     this.renderUserProfilePage = this.renderUserProfilePage.bind(this)
+    this.displayError = this.displayError.bind(this)
   }
 
   componentWillMount () {
@@ -36,6 +41,7 @@ class App extends Component {
     this.props.getCategories()
     this.props.findAndJoin(cookie.select(/(onpoint-id)/g)['onpoint-id'])
     Notification.requestPermission()
+    //setTimeout(function () { this.displayError('You need to log in') }.bind(this), 2000)
   }
 
   watchPosition () {
@@ -76,6 +82,11 @@ class App extends Component {
     if (window.location.hash) {
       window.location.hash = ''
     }
+  }
+
+  displayError (error) {
+    this.setState({error: error})
+    setTimeout(function () { this.setState({error: null}) }.bind(this), 3000)
   }
 
   setUserFromCookie () {
@@ -132,6 +143,7 @@ class App extends Component {
   render () {
     return (
       <div>
+        <ErrorNotification error={this.state.error} />
         <Menu username={this.props.user.username} />
         <GMap />
         <Route exact path='/' component={PostList} />
