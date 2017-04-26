@@ -1,5 +1,5 @@
 {
-  "name": "Hackreactor-Thesis-2017",
+  "name": "",
   "version": "1.0.0",
   "description": "",
   "author": "Keith Alpichi, Craig Rodrigues, Jong Kim",
@@ -29,7 +29,7 @@
     "dev-client": "webpack -d --watch",
     "dev-server": "nodemon server/index.js",
     "test": "NODE_ENV=test jest --runInBand --forceExit",
-    "heroku-postbuild": "NODE_ENV=production webpack -d"
+    "heroku-postbuild": "NODE_ENV=production webpack"
   },
   "dependencies": {
     "axios": "^0.15.3",
