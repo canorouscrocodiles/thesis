@@ -1,13 +1,28 @@
-import React from 'react'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
 
-export default (props) => {
-  if (props.error) {
+class ErrorNotification extends Component {
+  renderClass () {
+    const { error } = this.props
+    if (error) {
+      return 'error-notification show'
+    } else {
+      return 'error-notification hide'
+    }
+  }
+
+  render () {
+    const { error } = this.props
     return (
-      <div className='error-notification'>
-        <span className='error-text'>{props.error}</span>
+      <div className={this.renderClass()}>
+        <span className='error-text'>{error}</span>
       </div>
     )
-  } else {
-    return null
   }
+ }
+
+const mapStateToProps = state => {
+  return { error: state.error }
 }
+
+export default connect(mapStateToProps)(ErrorNotification)

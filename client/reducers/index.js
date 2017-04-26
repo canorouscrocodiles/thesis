@@ -3,7 +3,7 @@ import userReducer from './userReducer'
 import questionReducer from './questionReducer'
 import answerReducer from './answerReducer'
 import locationReducer from './locationReducer'
-import urlReducer from './urlReducer'
+import errorReducer from './errorReducer'
 import authReducer from './authReducer'
 
 const rootReducer = combineReducers({
@@ -11,7 +11,7 @@ const rootReducer = combineReducers({
   questions: questionReducer,
   currentLocation: locationReducer,
   answers: answerReducer,
-  goToUrl: urlReducer,
+  error: errorReducer,
   auth: authReducer
 })
 

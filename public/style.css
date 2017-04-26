@@ -169,6 +169,14 @@ textarea {
   color: #23d9a1;
 }
 
+.show {
+  display: block;
+}
+
+.hide {
+  display: none;
+}
+
 /**
  * React Select
  * ============

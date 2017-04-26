@@ -31,17 +31,16 @@ class App extends Component {
     this.watchLocationError = this.watchLocationError.bind(this)
     this.renderQuestionPage = this.renderQuestionPage.bind(this)
     this.renderUserProfilePage = this.renderUserProfilePage.bind(this)
-    this.displayError = this.displayError.bind(this)
   }
 
   componentWillMount () {
+    const userId = cookie.select(/(onpoint-id)/g)['onpoint-id']
     this.watchPosition()
     this.removeLocationHash()
     this.setUserFromCookie()
     this.props.getCategories()
-    this.props.findAndJoin(cookie.select(/(onpoint-id)/g)['onpoint-id'])
+    if (userId) { this.props.findAndJoin(userId) }
     Notification.requestPermission()
-    //setTimeout(function () { this.displayError('You need to log in') }.bind(this), 2000)
   }
 
   watchPosition () {
@@ -92,11 +91,6 @@ class App extends Component {
     if (window.location.hash) {
       window.location.hash = ''
     }
-  }
-
-  displayError (error) {
-    this.setState({error: error})
-    setTimeout(function () { this.setState({error: null}) }.bind(this), 3000)
   }
 
   setUserFromCookie () {
@@ -153,7 +147,7 @@ class App extends Component {
   render () {
     return (
       <div>
-        <ErrorNotification error={this.state.error} />
+        <ErrorNotification />
         <Menu username={this.props.user.username} />
         <GMap />
         <Route exact path='/' component={PostList} />

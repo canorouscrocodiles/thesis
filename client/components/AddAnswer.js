@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { postQuestionAnswer } from '../actions/sockets/answer'
+import { showErrorNotification } from '../actions/errors'
 
 class AddAnswer extends Component {
   constructor (props) {
@@ -44,13 +45,25 @@ class AddAnswer extends Component {
     }
   }
 
+  renderSubmitButton () {
+    const { user } = this.props
+    let submitFunction
+    if (user) {
+      submitFunction = this.submitAnswer
+    } else {
+      submitFunction = this.props.showErrorNotification.bind(null, 'You must be logged in to answer a question')
+    }
+    return <span className='button' onClick={submitFunction}>Respond</span>
+
+  }
+
   render () {
     const { activeQuestion } = this.props
     if (!activeQuestion) return null
     return (
       <div>
         <textarea maxLength='300' cols='100' rows='4' value={this.state.answer} onChange={this.handleAnswerChange} name='answer' placeholder='Add an answer...' />
-        <span className='button' onClick={this.submitAnswer}>Respond!</span>
+        {this.renderSubmitButton()}
         <p>{`${this.state.charCount} characters remaining`}</p>
       </div>
     )
@@ -63,7 +76,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    postQuestionAnswer: (data) => dispatch(postQuestionAnswer(data))
+    postQuestionAnswer: (data) => dispatch(postQuestionAnswer(data)),
+    showErrorNotification: (msg) => dispatch(showErrorNotification(msg))
   }
 }
 

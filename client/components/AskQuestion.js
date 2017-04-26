@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { postQuestion } from '../actions/sockets/questions'
+import { showErrorNotification } from '../actions/errors'
 
 const defaultCategories = [
   'Advice',
@@ -79,6 +80,17 @@ class AskQuestion extends Component {
     }
   }
 
+  renderSubmitButton () {
+    const { user } = this.props
+    let submitFunction
+    if (user.data) {
+      submitFunction = this.submitQuestion
+    } else {
+      submitFunction = this.props.showErrorNotification.bind(null, 'You must be logged in to ask a question')
+    }
+    return <span className='button' onClick={submitFunction}>Ask</span>
+  }
+
   render () {
     return (
       <li className='nav-link-right'>
@@ -86,7 +98,7 @@ class AskQuestion extends Component {
         <select value={this.state.category} onChange={this.handleCategoryChange}>
           {this.state.categories.map((category, id) => <option key={id} value={id + 1}>{category}</option>)}
         </select>
-        <span className='button' onClick={this.submitQuestion}>Ask</span>
+        {this.renderSubmitButton()}
         <p>{`${this.state.charCount} characters remaining`}</p>
       </li>
     )
@@ -104,7 +116,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    postQuestion: (data) => dispatch(postQuestion(data))
+    postQuestion: (data) => dispatch(postQuestion(data)),
+    showErrorNotification: (msg) => dispatch(showErrorNotification(msg))
   }
 }
 
