@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { Segment } from 'semantic-ui-react'
 import { markQuestionsAsRead, sortQuestions } from '../actions/questions'
 
 class UnreadNotification extends Component {
@@ -23,7 +24,7 @@ class UnreadNotification extends Component {
 
   render () {
     return (
-      <div onClick={this.setUnreadToFalse}>There are new questions!</div>
+      <Segment raised onClick={this.setUnreadToFalse}>New questions!</Segment>
     )
   }
 }

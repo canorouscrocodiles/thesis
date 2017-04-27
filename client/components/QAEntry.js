@@ -4,6 +4,7 @@ import moment from 'moment'
 import updateVote from '../actions/sockets/votes'
 import { socketUpdateAnswer } from '../actions/sockets/answer'
 import { showErrorNotification } from '../actions/errors'
+import { Card, Segment, Image, Button, Icon, Label, Input } from 'semantic-ui-react'
 
 class QAEntry extends Component {
   constructor (props) {
@@ -25,13 +26,13 @@ class QAEntry extends Component {
   }
 
   updateAnswer () {
-    const { dispatch, socketUpdateAnswer } = this.props
+    const { socketUpdateAnswer } = this.props
     if (this.state.message !== null) {
       if (this.state.message.length < 1) {
         this.state.message = null
       } else {
         this.props.answer.message = this.state.message
-        dispatch(socketUpdateAnswer(this.props.answer.message))
+        socketUpdateAnswer(this.props.answer.message)
       }
     }
     this.setState({ editing: false })
@@ -47,37 +48,39 @@ class QAEntry extends Component {
     const { user_id } = this.props.answer
     const { activeQuestion } = this.props
     if (id === user_id && activeQuestion) {
-      return <button className='button' onClick={() => this.setState({editing: true})}>Edit</button>
+      return <Button onClick={() => this.setState({editing: true})}>Edit</Button>
     } else {
       return null
     }
   }
 
-  renderVotingStyles (conditionalClassname, dependentOn, defaultClassName = 'button') {
+  renderVotingStyles (dependentOn) {
     const { users_vote_count } = this.props
     if (users_vote_count === dependentOn) {
-      return `${defaultClassName} ${conditionalClassname}`
+      return 'green'
     } else {
-      return defaultClassName
+      return 'grey'
     }
   }
 
   renderVoteButtons () {
-    const { dispatch, updateVote, activeQuestion, user } = this.props
+    const { updateVote, activeQuestion, user } = this.props
     if (!activeQuestion) return null
     if (!user.data) {
       const f = this.props.showErrorNotification.bind(null, 'You must be logged in to vote')
       return (
         <div>
-          <button className='button' onClick={f}>Vote Up</button>
-          <button className='button' onClick={f}>Vote Down</button>
+          <Icon circular name='thumbs up' onClick={f} style={{cursor: 'pointer'}} />
+          <Label circular color='green'>{this.props.answer.vote_count} </Label>
+          <Icon circular name='thumbs down' onClick={f} style={{cursor: 'pointer'}} />
         </div>
       )
     }
     return (
       <div>
-        <button className={this.renderVotingStyles('upvote', 1)} onClick={() => updateVote && dispatch(updateVote(1))}>Vote Up</button>
-        <button className={this.renderVotingStyles('downvote', -1)} onClick={() => updateVote && dispatch(updateVote(-1))}>Vote Down</button>
+        <Icon circular name='thumbs up' color={this.renderVotingStyles(1)} onClick={() => updateVote && updateVote(1)} style={{cursor: 'pointer'}} />
+        <Label circular color='green'>{this.props.answer.vote_count} </Label>
+        <Icon circular name='thumbs down' color={this.renderVotingStyles(-1)} onClick={() => updateVote && updateVote(-1)} style={{cursor: 'pointer'}} />
       </div>
     )
   }
@@ -86,32 +89,49 @@ class QAEntry extends Component {
     const humanTime = moment(this.props.answer.timestamp).fromNow()
     if (!this.state.editing) {
       return (
-        <div className='list-entry'>
-          <p>{this.props.answer.vote_count}</p>
-          {this.renderVoteButtons()}
-          <div>
-            <p>{this.props.answer.username}</p>
-            <img src={this.props.answer.avatar} />
-            <p className='post-title'>{this.state.message !== null ? this.state.message : this.props.answer.message}</p>
-            {this.renderEditButton()}
-            <p>{humanTime}</p>
-          </div>
-        </div>
+        <Segment basic className='list-entry'>
+          <Card fluid>
+            <Card.Content>
+              <Image floated='left' size='mini' src={this.props.answer.avatar} />
+              <Card.Header>{this.props.answer.username}</Card.Header>
+              <Card.Meta>{humanTime}</Card.Meta>
+              <Card.Description>{this.state.message !== null ? this.state.message : this.props.answer.message}</Card.Description>
+            </Card.Content>
+            <Card.Content extra>
+              {this.renderVoteButtons()}
+              {this.renderEditButton()}
+            </Card.Content>
+          </Card>
+        </Segment>
       )
     } else {
+      const msg = this.state.message ? this.state.message : this.props.answer.message
       return (
-        <div className='list-entry'>
-          <p>{this.props.answer.vote_count}</p>
-          {this.renderVoteButtons()}
-          <div>
-            <p>{this.props.answer.username}</p>
-            <img src={this.props.answer.avatar} />
-            <textarea maxLength='300' cols='100' rows='4' value={this.state.message !== null ? this.state.message : this.props.answer.message} onChange={this.handleAnswerChange} name='answer' placeholder='Edit answer...' />
-            <p>{`${this.state.charCount} characters remaining`}</p>
-            <span className='button' onClick={this.updateAnswer}>Save</span>
-            <span className='button' onClick={this.cancelUpdate}>Cancel</span>
-          </div>
-        </div>
+        <Segment basic className='list-entry'>
+          <Card fluid>
+            <Card.Content>
+              <Image floated='left' size='mini' src={this.props.answer.avatar} />
+              <Card.Header>{this.props.answer.username}</Card.Header>
+              <Card.Meta>{humanTime}</Card.Meta>
+              <Card.Description>
+                <Input
+                  fluid
+                  value={msg}
+                  onChange={this.handleAnswerChange}
+                  name='answer'
+                  label={{ basic: true, content: `${this.state.charCount}` }}
+                  labelPosition='right'
+                />
+              </Card.Description>
+            </Card.Content>
+            <Card.Content extra>
+              <Button.Group>
+                <Button color='red' onClick={this.cancelUpdate}>Cancel</Button>
+                <Button color='green' onClick={this.updateAnswer}>Save</Button>
+              </Button.Group>
+            </Card.Content>
+          </Card>
+        </Segment>
       )
     }
   }
@@ -122,20 +142,16 @@ const mapStateToProps = (state, ownProps) => {
   return { user: state.user, user_id: id, users_vote_count: ownProps.answer.users_vote_count }
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    showErrorNotification: msg => dispatch(showErrorNotification(msg))
-  }
-}
-
 const mergeProps = (stateProps, dispatchProps, ownProps) => {
+  const { dispatch } = dispatchProps
   return {
     ...stateProps,
     ...dispatchProps,
     ...ownProps,
-    updateVote: stateProps.user_id ? (vote_type) => updateVote(ownProps.answer.id, ownProps.answer.question_id, stateProps.user_id, vote_type) : null,
-    socketUpdateAnswer: (message) => socketUpdateAnswer({ id: ownProps.answer.id, question_id: ownProps.answer.question_id, message: message })
+    showErrorNotification: msg => dispatch(showErrorNotification(msg)),
+    updateVote: stateProps.user_id ? (vote_type) => dispatch(updateVote(ownProps.answer.id, ownProps.answer.question_id, stateProps.user_id, vote_type)) : null,
+    socketUpdateAnswer: (message) => dispatch(socketUpdateAnswer({ id: ownProps.answer.id, question_id: ownProps.answer.question_id, message: message }))
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(QAEntry)
+export default connect(mapStateToProps, null, mergeProps)(QAEntry)

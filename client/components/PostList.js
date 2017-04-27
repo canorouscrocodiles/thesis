@@ -21,14 +21,15 @@ class PostList extends Component {
 
     this.handleOptionChange = this.handleOptionChange.bind(this)
     this.handleCategoryChange = this.handleCategoryChange.bind(this)
+    this.scrollToTop = this.scrollToTop.bind(this)
   }
 
   componentWillMount () {
-    let index = this.props.sortOptions.findIndex(x => x === this.props.sortBy)
-    this.props.changeOption(index)
+    // let index = this.props.sortOptions.findIndex(x => x === this.props.sortBy)
+    // this.props.changeOption(index)
 
-    let value = this.props.categories.map(x => ({ label: x, value: x }))
-    this.props.changeValue(value)
+    // let value = this.props.categories.map(x => ({ label: x, value: x }))
+    // this.props.changeValue(value)
   }
 
   handleOptionChange (event, data) {
@@ -36,12 +37,12 @@ class PostList extends Component {
     this.props.changeOption(data.value)
 
     // let selectedCategories = this.props.value.map(x => x.value)
-    this.props.sortQuestions(data.value, [])
+    this.props.sortQuestions(data.value, this.props.value)
   }
 
   handleCategoryChange (event, data) {
     console.log('You\'ve selected:', data.value)
-    this.props.changeValue(data.value)
+    // this.props.changeValue(data.value)
 
     console.log('sortBy ', this.props.option)
     this.props.sortQuestions(this.props.option, data.value)
@@ -65,6 +66,11 @@ class PostList extends Component {
     )
   }
 
+  scrollToTop () {
+    var elmnt = document.getElementById('postlist2')
+    elmnt.scrollTop = 0
+  }
+
   renderMessage () {
     if (!this.props.currentLocation.name) {
       return (
@@ -83,10 +89,11 @@ class PostList extends Component {
   renderPostList () {
     if (this.props.questions.data.length === 0 && this.props.currentLocation.location) {
       return (
-        <div>
-          <p>😞 There are no questions around you. 😞</p>
+        <Segment raised textAlign='center'>
+          <p>There are no questions around you.</p>
+          <p>😞</p>
           <p>Post a question you want answered!</p>
-        </div>
+        </Segment>
       )
     } else if (this.props.questions.data.length === 0) {
       return (
@@ -98,7 +105,7 @@ class PostList extends Component {
       )
     } else {
       return (
-        <div className='post-list'>
+        <div id='postlist2' className='post-list'>
           {this.props.questions.data.map(question => <ListEntry key={question.id} question={question} />)}
         </div>
       )
@@ -107,28 +114,34 @@ class PostList extends Component {
 
   render () {
     return (
-      <Segment basic>
-        <Segment textAlign='center' raised>
-          {this.renderMessage()}
-          <Dropdown
-            placeholder='Sort'
-            selection
-            defaultValue={this.props.option}
-            options={this.state.sortOptions}
-            onChange={this.handleOptionChange}
-          />
-          <Dropdown
-            placeholder='Filter categories'
-            multiple
-            selection
-            options={this.props.categoryOptions}
-            onChange={this.handleCategoryChange}
-          />
+      <div>
+        <Segment basic>
+          <Segment textAlign='center' raised>
+            {this.renderMessage()}
+            <Dropdown
+              placeholder='Sort'
+              selection
+              defaultValue={this.props.option}
+              options={this.state.sortOptions}
+              onChange={this.handleOptionChange}
+            />
+            <Dropdown
+              placeholder='Filter categories'
+              multiple
+              selection
+              defaultValue={this.props.categories}
+              options={this.props.categoryOptions}
+              onChange={this.handleCategoryChange}
+            />
+          </Segment>
+          <Divider hidden />
+          {this.renderUnread()}
+          {this.renderPostList()}
+          <div className='back-to-top'>
+            <Icon color='green' size='huge' name='toggle up' onClick={this.scrollToTop} />
+          </div>
         </Segment>
-        <Divider hidden />
-        {this.renderUnread()}
-        {this.renderPostList()}
-      </Segment>
+      </div>
     )
   }
 }

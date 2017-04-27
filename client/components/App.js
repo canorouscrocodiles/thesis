@@ -147,10 +147,11 @@ class App extends Component {
 
   render () {
     return (
-      <div>
+      <div className='our-app'>
         <Grid>
-          <ErrorNotification />
-          <Menu2 username={this.props.user.username} />
+          <Grid.Row>
+            <Menu2 username={this.props.user.username} />
+          </Grid.Row>
           <Grid.Row columns={2}>
             <Grid.Column width={8}>
               <GMap />

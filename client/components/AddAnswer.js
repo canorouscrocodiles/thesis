@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { postQuestionAnswer } from '../actions/sockets/answer'
 import { showErrorNotification } from '../actions/errors'
+import { Button, Input } from 'semantic-ui-react'
 
 class AddAnswer extends Component {
   constructor (props) {
@@ -53,8 +54,7 @@ class AddAnswer extends Component {
     } else {
       submitFunction = this.props.showErrorNotification.bind(null, 'You must be logged in to answer a question')
     }
-    return <span className='button' onClick={submitFunction}>Respond</span>
-
+    return <Button onClick={submitFunction} color='green'>Respond</Button>
   }
 
   render () {
@@ -62,9 +62,16 @@ class AddAnswer extends Component {
     if (!activeQuestion) return null
     return (
       <div>
-        <textarea maxLength='300' cols='100' rows='4' value={this.state.answer} onChange={this.handleAnswerChange} name='answer' placeholder='Add an answer...' />
+        <Input
+          fluid
+          value={this.state.answer}
+          onChange={this.handleAnswerChange}
+          name='answer'
+          label={{ basic: true, content: `${this.state.charCount}` }}
+          labelPosition='right'
+          placeholder='Provide an answer to this question'
+        />
         {this.renderSubmitButton()}
-        <p>{`${this.state.charCount} characters remaining`}</p>
       </div>
     )
   }
