@@ -65,6 +65,7 @@
     "redux-logger": "^3.0.1",
     "redux-socket.io": "^1.4.0",
     "redux-thunk": "^2.2.0",
+    "semantic-ui-react": "^0.68.2",
     "socket.io": "^1.7.3",
     "webpack": "^2.2.1"
   },

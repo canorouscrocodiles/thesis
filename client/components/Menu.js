@@ -4,34 +4,42 @@ import { connect } from 'react-redux'
 import { loggingOut } from '../actions/auth'
 import AskQuestion from './AskQuestion'
 import Inbox from './Inbox'
+import { Button, Grid, Menu, Icon, Image } from 'semantic-ui-react'
 
-class Menu extends Component {
+class Menu2 extends Component {
   userProfileButton () {
     return (
-      <li className='nav-link-right'>
-        <Link className='link' to={`/users/${this.props.user.id}`}><img src={`http://graph.facebook.com/${this.props.user.id}/picture?type=square`} /></Link>
-        <span>{this.props.user.username}</span>
+      <div>
+        <Link className='link' to={`/users/${this.props.user.id}`}>
+          <Image src={`http://graph.facebook.com/${this.props.user.id}/picture?type=large`} avatar />
+          <span>{this.props.user.username}</span>
+        </Link>
         <Link className='link' onClick={this.props.loggingOut} to='/'>(Logout)</Link>
-      </li>
+      </div>
     )
   }
 
   loggedOutButton () {
     return (
-      <li className='nav-link-right'><a className='link button' href='/auth/facebook'>Login with Facebook</a></li>
+      <Button color='facebook'>
+        <Icon name='facebook' />Login With Facebook
+      </Button>
     )
   }
 
   render () {
     return (
-      <div id='menu'>
-        <ul id='nav-links'>
-          <li className='nav-link-left'><Link className='link' to='/'><h2 id='title'>OnPoint 👇</h2></Link></li>
-          { this.props.user ? this.userProfileButton() : this.loggedOutButton() }
+      <Menu fluid borderless>
+        <Menu.Item position='left'>
+          <Link className='link' to='/'><h1>On Point 👇</h1></Link>
+        </Menu.Item>
+        <Menu.Item position='center'>
           <AskQuestion />
-          <Inbox />
-        </ul>
-      </div>
+        </Menu.Item>
+        <Menu.Item position='right'>
+          { this.props.user ? this.userProfileButton() : this.loggedOutButton() }
+        </Menu.Item>
+      </Menu>
     )
   }
 }
@@ -49,4 +57,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Menu)
+export default connect(mapStateToProps, mapDispatchToProps)(Menu2)
