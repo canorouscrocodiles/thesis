@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 import updateVote from '../actions/sockets/votes'
 import { socketUpdateAnswer } from '../actions/sockets/answer'
+import { showErrorNotification } from '../actions/errors'
 
 class QAEntry extends Component {
   constructor (props) {
@@ -62,8 +63,17 @@ class QAEntry extends Component {
   }
 
   renderVoteButtons () {
-    const { dispatch, updateVote, activeQuestion } = this.props
+    const { dispatch, updateVote, activeQuestion, user } = this.props
     if (!activeQuestion) return null
+    if (!user.data) {
+      const f = this.props.showErrorNotification.bind(null, 'You must be logged in to vote')
+      return (
+        <div>
+          <button className='button' onClick={f}>Vote Up</button>
+          <button className='button' onClick={f}>Vote Down</button>
+        </div>
+      )
+    }
     return (
       <div>
         <button className={this.renderVotingStyles('upvote', 1)} onClick={() => updateVote && dispatch(updateVote(1))}>Vote Up</button>
@@ -112,6 +122,12 @@ const mapStateToProps = (state, ownProps) => {
   return { user: state.user, user_id: id, users_vote_count: ownProps.answer.users_vote_count }
 }
 
+const mapDispatchToProps = dispatch => {
+  return {
+    showErrorNotification: msg => dispatch(showErrorNotification(msg))
+  }
+}
+
 const mergeProps = (stateProps, dispatchProps, ownProps) => {
   return {
     ...stateProps,
@@ -122,4 +138,4 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
   }
 }
 
-export default connect(mapStateToProps, null, mergeProps)(QAEntry)
+export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(QAEntry)
