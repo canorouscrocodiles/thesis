@@ -149,15 +149,13 @@ class App extends Component {
     return (
       <div>
         <Grid>
-          <Grid.Row>
-            <ErrorNotification />
-            <Menu2 username={this.props.user.username} />
-          </Grid.Row>
+          <ErrorNotification />
+          <Menu2 username={this.props.user.username} />
           <Grid.Row columns={2}>
-            <Grid.Column floated='left' stretched='true'>
+            <Grid.Column className='five wide column'>
               <GMap />
             </Grid.Column>
-            <Grid.Column>
+            <Grid.Column className='seven wide column'>
               <Route exact path='/' component={PostList} />
               <Route path='/users/:id' render={this.renderUserProfilePage} />
               <Route path='/question/:id' render={this.renderQuestionPage} />
