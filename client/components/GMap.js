@@ -267,9 +267,9 @@ class GMap extends Component {
     return (
       <div id='mapWindow'>
         <Segment basic>
-          <Dimmer active inverted>
-            <Loader inverted content='...Loading Map' />
-          </Dimmer>
+          <div className='map-loader-position'>
+            <div className='ld ld-ball ld-broadcast' style={{'font-size': '32px', color: '#23d9a1'}} /><div>Map Loading...</div>
+          </div>
         </Segment>
       </div>
     )

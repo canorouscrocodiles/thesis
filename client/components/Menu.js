@@ -11,7 +11,7 @@ class Menu2 extends Component {
     return (
       <div>
         <Link className='link' to={`/users/${this.props.user.id}`}>
-          <Image shape='circular' height='40' width='40' src={`http://graph.facebook.com/${this.props.user.id}/picture?type=large`} />
+          <Image shape='circular' height='40em' width='40em' src={`http://graph.facebook.com/${this.props.user.id}/picture?type=large`} />
           <span>{this.props.user.username}</span>
         </Link>
         <Link className='link' onClick={this.props.loggingOut} to='/'>(Logout)</Link>
