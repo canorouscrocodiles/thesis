@@ -35,6 +35,11 @@ div.column {
 .post-list-loading {
   height: 500px;
 }
+
+.ui.button {
+  margin: 8px 0;
+}
+
 /**
  * React Select
  * ============

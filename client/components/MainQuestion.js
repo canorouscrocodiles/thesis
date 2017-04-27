@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { enterRoom, leaveRoom, socketUpdateQuestion, deactivateQuestion } from '../actions/sockets/questions'
+import { sortAnswers } from '../actions/answer'
 import moment from 'moment'
-import { Segment } from 'semantic-ui-react'
+import AddAnswer from './AddAnswer'
+import { Segment, Header, Label, Icon, Button, Form, TextArea, Dropdown, Divider } from 'semantic-ui-react'
 
 class MainQuestion extends Component {
   constructor (props) {
@@ -12,22 +14,33 @@ class MainQuestion extends Component {
       category_id: null,
       categories: ['Chipotle', 'Convention', 'Sports', 'Education', 'Advice', 'Traffic', 'Animals', 'Health', 'History', 'Tourism', 'Tech', 'Business', 'News', 'Food', 'Emergency', 'Music', 'Movies', 'TV', 'Life', 'Love', 'Politics'],
       charCount: 300,
-      editing: false
+      editing: false,
+      sortOptions: [ 'New', 'Trending', 'Old' ],
+      option: 0
     }
     this.updateQuestion = this.updateQuestion.bind(this)
     this.cancelUpdate = this.cancelUpdate.bind(this)
     this.handleQuestionChange = this.handleQuestionChange.bind(this)
     this.handleCategoryChange = this.handleCategoryChange.bind(this)
+    this.handleOptionChange = this.handleOptionChange.bind(this)
   }
 
   componentWillMount () {
     const user_id = this.props.user.data ? this.props.user.data.id : null
+    let index = this.state.sortOptions.findIndex(x => x === this.props.sortBy)
+    this.setState({ option: index })
     let enterInfo = {
       user_id: user_id,
       question_id: this.props.id,
       question_creator: user_id === this.props.question.user_id
     }
     this.props.enterRoom(enterInfo)
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.answers.length !== this.props.answers.length) {
+      this.props.sortAnswers(this.state.sortOptions[this.state.option])
+    }
   }
 
   componentWillUnmount () {
@@ -40,13 +53,18 @@ class MainQuestion extends Component {
     this.props.leaveRoom(leaveInfo)
   }
 
+  handleOptionChange (event, data) {
+    this.setState({ option: data.value })
+    this.props.sortAnswers(this.state.sortOptions[data.value])
+  }
+
   handleQuestionChange (event) {
     let remaining = 300 - event.target.value.length
     this.setState({ message: event.target.value, charCount: remaining })
   }
 
-  handleCategoryChange (event) {
-    this.setState({ category_id: event.target.value })
+  handleCategoryChange (event, data) {
+    this.setState({ category_id: data.value })
   }
 
   updateQuestion () {
@@ -69,23 +87,17 @@ class MainQuestion extends Component {
     return (<div>Loading...</div>)
   }
 
-  renderEditButton () {
+  renderEditButtons () {
     const { question, user } = this.props
     const id = user.data ? user.data.id : null
     const { user_id } = question
     if (id === user_id && question.active) {
-      return <button className='button' onClick={() => this.setState({editing: true})}>Edit</button>
-    } else {
-      return null
-    }
-  }
-
-  renderCloseButton () {
-    const { question, user } = this.props
-    const id = user.data ? user.data.id : null
-    const { user_id } = question
-    if (id === user_id && question.active) {
-      return <button className='button' onClick={() => this.props.deactivateQuestion(question.id)}>Close question</button>
+      return (
+        <Button.Group>
+          <Button onClick={() => this.setState({editing: true})}>Edit</Button>
+          <Button color='red' onClick={() => this.props.deactivateQuestion(question.id)}>Close question</Button>
+        </Button.Group>
+      )
     } else {
       return null
     }
@@ -96,36 +108,68 @@ class MainQuestion extends Component {
     if (question.active) {
       return null
     } else {
-      return <h3>This question is now closed</h3>
+      return <Label color='red' tag>This question is now closed</Label>
     }
+  }
+
+  renderAnswerTitle () {
+    const { answers } = this.props
+    if (answers.length > 0) {
+      return <h2>{answers.length} Answers</h2>
+    } else {
+      return <h4>Waiting for answers...</h4>
+    }
+  }
+
+  renderSortDropdown () {
+    const options = this.state.sortOptions.map((option, i) => ({ text: option, value: i }))
+    const text = this.state.sortOptions[this.state.option]
+    if (this.props.answers.length === 0) { return null }
+    return <Dropdown selection closeOnChange text={text} onChange={this.handleOptionChange} options={options} />
   }
 
   render () {
     const { question } = this.props
+    const styles = {
+      bold: { 'font-weight': 'bold' },
+      italic: { 'font-style': 'italic' }
+    }
     if (!question) { return this.renderLoader() }
     let humanTime = moment(question.timestamp).fromNow()
     if (!this.state.editing) {
       return (
-        <div>
-          <h1>Q: {this.state.message !== null ? this.state.message : question.message}</h1>
-          <h2>{question.username} - {question.location}</h2>
-          <h3>{humanTime} in {this.state.category_id !== null ? this.state.categories[this.state.category_id - 1] : question.category}</h3>
-          {this.renderEditButton()}
-          {this.renderCloseButton()}
+        <Segment>
+          <Header as='h2'>
+            {this.state.message !== null ? this.state.message : question.message}
+            <Header.Subheader><span style={styles.bold}>{question.username}</span> - <span style={styles.italic}>{humanTime} in {question.location}</span> </Header.Subheader>
+            <Label><Icon name='hashtag' />{this.state.category_id ? this.state.categories[this.state.category_id - 1] : question.category}</Label>
+          </Header>
+          {this.renderEditButtons()}
           {this.renderActivityLabel()}
-        </div>
+          <Divider />
+          <AddAnswer id={this.props.id} activeQuestion={question.active} />
+          {this.renderAnswerTitle()}
+          {this.renderSortDropdown()}
+        </Segment>
       )
     } else {
+      const options = this.state.categories.map((category, id) => ({ text: category, value: id + 1 }))
+      const text = this.state.category_id ? this.state.categories[this.state.category_id - 1] : question.category
+      const message = this.state.message ? this.state.message : question.message
       return (
-        <div>
-          <textarea maxLength='300' cols='100' rows='4' value={this.state.message !== null ? this.state.message : question.message} onChange={this.handleQuestionChange} name='question' placeholder='Edit question...' />
-          <select value={this.state.category_id !== null ? this.state.category_id : question.category} onChange={this.handleCategoryChange}>
-            {this.state.categories.map((category, id) => <option key={id} value={id + 1}>{category}</option>)}
-          </select>
-          <p>{`${this.state.charCount} characters remaining`}</p>
-          <span className='button' onClick={this.updateQuestion}>Save</span>
-          <span className='button' onClick={this.cancelUpdate}>Cancel</span>
-        </div>
+        <Segment>
+          <Form>
+            <h2>Question</h2>
+            <TextArea autoHeight value={message} onChange={this.handleQuestionChange} name='question' />
+            <p>{`${this.state.charCount} characters remaining`}</p>
+            <h2>Category</h2>
+            <Dropdown fluid selection closeOnChange text={text} onChange={this.handleCategoryChange} options={options} />
+          </Form>
+          <Button.Group>
+            <Button color='red' onClick={this.cancelUpdate}>Cancel</Button>
+            <Button color='green' onClick={this.updateQuestion}>Save</Button>
+          </Button.Group>
+        </Segment>
       )
     }
   }
@@ -133,7 +177,9 @@ class MainQuestion extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    user: state.user
+    user: state.user,
+    sortBy: state.answers.sortBy,
+    answers: state.answers.data
   }
 }
 
@@ -142,7 +188,8 @@ const mapDispatchToProps = (dispatch) => {
     enterRoom: (id) => dispatch(enterRoom(id)),
     leaveRoom: (id) => dispatch(leaveRoom(id)),
     deactivateQuestion: (id) => dispatch(deactivateQuestion(id)),
-    socketUpdateQuestion: data => dispatch(socketUpdateQuestion(data))
+    socketUpdateQuestion: data => dispatch(socketUpdateQuestion(data)),
+    sortAnswers: (sortBy) => dispatch(sortAnswers(sortBy))
   }
 }
 
