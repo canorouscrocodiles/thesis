@@ -1,7 +1,7 @@
 {
-  "name": "",
+  "name": "OnPoint",
   "version": "1.0.0",
-  "description": "",
+  "description": "Geolocation-based Q&A. Ask and answer nearby questions in real-time",
   "author": "Keith Alpichi, Craig Rodrigues, Jong Kim",
   "license": "MIT",
   "main": "server/index.js",
