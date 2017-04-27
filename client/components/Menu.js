@@ -6,19 +6,8 @@ import AskQuestion from './AskQuestion'
 import Inbox from './Inbox'
 import { Button, Dropdown, Menu, Icon, Image } from 'semantic-ui-react'
 
-const userOptions = [
-  { key: 'profile', text: 'Profile', icon: 'user' },
-  { key: 'log out', text: 'Log Out', icon: 'sign out' }
-]
-
 class Menu2 extends Component {
   userProfileButton () {
-    const trigger = (
-      <span>
-        <Image src={`http://graph.facebook.com/${this.props.user.id}/picture?type=large`} avatar /> {this.props.user.username}
-      </span>
-    )
-
     return (
       <div>
         <Link className='link' to={`/users/${this.props.user.id}`}>
