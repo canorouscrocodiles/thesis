@@ -14,22 +14,22 @@ const pessimisticExecute = (action, emit, next, dispatch) => {
 }
 const socketMiddleware = reduxSocket(socket, ['post/', 'get/', 'put/', 'delete/', 'enter/', 'leave/'], { execute: pessimisticExecute })
 
-const logger = createLogger()
-const middlewares = applyMiddleware(thunk, logger, socketMiddleware)
-
+let middlewares
 let enhancers
+
 if (process.env.NODE_ENV === 'development') {
+  const logger = createLogger()
   const reduxDevTool = window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  middlewares = applyMiddleware(thunk, logger, socketMiddleware)
   enhancers = compose(
     middlewares,
     reduxDevTool
   )
 } else {
+  middlewares = applyMiddleware(thunk, socketMiddleware)
   enhancers = compose(middlewares)
 }
 
-// Possibly place pre-loaded state as 2nd arg here.
-// It can be retrieved from local storage (ie, maybe users location?) or from the server
 const store = createStore(rootReducer, enhancers)
 
 export default store
