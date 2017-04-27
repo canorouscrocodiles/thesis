@@ -9,7 +9,6 @@ const updateLocation = (socket, {user_id, coordinates}) => {
   .then(() => Questions.selectQuestions(coordinates))
   .then((questions) => {
     io.to(socket.id).emit('action', { type: UPDATED_QUESTIONS_SUCCESS, data: questions, location: coordinates })
-    console.log(`Client disconnected with id ${socket.id}`)
   })
   .catch(error => {
     console.log(`Error updating location or selecting nearby questions. Error: ${error}`)
