@@ -7,12 +7,13 @@ import { fetchingLocationName, fetchLocationError } from '../actions/location'
 import utils from '../utils'
 import ErrorNotification from './ErrorNotification'
 import GMap from './GMap'
-import Menu from './Menu'
+import Menu2 from './Menu'
 import QuestionPage from './QuestionPage'
 import PostList from './PostList'
 import UserProfile from './UserProfile'
 import { sendLocationToServer } from '../actions/sockets/location'
 import { getCategories, findAndJoin } from '../actions/sockets/questions'
+import { Container, Grid, Rail, Segment } from 'semantic-ui-react'
 
 const watchOptions = {
   enableHighAccuracy: true,
@@ -147,12 +148,20 @@ class App extends Component {
   render () {
     return (
       <div>
-        <ErrorNotification />
-        <Menu username={this.props.user.username} />
-        <GMap />
-        <Route exact path='/' component={PostList} />
-        <Route path='/users/:id' render={this.renderUserProfilePage} />
-        <Route path='/question/:id' render={this.renderQuestionPage} />
+        <Grid>
+          <ErrorNotification />
+          <Menu2 username={this.props.user.username} />
+          <Grid.Row columns={2}>
+            <Grid.Column width={8}>
+              <GMap />
+            </Grid.Column>
+            <Grid.Column width={8}>
+              <Route exact path='/' component={PostList} />
+              <Route path='/users/:id' render={this.renderUserProfilePage} />
+              <Route path='/question/:id' render={this.renderQuestionPage} />
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
       </div>
     )
   }

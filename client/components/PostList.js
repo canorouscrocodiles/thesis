@@ -1,21 +1,26 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import Select from 'react-select'
 import { sortQuestions, changeOption, changeValue } from '../actions/questions'
 import ListEntry from './ListEntry'
 import UnreadNotification from './UnreadNotification'
+import { Dimmer, Divider, Dropdown, Icon, Loader, Segment } from 'semantic-ui-react'
 
 class PostList extends Component {
   constructor (props) {
     super(props)
     this.state = {
       value: [],
-      sortOptions: [ 'New', 'Trending', 'Distance', 'Old' ],
+      sortOptions: [
+        { key: 'New', value: 'New', text: 'New' },
+        { key: 'Trending', value: 'Trending', text: 'Trending' },
+        { key: 'Distance', value: 'Distance', text: 'Distance' },
+        { key: 'Old', value: 'Old', text: 'Old' }
+      ],
       option: 0
     }
 
     this.handleOptionChange = this.handleOptionChange.bind(this)
-    this.handleSelectChange = this.handleSelectChange.bind(this)
+    this.handleCategoryChange = this.handleCategoryChange.bind(this)
   }
 
   componentWillMount () {
@@ -26,21 +31,20 @@ class PostList extends Component {
     this.props.changeValue(value)
   }
 
-  handleOptionChange (event) {
-    this.props.changeOption(event.target.value)
+  handleOptionChange (event, data) {
+    console.log(data.value)
+    this.props.changeOption(data.value)
 
-    let selectedCategories = this.props.value.map(x => x.value)
-    this.props.sortQuestions(this.props.sortOptions[event.target.value], selectedCategories)
+    // let selectedCategories = this.props.value.map(x => x.value)
+    this.props.sortQuestions(data.value, [])
   }
 
-  handleSelectChange (value) {
-    console.log('You\'ve selected:', value)
-    this.props.changeValue(value)
+  handleCategoryChange (event, data) {
+    console.log('You\'ve selected:', data.value)
+    this.props.changeValue(data.value)
 
-    let selectedCategories = value.map(x => x.value)
-    console.log('sortBy ', this.state.sortOptions[this.state.option])
-
-    this.props.sortQuestions(this.props.sortOptions[this.props.option], selectedCategories)
+    console.log('sortBy ', this.props.option)
+    this.props.sortQuestions(this.props.option, data.value)
   }
 
   locationLoaded () {
@@ -55,12 +59,18 @@ class PostList extends Component {
       city = 'The Earth'
     }
     return (
-      <h3>Questions around { `${district}, ${city}` }</h3>
+      <h3>
+        <Icon name='marker' color='grey' size='big' />Questions around { `${district}, ${city}` }
+      </h3>
     )
   }
 
   renderMessage () {
-    if (!this.props.currentLocation.name) return <h3>Finding your location...</h3>
+    if (!this.props.currentLocation.name) {
+      return (
+        <h3><Loader indeterminate active inline /> Finding your location...</h3>
+      )
+    }
     return this.locationLoaded()
   }
 
@@ -80,7 +90,11 @@ class PostList extends Component {
       )
     } else if (this.props.questions.data.length === 0) {
       return (
-        <div>LOADING QUESTIONS...</div>
+        <div className='post-list-loading'>
+          <Dimmer active inverted>
+            <Loader size='massive' inline='centered'>Getting Questions</Loader>
+          </Dimmer>
+        </div>
       )
     } else {
       return (
@@ -93,21 +107,28 @@ class PostList extends Component {
 
   render () {
     return (
-      <div>
-        {this.renderMessage()}
-        <select value={this.props.option} onChange={this.handleOptionChange}>
-          {this.props.sortOptions.map((option, i) => <option key={i} value={i}>{option}</option>)}
-        </select>
-        <Select
-          multi
-          value={this.props.value}
-          placeholder='Filter categories'
-          options={this.props.categoryOptions}
-          onChange={this.handleSelectChange}
-        />
+      <Segment basic>
+        <Segment textAlign='center' raised>
+          {this.renderMessage()}
+          <Dropdown
+            placeholder='Sort'
+            selection
+            defaultValue={this.props.option}
+            options={this.state.sortOptions}
+            onChange={this.handleOptionChange}
+          />
+          <Dropdown
+            placeholder='Filter categories'
+            multiple
+            selection
+            options={this.props.categoryOptions}
+            onChange={this.handleCategoryChange}
+          />
+        </Segment>
+        <Divider hidden />
         {this.renderUnread()}
         {this.renderPostList()}
-      </div>
+      </Segment>
     )
   }
 }

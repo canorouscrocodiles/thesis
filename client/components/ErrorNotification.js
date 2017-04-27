@@ -13,11 +13,15 @@ class ErrorNotification extends Component {
 
   render () {
     const { error } = this.props
-    return (
-      <div className={this.renderClass()}>
-        <span className='error-text'>{error}</span>
-      </div>
-    )
+    if (error) {
+      return (
+        <div className={this.renderClass()}>
+          <span className='error-text'>{error}</span>
+        </div>
+      )
+    } else {
+      return null
+    }
   }
  }
 

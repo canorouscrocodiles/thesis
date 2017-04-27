@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { Button, Dropdown, Input } from 'semantic-ui-react'
 import { postQuestion } from '../actions/sockets/questions'
 import { showErrorNotification } from '../actions/errors'
 
@@ -10,6 +11,17 @@ const defaultCategories = [
   'Chipotle',
   'Concerts',
   'Convention'
+]
+
+const catOpts = [
+  {
+    text: 'Advice',
+    value: 'advice'
+  },
+  {
+    text: 'Animals',
+    value: 'animals'
+  }
 ]
 
 class AskQuestion extends Component {
@@ -93,14 +105,22 @@ class AskQuestion extends Component {
 
   render () {
     return (
-      <li className='nav-link-right'>
-        <input type='text' size='100' maxLength='300' value={this.state.question} onChange={this.handleQuestionChange} name='question' placeholder='Ask a question...' />
+      <div>
+        <Input
+          size='medium'
+          onChange={this.handleQuestionChange}
+          label={{ basic: true, content: `${this.state.charCount}` }}
+          labelPosition='right'
+          placeholder='Ask a question...'
+        />
+        <Button primary onClick={this.submitQuestion}>Ask!</Button>
+        <Dropdown compact placeholder='Category' onChange={this.handleCategoryChange} selection options={catOpts} />
         <select value={this.state.category} onChange={this.handleCategoryChange}>
           {this.state.categories.map((category, id) => <option key={id} value={id + 1}>{category}</option>)}
         </select>
         {this.renderSubmitButton()}
         <p>{`${this.state.charCount} characters remaining`}</p>
-      </li>
+      </div>
     )
   }
 }

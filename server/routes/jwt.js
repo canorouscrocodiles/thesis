@@ -7,7 +7,7 @@ const serialize = function serialize (req, res, next) {
     id: profile.id,
     username: profile.first_name,
     email: 'email@test.com',
-    img_url: `http://graph.facebook.com/${profile.id}/picture?type=square`,
+    img_url: `http://graph.facebook.com/${profile.id}/picture?type=large`,
     bio: 'My bio'
   })
   .then((data) => {

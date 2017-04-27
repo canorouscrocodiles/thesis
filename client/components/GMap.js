@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import utils from '../utils'
+import { Dimmer, Loader, Segment } from 'semantic-ui-react'
 
 // These are options used to initially render map
 // center defines the center of the map
@@ -14,6 +15,8 @@ let options = {
   zoom: 16,
   draggable: true,
   streetViewControl: false,
+  mapTypeControl: false,
+  zoomControl: true,
   styles: [
     {
       'featureType': 'poi',
@@ -256,12 +259,18 @@ class GMap extends Component {
     }
   }
 
+  componentDidUpdate () {
+    if (this.state.map) this.state.map.panBy(250, 50)
+  }
+
   render () {
     return (
       <div id='mapWindow'>
-        <div className='map-loader-position'>
-          <div className='ld ld-ball ld-broadcast' style={{'font-size': '32px', color: '#23d9a1'}} /><div>Map Loading...</div>
-        </div>
+        <Segment basic>
+          <Dimmer active inverted>
+            <Loader inverted content='...Loading Map' />
+          </Dimmer>
+        </Segment>
       </div>
     )
   }
