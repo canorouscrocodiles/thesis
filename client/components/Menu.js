@@ -4,12 +4,12 @@ import { connect } from 'react-redux'
 import { loggingOut } from '../actions/auth'
 import AskQuestion from './AskQuestion'
 import Inbox from './Inbox'
-import { Button, Dropdown, Menu, Icon, Image } from 'semantic-ui-react'
+import { Grid, Button, Label, Dropdown, Menu, Icon, Image } from 'semantic-ui-react'
 
-class Menu2 extends Component {
+class OPMenu extends Component {
   userProfileButton () {
     return (
-      <div>
+      <div id='profileUser'>
         <Link className='link' to={`/users/${this.props.user.id}`}>
           <Image shape='circular' height='40em' width='40em' src={`http://graph.facebook.com/${this.props.user.id}/picture?type=large`} />
           <span>{this.props.user.username}</span>
@@ -21,25 +21,30 @@ class Menu2 extends Component {
 
   loggedOutButton () {
     return (
-      <Button color='facebook'>
-        <Icon name='facebook' />Login With Facebook
-      </Button>
+      <div id='profileUser'>
+        <Button color='facebook'>
+          <Icon name='facebook' />Login With Facebook
+        </Button>
+      </div>
     )
   }
 
   render () {
     return (
-      <Menu fluid borderless>
-        <Menu.Item position='left'>
+      <div id='menuWrapper'>
+        <div id='menuTitle'>
           <Link className='link' to='/'><h1>On Point 👇</h1></Link>
-        </Menu.Item>
-        <Menu.Item position='center'>
+        </div>
+        <div id='menuQuestion'>
           <AskQuestion />
-        </Menu.Item>
-        <Menu.Item position='right'>
-          { this.props.user ? this.userProfileButton() : this.loggedOutButton() }
-        </Menu.Item>
-      </Menu>
+        </div>
+        <div id='menuProfile'>
+          <div id='menuProfileWrapper'>
+            <Inbox />
+            { this.props.user ? this.userProfileButton() : this.loggedOutButton() }
+          </div>
+        </div>
+      </div>
     )
   }
 }
@@ -57,4 +62,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Menu2)
+export default connect(mapStateToProps, mapDispatchToProps)(OPMenu)

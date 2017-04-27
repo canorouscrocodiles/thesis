@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { getUnread } from '../actions/sockets/answer'
 import { removeQuestionFromInbox } from '../actions/inbox'
+import { Menu, Icon, Label } from 'semantic-ui-react'
 
 class Inbox extends Component {
   constructor (props) {
@@ -41,23 +42,9 @@ class Inbox extends Component {
 
   render () {
     return (
-      <div>
-        <img id='inboxImg' onClick={this.showMessages} src='/images/inbox.png' />
-        <span id='inboxLabel' onClick={this.showMessages}>{this.props.unread[0] || ''}</span>
-        <div id='inboxList'>
-          {
-            this.props.unread.map((entry, id) => {
-              if (id > 0) {
-                return (
-                  <div key={entry.id}>
-                    <p className='bold-link' onClick={() => this.handleClick(entry.id)}>{entry.question}</p>
-                    {entry.answers.map((answer, id) => <p key={`${id}`}>{answer}</p>)}
-                    <br />
-                  </div>
-                )
-              }
-            })
-          }
+      <div id='profileInbox'>
+        <div onClick={this.showMessages}>
+          <Icon name='inbox' size='huge' color='blue' />
         </div>
       </div>
     )

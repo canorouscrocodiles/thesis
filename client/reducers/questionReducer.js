@@ -145,7 +145,9 @@ export default (state = initialState, action) => {
         }
       }
     case GET_CATEGORIES_SUCCESS:
-      let data = action.data.map(x => x.name)
+      let data = action.data.map(x => {
+        return { text: x.name, value: x.id }
+      })
       return {
         ...state,
         categoryList: data

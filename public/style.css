@@ -1,39 +1,140 @@
 html, body {
-  height: 100vh;
+  width: 100%;
+  height: 100%;
 }
 
 h2 {
   word-wrap: break-word;
 }
 
-.our-app {
-  height: 100vh;
+#app {
+  width: 100%;
+  height: 100%;
 }
 
-.back-to-top {
-  position:fixed;
-  right:0;
-  bottom:0;
-  padding: 10px;
-  opacity: 0.8;
+#appView {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(9, 1fr) 30px repeat(6, 1fr);
+  grid-template-rows: 66px 1fr 70px;
+}
+
+#menuView {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-column: 1 / 17;
+  grid-row: 1;
+  z-index: 2;
+  border-top: 2px solid #23d9a1;
+  border-bottom: 1px solid rgba(34,36,38,.15);
+  box-shadow: 0 2px 4px 0 rgba(34,36,38,.12), 0 2px 10px 0 rgba(34,36,38,.15);
+}
+
+#menuWrapper {
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+  height: 100%;
+  width: 100%;
+}
+
+#menuTitle {
+  grid-column: 1 / 3;
+  height: 100%;
+  width: 100%;
+}
+
+#menuTitle h1 {
+  margin: 10px;
+}
+
+#menuQuestion {
+  grid-column: 3 / 15;
+}
+
+#questionWrapper {
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+}
+
+#questionCategory {
+  grid-column: 1;
+}
+
+#questionBar {
+  grid-column: 2 / 15;
+}
+
+div.ui.medium.right.labeled.input {
+  width: 100%;
+}
+
+#questionInput {
+  width: 100%;
+}
+
+#questionButton {
+  grid-column: 16 / 17;
+  margin-top: 2px;
+}
+
+.questionInputElement {
+  margin: 10px 5px;
+}
+
+#menuProfile {
+  grid-column: 15 / 17;
+}
+
+#menuProfileWrapper {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+}
+
+#profileInbox {
+  grid-column: 1;
+}
+
+#profileUser {
+  grid-column: 2;
+}
+
+#mapView {
+  grid-column: 1 / 17;
+  grid-row: 2 / 4;
 }
 
 #mapWindow {
-  height: 100vh;
-  width: 100vw;
+  width: 100%;
+  height: 100%;
 }
 
-.post-list {
-  height: 100vh;
-  overflow-y: scroll;
+#postView {
+  grid-column: 10 / 17;
+  grid-row: 2 / 4;
+  z-index: 3;
+  overflow: scroll;
 }
 
-.post-list-loading {
-  height: 100vh;
+.back-to-top {
+  grid-column: 9;
+  grid-row: 3;
+  position: relative;
+  right: -30px;
+  padding: 10px;
+  opacity: 0.8;
+  z-index: 3;
+}
+
+#optitle {
+  grid-column: 1 / 2;
+  padding: 10px;
 }
 
 div.ui.borderless.fluid.menu {
   margin: 0;
+  height: 5%;
 }
 
 div.two.column.row {
@@ -44,6 +145,10 @@ div.two.column.row {
 
 div.column {
   margin: 0;
+  padding: 0;
+}
+
+div.ten.wide.column {
   padding: 0;
 }
 
