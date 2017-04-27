@@ -13,7 +13,7 @@ import PostList from './PostList'
 import UserProfile from './UserProfile'
 import { sendLocationToServer } from '../actions/sockets/location'
 import { getCategories, findAndJoin } from '../actions/sockets/questions'
-import { Container, Grid } from 'semantic-ui-react'
+import { Container, Grid, Rail, Segment } from 'semantic-ui-react'
 
 const watchOptions = {
   enableHighAccuracy: true,
@@ -152,10 +152,10 @@ class App extends Component {
           <ErrorNotification />
           <Menu2 username={this.props.user.username} />
           <Grid.Row columns={2}>
-            <Grid.Column className='five wide column'>
+            <Grid.Column width={8}>
               <GMap />
             </Grid.Column>
-            <Grid.Column className='seven wide column'>
+            <Grid.Column width={8}>
               <Route exact path='/' component={PostList} />
               <Route path='/users/:id' render={this.renderUserProfilePage} />
               <Route path='/question/:id' render={this.renderQuestionPage} />

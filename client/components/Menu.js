@@ -4,14 +4,14 @@ import { connect } from 'react-redux'
 import { loggingOut } from '../actions/auth'
 import AskQuestion from './AskQuestion'
 import Inbox from './Inbox'
-import { Button, Grid, Menu, Icon, Image } from 'semantic-ui-react'
+import { Button, Dropdown, Menu, Icon, Image } from 'semantic-ui-react'
 
 class Menu2 extends Component {
   userProfileButton () {
     return (
       <div>
         <Link className='link' to={`/users/${this.props.user.id}`}>
-          <Image src={`http://graph.facebook.com/${this.props.user.id}/picture?type=large`} avatar />
+          <Image shape='circular' height='40em' width='40em' src={`http://graph.facebook.com/${this.props.user.id}/picture?type=large`} />
           <span>{this.props.user.username}</span>
         </Link>
         <Link className='link' onClick={this.props.loggingOut} to='/'>(Logout)</Link>

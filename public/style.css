@@ -2,12 +2,14 @@ html, body {
   height: 100vh;
 }
 
+h2 {
+  word-wrap: break-word;
+}
+
 #mapWindow {
   float: left;
-  min-height: 800px;
-  min-width: 500px;
-  height: 100%;
-  width: 100%;
+  height: 100vh;
+  width: 100vw;
 }
 
 .post-list {
@@ -30,6 +32,9 @@ div.column {
   padding: 0;
 }
 
+.post-list-loading {
+  height: 500px;
+}
 /**
  * React Select
  * ============

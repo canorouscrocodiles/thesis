@@ -31,7 +31,7 @@ const initialState = {
   unread: false,
   value: [],
   sortOptions: [ 'New', 'Trending', 'Distance', 'Old' ],
-  option: 0,
+  option: 'New',
   fetching: false,
   error: null
 }
@@ -53,8 +53,9 @@ const calculateDistance = (questions, location) => {
 const filterCategories = (arr) => {
   let results = Object.keys(_.groupBy(arr, 'category')).map(cat => {
     return {
-      label: cat,
-      value: cat.toLowerCase()
+      label: cat.toLowerCase(),
+      value: cat,
+      text: cat.toLowerCase()
     }
   })
 
