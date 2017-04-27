@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { enterRoom, leaveRoom, socketUpdateQuestion, deactivateQuestion } from '../actions/sockets/questions'
 import moment from 'moment'
+import { Segment } from 'semantic-ui-react'
 
 class MainQuestion extends Component {
   constructor (props) {
@@ -106,9 +107,9 @@ class MainQuestion extends Component {
     if (!this.state.editing) {
       return (
         <div>
-          <h2>{this.state.message !== null ? this.state.message : question.message}</h2>
-          <p>{question.username} - {question.location}</p>
-          <p>{humanTime} - {this.state.category_id !== null ? this.state.categories[this.state.category_id - 1] : question.category}</p>
+          <h1>Q: {this.state.message !== null ? this.state.message : question.message}</h1>
+          <h2>{question.username} - {question.location}</h2>
+          <h3>{humanTime} in {this.state.category_id !== null ? this.state.categories[this.state.category_id - 1] : question.category}</h3>
           {this.renderEditButton()}
           {this.renderCloseButton()}
           {this.renderActivityLabel()}

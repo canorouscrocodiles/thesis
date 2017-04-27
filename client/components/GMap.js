@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import utils from '../utils'
+import { Segment } from 'semantic-ui-react'
 
 // These are options used to initially render map
 // center defines the center of the map
@@ -259,9 +260,11 @@ class GMap extends Component {
   render () {
     return (
       <div id='mapWindow'>
-        <div className='map-loader-position'>
-          <div className='ld ld-ball ld-broadcast' style={{'font-size': '32px', color: '#23d9a1'}} /><div>Map Loading...</div>
-        </div>
+        <Segment basic>
+          <div className='map-loader-position'>
+            <div className='ld ld-ball ld-broadcast' style={{'font-size': '32px', color: '#23d9a1'}} /><div>Map Loading...</div>
+          </div>
+        </Segment>
       </div>
     )
   }

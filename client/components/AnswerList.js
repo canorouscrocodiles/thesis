@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { fetchQuestionAnswers, sortAnswers } from '../actions/answer'
 import QAEntry from './QAEntry'
 import AddAnswer from './AddAnswer'
+import { Divider } from 'semantic-ui-react'
 
 class AnswerList extends Component {
   constructor (props) {
@@ -37,7 +38,8 @@ class AnswerList extends Component {
     const { question } = this.props
     return (
       <div className='post-list'>
-        <h4>Answers</h4>
+        <Divider />
+        <h2>Answers</h2>
         <AddAnswer id={this.props.id} activeQuestion={question.active} />
         <select value={this.state.option} onChange={this.handleOptionChange}>
           {this.state.sortOptions.map((option, i) => <option key={i} value={i}>{option}</option>)}
