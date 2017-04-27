@@ -113,7 +113,7 @@ class AskQuestion extends Component {
           labelPosition='right'
           placeholder='Ask a question...'
         />
-        <Button primary onClick={this.submitQuestion}>Ask!</Button>
+        <Button primary color='green' onClick={this.submitQuestion}>Ask!</Button>
         <Dropdown compact placeholder='Category' onChange={this.handleCategoryChange} selection options={catOpts} />
         <select value={this.state.category} onChange={this.handleCategoryChange}>
           {this.state.categories.map((category, id) => <option key={id} value={id + 1}>{category}</option>)}
