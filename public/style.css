@@ -1,5 +1,5 @@
 html, body {
-  height: 100%;
+  height: 100vh;
 }
 
 #mapWindow {
@@ -13,6 +13,21 @@ html, body {
 .post-list {
   height: 800px;
   overflow-y: scroll;
+}
+
+div.ui.borderless.fluid.menu {
+  margin: 0;
+}
+
+div.two.column.row {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+div.column {
+  margin: 0;
+  padding: 0;
 }
 
 /**
