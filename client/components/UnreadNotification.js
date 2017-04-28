@@ -24,7 +24,7 @@ class UnreadNotification extends Component {
 
   render () {
     return (
-      <Segment className='unread-notification' raised inverted color='green' textAlign='center' onClick={this.setUnreadToFalse}>
+      <Segment className='unread-notification' raised inverted textAlign='center' onClick={this.setUnreadToFalse}>
         <h3>New Questions!</h3>
       </Segment>
     )

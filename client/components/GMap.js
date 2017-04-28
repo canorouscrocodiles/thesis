@@ -19,45 +19,45 @@ let options = {
   zoomControl: true,
   styles: [
     {
-      "featureType": "landscape",
-      "stylers": [
+      'featureType': 'landscape',
+      'stylers': [
         {
-          "color": "#e1e6e2"
+          'color': '#e1e6e2'
         }
       ]
     },
     {
-      "featureType": "poi",
-      "elementType": "geometry.fill",
-      "stylers": [
+      'featureType': 'poi',
+      'elementType': 'geometry.fill',
+      'stylers': [
         {
-          "visibility": "off"
+          'visibility': 'off'
         }
       ]
     },
     {
-      "featureType": "poi.business",
-      "elementType": "labels.icon",
-      "stylers": [
+      'featureType': 'poi.business',
+      'elementType': 'labels.icon',
+      'stylers': [
         {
-          "visibility": "off"
+          'visibility': 'off'
         }
       ]
     },
     {
-      "featureType": "road",
-      "elementType": "geometry.fill",
-      "stylers": [
+      'featureType': 'road',
+      'elementType': 'geometry.fill',
+      'stylers': [
         {
-          "color": "#ffffff"
+          'color': '#ffffff'
         }
       ]
     },
     {
-      "featureType": "water",
-      "stylers": [
+      'featureType': 'water',
+      'stylers': [
         {
-          "color": "#93accc"
+          'color': '#93accc'
         }
       ]
     }
@@ -153,10 +153,8 @@ class GMap extends Component {
       icon: {
         path: window.google.maps.SymbolPath.CIRCLE,
         scale: 2,
-        fillColor: '#e52424',
-        fillOpacity: 1,
-        strokeColor: '#e52424',
-        strokeWeight: 2
+        fillColor: '#1b3454',
+        fillOpacity: 1
       },
       clickable: false,
       flat: true,

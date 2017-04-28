@@ -58,8 +58,8 @@ class Inbox extends Component {
           trigger={
             <div id='profileInbox'>
               <div onClick={this.showMessages}>
-                <Icon name='inbox' size='huge' color='blue' />
-                <Label id='inboxLabel' floating color='teal'>{this.props.unread[0]}</Label>
+                <Icon name='inbox' size='huge' />
+                <Label id='inboxLabel' floating >{this.props.unread[0]}</Label>
               </div>
             </div>
           }
