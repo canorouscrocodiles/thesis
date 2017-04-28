@@ -24,14 +24,6 @@ class PostList extends Component {
     this.scrollToTop = this.scrollToTop.bind(this)
   }
 
-  componentWillMount () {
-    // let index = this.props.sortOptions.findIndex(x => x === this.props.sortBy)
-    // this.props.changeOption(index)
-
-    // let value = this.props.categories.map(x => ({ label: x, value: x }))
-    // this.props.changeValue(value)
-  }
-
   handleOptionChange (event, data) {
     console.log(data.value)
     this.props.changeOption(data.value)
@@ -67,7 +59,7 @@ class PostList extends Component {
   }
 
   scrollToTop () {
-    var elmnt = document.getElementById('postlist2')
+    var elmnt = document.getElementById('postlist')
     elmnt.scrollTop = 0
   }
 
@@ -105,7 +97,7 @@ class PostList extends Component {
       )
     } else {
       return (
-        <div id='postlist2' className='post-list'>
+        <div id='postlist' className='post-list'>
           {this.props.questions.data.map(question => <ListEntry key={question.id} question={question} />)}
         </div>
       )
