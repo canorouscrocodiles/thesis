@@ -115,9 +115,9 @@ class MainQuestion extends Component {
   renderAnswerTitle () {
     const { answers, question } = this.props
     if (answers.length === 1) {
-      return <Header as='h2' floated='left'>1 Answer</Header>
+      return <Header as='h2'>1 Answer</Header>
     } else if (answers.length > 1) {
-      return <Header as='h2' floated='left'>{answers.length} Answers</Header>
+      return <Header as='h2'>{answers.length} Answers</Header>
     } else if (question.active) {
       return <Header as='h2' textAlign='center'>Waiting for answers...</Header>
     } else {
