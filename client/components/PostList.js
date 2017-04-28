@@ -57,7 +57,7 @@ class PostList extends Component {
     }
     return (
       <h3>
-        <Icon id='mappointer' name='marker' color='grey' size='big' />Questions around { `${district}, ${city}` }
+        <Icon name='marker' color='grey' size='big' />Questions around { `${district}, ${city}` }
       </h3>
     )
   }
