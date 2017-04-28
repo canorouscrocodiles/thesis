@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { sortQuestions, changeOption, changeValue } from '../actions/questions'
 import ListEntry from './ListEntry'
 import UnreadNotification from './UnreadNotification'
-import { Dimmer, Divider, Dropdown, Icon, Loader, Segment } from 'semantic-ui-react'
+import { Dimmer, Divider, Dropdown, Icon, Image, Loader, Segment } from 'semantic-ui-react'
 
 class PostList extends Component {
   constructor (props) {
@@ -16,11 +16,16 @@ class PostList extends Component {
         { key: 'Distance', value: 'Distance', text: 'Distance' },
         { key: 'Old', value: 'Old', text: 'Old' }
       ],
-      option: 0
+      defaultSort: '',
+      defaultCategories: []
     }
 
     this.handleOptionChange = this.handleOptionChange.bind(this)
     this.handleCategoryChange = this.handleCategoryChange.bind(this)
+  }
+
+  componentDidMount () {
+    this.setState({ defaultSort: this.props.option, defaultCategories: this.props.categories })
   }
 
   handleOptionChange (event, data) {
@@ -83,11 +88,14 @@ class PostList extends Component {
       )
     } else if (this.props.questions.data.length === 0) {
       return (
-        <div className='post-list-loading'>
+        <Segment raised>
           <Dimmer active inverted>
-            <Loader size='massive' inline='centered'>Getting Questions</Loader>
+            <Loader size='massive' inline='centered'>Loading Questions</Loader>
           </Dimmer>
-        </div>
+          <Image src='https://react.semantic-ui.com/assets/images/wireframe/paragraph.png' />
+          <Divider />
+          <Image src='https://react.semantic-ui.com/assets/images/wireframe/paragraph.png' />
+        </Segment>
       )
     } else {
       return (
@@ -100,15 +108,14 @@ class PostList extends Component {
 
   render () {
     return (
-      <div>
+      <div className='questions'>
         <Segment basic>
           <Segment textAlign='center' raised>
             {this.renderMessage()}
             <Dropdown
               placeholder='Sort'
               selection
-              value={this.props.option}
-              defaultValue={this.props.option}
+              defaultValue={this.state.defaultSort}
               options={this.state.sortOptions}
               onChange={this.handleOptionChange}
             />
@@ -116,8 +123,7 @@ class PostList extends Component {
               placeholder='Filter categories'
               multiple
               selection
-              value={this.props.categories}
-              defaultValue={this.props.categories}
+              defaultValue={this.state.defaultCategories}
               options={this.props.categoryOptions}
               onChange={this.handleCategoryChange}
             />
