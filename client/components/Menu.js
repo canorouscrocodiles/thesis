@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import { Link, Redirect, withRouter } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { loggingOut } from '../actions/auth'
 import AskQuestion from './AskQuestion'
 import Inbox from './Inbox'
-import { Grid, Button, Label, Dropdown, Menu, Icon, Image } from 'semantic-ui-react'
+import { Button, Dropdown, Icon, Image } from 'semantic-ui-react'
 
 class OPMenu extends Component {
   constructor (props) {
@@ -77,7 +77,7 @@ class OPMenu extends Component {
     return (
       <div id='menuWrapper'>
         <div id='menuTitle'>
-          <Link className='link' to='/'><h1>On Point 👇</h1></Link>
+          <Link className='link' to='/'><img src='/images/onPointLogo-Green-Blue.png' /></Link>
         </div>
         <div id='menuQuestion'>
           <AskQuestion />
