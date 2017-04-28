@@ -80,7 +80,7 @@ class AskQuestion extends Component {
     } else {
       submitFunction = this.props.showErrorNotification.bind(null, 'You must be logged in to ask a question')
     }
-    return <span className='button' onClick={submitFunction}>Ask</span>
+    return <div id='questionButton' className='questionInputElement'><Button className='secondaryColor' onClick={submitFunction}>Ask</Button></div>
   }
 
   render () {
@@ -101,9 +101,7 @@ class AskQuestion extends Component {
             placeholder='Ask a question...'
           />
         </div>
-        <div id='questionButton' className='questionInputElement'>
-          <Button primary onClick={this.submitQuestion}>Ask!</Button>
-        </div>
+        {this.renderSubmitButton()}
       </div>
     )
   }

@@ -19,9 +19,46 @@ let options = {
   zoomControl: true,
   styles: [
     {
-      'featureType': 'poi',
-      'stylers': [
-        { 'visibility': 'off' }
+      "featureType": "landscape",
+      "stylers": [
+        {
+          "color": "#e1e6e2"
+        }
+      ]
+    },
+    {
+      "featureType": "poi",
+      "elementType": "geometry.fill",
+      "stylers": [
+        {
+          "visibility": "off"
+        }
+      ]
+    },
+    {
+      "featureType": "poi.business",
+      "elementType": "labels.icon",
+      "stylers": [
+        {
+          "visibility": "off"
+        }
+      ]
+    },
+    {
+      "featureType": "road",
+      "elementType": "geometry.fill",
+      "stylers": [
+        {
+          "color": "#ffffff"
+        }
+      ]
+    },
+    {
+      "featureType": "water",
+      "stylers": [
+        {
+          "color": "#93accc"
+        }
       ]
     }
   ]
@@ -90,9 +127,9 @@ class GMap extends Component {
       icon: {
         path: window.google.maps.SymbolPath.CIRCLE,
         scale: radius,
-        fillColor: '#75aaff',
+        fillColor: '#23d9a1',
         fillOpacity: 0.9,
-        strokeColor: '#5e9cff',
+        strokeColor: '#21ce94',
         strokeWeight: 1
       },
       label: {
@@ -116,9 +153,9 @@ class GMap extends Component {
       icon: {
         path: window.google.maps.SymbolPath.CIRCLE,
         scale: 10,
-        fillColor: 'red',
+        fillColor: '#e52424',
         fillOpacity: 1,
-        strokeColor: 'white',
+        strokeColor: '#e52424',
         strokeWeight: 2
       },
       clickable: false,
@@ -131,9 +168,9 @@ class GMap extends Component {
       map: map,
       center: position,
       radius: radius,
-      fillColor: '#429bf4',
+      fillColor: '#23d9a1',
       fillOpacity: 0,
-      strokeColor: '#429bf4',
+      strokeColor: '#23d9a1',
       strokeOpacity: 0.50,
       strokeWeight: 1.25,
       clickable: false,

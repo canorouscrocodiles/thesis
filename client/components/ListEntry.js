@@ -24,7 +24,7 @@ export default (props) => {
             {props.question.location}
           </Feed.Meta>
         </Feed.Content>
-        <Label color='blue' attached='bottom right'><Icon name='hashtag' />{props.question.category}</Label>
+        <Label attached='bottom right'><Icon name='hashtag' />{props.question.category}</Label>
       </Segment>
       <Divider hidden />
     </Feed.Event>

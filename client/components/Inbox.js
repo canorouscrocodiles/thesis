@@ -77,7 +77,7 @@ class Inbox extends Component {
       return (
         <div id='profileInbox'>
           <div onClick={this.showMessages}>
-            <Icon name='inbox' size='huge' color='blue' />
+            <Icon name='inbox' size='huge' id='inbox' />
           </div>
         </div>
       )
