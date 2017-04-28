@@ -65,6 +65,7 @@ class AddAnswer extends Component {
         <Input
           fluid
           value={this.state.answer}
+          maxLength='300'
           onChange={this.handleAnswerChange}
           name='answer'
           label={{ basic: true, content: `${this.state.charCount}` }}

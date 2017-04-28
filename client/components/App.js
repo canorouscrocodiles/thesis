@@ -32,6 +32,7 @@ class App extends Component {
     this.watchLocationError = this.watchLocationError.bind(this)
     this.renderQuestionPage = this.renderQuestionPage.bind(this)
     this.renderUserProfilePage = this.renderUserProfilePage.bind(this)
+    this.scrollToTop = this.scrollToTop.bind(this)
   }
 
   componentWillMount () {
@@ -105,6 +106,11 @@ class App extends Component {
     if (username) {
       this.props.setUser({ username, id })
     }
+  }
+
+  scrollToTop () {
+    var elmnt = document.getElementById('postView')
+    elmnt.scrollTop = 0
   }
 
   renderQuestionPage (props) {

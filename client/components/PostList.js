@@ -21,7 +21,6 @@ class PostList extends Component {
 
     this.handleOptionChange = this.handleOptionChange.bind(this)
     this.handleCategoryChange = this.handleCategoryChange.bind(this)
-    this.scrollToTop = this.scrollToTop.bind(this)
   }
 
   handleOptionChange (event, data) {
@@ -56,11 +55,6 @@ class PostList extends Component {
         <Icon name='marker' color='grey' size='big' />Questions around { `${district}, ${city}` }
       </h3>
     )
-  }
-
-  scrollToTop () {
-    var elmnt = document.getElementById('postView')
-    elmnt.scrollTop = 0
   }
 
   renderMessage () {
