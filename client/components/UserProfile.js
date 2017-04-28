@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { fetchUser, fetchUserQuestions, fetchUserAnswers } from '../actions/user'
-import { Container, Dimmer, Header, Image, Loader, Segment } from 'semantic-ui-react'
+import { Container, Dimmer, Header, Image, Loader, Segment, Button } from 'semantic-ui-react'
 import UserQuestions from './UserQuestions'
 import UserAnswers from './UserAnswers'
 
@@ -34,20 +34,19 @@ class UserInfo extends Component {
       )
     } else {
       return (
-        <div>
-          <Segment raised>
-            <Container text>
-              <Image centered src={this.props.user.data.img_url} width='200em' height='200em' shape='rounded' />
-              <Header as='h2'>{this.props.user.data.username}</Header>
-              <p>{this.props.user.data.bio}</p>
-            </Container>
-          </Segment>
-          <Segment raised>
-            <span onClick={() => this.handleSelectedTab('questions')}>My Questions</span> | <span onClick={() => this.handleSelectedTab('answers')}>My Answers</span>
-          </Segment>
-
-          { this.state.selectedTab === 'questions' ? <UserQuestions /> : <UserAnswers /> }
-        </div>
+        <Segment raised>
+          <Container text>
+            <Image centered src={this.props.user.data.img_url} width='200em' height='200em' shape='rounded' />
+            <Header as='h2'>{this.props.user.data.username}</Header>
+            <p>{this.props.user.data.bio}</p>
+            <Button.Group>
+              <Button onClick={() => this.handleSelectedTab('questions')}>My Questions</Button>
+              <Button.Or text='&amp;'/>
+              <Button onClick={() => this.handleSelectedTab('answers')}>My Answers</Button>
+            </Button.Group>
+            { this.state.selectedTab === 'questions' ? <UserQuestions /> : <UserAnswers /> }
+          </Container>
+        </Segment>
       )
     }
   }

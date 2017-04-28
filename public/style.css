@@ -7,6 +7,30 @@ h2 {
   word-wrap: break-word;
 }
 
+.mainColor  {
+  color: #23d9a1;
+}
+
+.mainBGColor {
+  background-color: #23d9a1;
+}
+
+.secondaryColor {
+  color: #1b3454;
+}
+
+.grey {
+  color: #767676;
+}
+
+h1, h2, h3, h4, h5, p, span {
+  color: #1b3454;
+}
+
+a {
+  color: #21c190;
+}
+
 #app {
   width: 100%;
   height: 100%;
@@ -187,6 +211,17 @@ div.ten.wide.column {
 
 .ui.button {
   margin: 8px 0;
+  background-color: #1b3454;
+  color: white;
+}
+
+.ui.button.mainColor {
+  background-color: #23d9a1;
+}
+
+.ui.label {
+  background-color: #23d9a1;
+  color: white;
 }
 
 .ui.divider:not(.vertical):not(.horizontal) {
@@ -195,4 +230,14 @@ div.ten.wide.column {
 
 .ui[class*="bottom right attached"].label {
   border-radius: 0;
+}
+
+#inbox {
+  color: #1b3454;
+  cursor: 'pointer';
+}
+
+#inbox:hover {
+  background-color: white;
+  color: #767676;
 }

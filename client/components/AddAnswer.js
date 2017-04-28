@@ -54,7 +54,7 @@ class AddAnswer extends Component {
     } else {
       submitFunction = this.props.showErrorNotification.bind(null, 'You must be logged in to answer a question')
     }
-    return <Button onClick={submitFunction} color='green'>Respond</Button>
+    return <Button onClick={submitFunction}>Respond</Button>
   }
 
   render () {

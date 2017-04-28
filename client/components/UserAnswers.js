@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import UserAnswerEntry from './UserAnswerEntry'
+import { Feed } from 'semantic-ui-react'
 
 class UserAnswers extends Component {
   render () {
@@ -9,9 +10,9 @@ class UserAnswers extends Component {
 
     if (answers) {
       return (
-        <div className='post-list'>
+        <Feed>
           {answers.map(answer => <UserAnswerEntry key={answer.id} answer={answer} />)}
-        </div>
+        </Feed>
       )
     } else {
       return (<div>LOADING...</div>)

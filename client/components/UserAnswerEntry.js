@@ -1,15 +1,26 @@
 import React from 'react'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
+import { Feed, Label } from 'semantic-ui-react'
 
 export default (props) => {
   let humanTime = moment(props.answer.timestamp).fromNow()
   return (
-    <div className='list-entry'>
-      {props.answer.active_question ? <p>Active</p> : <p>Closed</p>}
-      <p>{humanTime}</p>
-      <p className='post-title'>Q: {props.answer.question_message}</p>
-      <Link to={`/question/${props.answer.question_id}`}>A: {props.answer.message}</Link>
-    </div>
+    <Feed.Event>
+      <Feed.Content>
+        <Feed.Summary>
+          {props.answer.question_message}
+          <Feed.Date>
+            {humanTime}{' '}
+            <Label>
+              {props.answer.active_question ? 'Active' : 'Closed'}
+            </Label>
+          </Feed.Date>
+        </Feed.Summary>
+        <Feed.Extra>
+          I replied: <Link to={`/question/${props.answer.question_id}`}>{props.answer.message}</Link>
+        </Feed.Extra>
+      </Feed.Content>
+    </Feed.Event>
   )
 }

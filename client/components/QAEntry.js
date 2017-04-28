@@ -57,7 +57,7 @@ class QAEntry extends Component {
   renderVotingStyles (dependentOn) {
     const { users_vote_count } = this.props
     if (users_vote_count === dependentOn) {
-      return 'green'
+      return 'mainColor'
     } else {
       return 'grey'
     }
@@ -71,16 +71,16 @@ class QAEntry extends Component {
       return (
         <div>
           <Icon circular name='thumbs up' onClick={f} style={{cursor: 'pointer'}} />
-          <Label circular color='green'>{this.props.answer.vote_count} </Label>
+          <Label circular className='mainColor'>{this.props.answer.vote_count} </Label>
           <Icon circular name='thumbs down' onClick={f} style={{cursor: 'pointer'}} />
         </div>
       )
     }
     return (
       <div>
-        <Icon circular name='thumbs up' color={this.renderVotingStyles(1)} onClick={() => updateVote && updateVote(1)} style={{cursor: 'pointer'}} />
-        <Label circular color='green'>{this.props.answer.vote_count} </Label>
-        <Icon circular name='thumbs down' color={this.renderVotingStyles(-1)} onClick={() => updateVote && updateVote(-1)} style={{cursor: 'pointer'}} />
+        <Icon circular name='thumbs up' className={this.renderVotingStyles(1)} onClick={() => updateVote && updateVote(1)} style={{cursor: 'pointer'}} />
+        <Label circular className='mainColor'>{this.props.answer.vote_count} </Label>
+        <Icon circular name='thumbs down' className={this.renderVotingStyles(-1)} onClick={() => updateVote && updateVote(-1)} style={{cursor: 'pointer'}} />
       </div>
     )
   }
@@ -126,8 +126,8 @@ class QAEntry extends Component {
             </Card.Content>
             <Card.Content extra>
               <Button.Group>
-                <Button color='red' onClick={this.cancelUpdate}>Cancel</Button>
-                <Button color='green' onClick={this.updateAnswer}>Save</Button>
+                <Button color='grey' onClick={this.cancelUpdate}>Cancel</Button>
+                <Button className='mainColor' onClick={this.updateAnswer}>Save</Button>
               </Button.Group>
             </Card.Content>
           </Card>
