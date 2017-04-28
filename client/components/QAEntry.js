@@ -65,7 +65,15 @@ class QAEntry extends Component {
 
   renderVoteButtons () {
     const { updateVote, activeQuestion, user } = this.props
-    if (!activeQuestion) return null
+    if (!activeQuestion) {
+      return (
+        <div>
+          <Icon circular name='thumbs up' className={this.renderVotingStyles(1)} />
+          <Label circular className='mainColor'>{this.props.answer.vote_count} </Label>
+          <Icon circular name='thumbs down' className={this.renderVotingStyles(-1)} />
+        </div>
+      )
+    }
     if (!user.data) {
       const f = this.props.showErrorNotification.bind(null, 'You must be logged in to vote')
       return (
