@@ -33,22 +33,16 @@ module.exports = socket => {
   socket.on('action', action => {
     switch (action.type) {
       case 'get/findAndJoin':
-        questionHandler.findAndJoin(socket, action.data)
-        break
+        return questionHandler.findAndJoin(socket, action.data)
       case 'enter/':
-        console.log(`User id: ${action.data.user_id} with socket id: ${socket.id} is entering room with id ${action.data.question_id}`)
-        if (!socket.rooms[action.data.question_id]) {
-          questionHandler.enterRoom(socket, action)
-        }
-        break
+        return questionHandler.enterRoom(socket, action)
+        // if (!socket.rooms[action.data.question_id]) {
+        //   return questionHandler.enterRoom(socket, action)
+        // }
       case 'leave/':
-        console.log(`User id: ${action.data.user_id} with socket id: ${socket.id} is leaving room with id ${action.data.question_id}`)
-        questionHandler.leaveRoom(socket, action)
-        break
+        return questionHandler.leaveRoom(socket, action)
       case 'post/ANSWER_TO_QUESTION':
-        console.log(`User with socket id: ${socket.id} is posting answer ${action.data}`)
-
-        verifyJWT(action.token)
+        return verifyJWT(action.token)
           .then(({ id }) => verifyUser(id))
           .then(validateUser)
           .then(() => answerHandler.postAnswer(socket, action.data))
@@ -57,12 +51,10 @@ module.exports = socket => {
             console.log(`${name} - ${message}`)
             socket.emit('action', { type: 'AUTHORIZATION ERROR' })
           })
-
-        break
+        // console.log(`User with socket id: ${socket.id} is posting answer ${action.data}`)
       case 'post/question':
         console.log(`User with socket id: ${socket.id} is posting a question`)
-
-        verifyJWT(action.token)
+        return verifyJWT(action.token)
           .then(({ id }) => verifyUser(id))
           .then(validateUser)
           .then(() => questionHandler.insertQuestion(socket, action.data))
@@ -70,79 +62,53 @@ module.exports = socket => {
             console.log(`${name} - ${message}`)
             socket.emit('action', { type: 'AUTHORIZATION ERROR' })
           })
-
-        break
       case 'get/question':
-        verifyJWT(action.token)
+        return verifyJWT(action.token)
           .then(({ id }) => verifyUser(id))
           .then(validateUser)
-          .then(() => {
-            questionHandler.selectQuestion(socket, action.data)
-            console.log(`User with socket id: ${socket.id} is requesting question with id ${action.data}`)
-          })
+          .then(() => questionHandler.selectQuestion(socket, action.data))
           .catch(() => socket.emit('action', { type: 'AUTHORIZATION ERROR' }))
-        break
       case 'post/location':
-        locationHandler.updateLocation(socket, action.data)
-        break
+        return locationHandler.updateLocation(socket, action.data)
       case 'put/vote':
-        verifyJWT(action.token)
+        return verifyJWT(action.token)
           .then(({ id }) => verifyUser(id))
           .then(validateUser)
-          .then(() => {
-            updateVote(socket, action.data)
-            console.log(`User ${socket.id} updated his vote to answer ${action.data.answer_id} with the vote type of ${action.data.vote_type}`)
-          })
+          .then(() => updateVote(socket, action.data))
           .catch(() => socket.emit('action', { type: 'AUTHORIZATION ERROR' }))
-        break
       case 'put/question':
-        verifyJWT(action.token)
+        return verifyJWT(action.token)
           .then(({ id }) => verifyUser(id))
           .then(validateUser)
-          .then(() => {
-            questionHandler.updateQuestion(socket, action.data)
-            console.log(`User ${socket.id} updated his question`)
-          })
+          .then(() => questionHandler.updateQuestion(socket, action.data))
           .catch(() => socket.emit('action', { type: 'AUTHORIZATION ERROR' }))
-        break
       case 'put/answer':
-        verifyJWT(action.token)
+        return verifyJWT(action.token)
           .then(({ id }) => verifyUser(id))
           .then(validateUser)
-          .then(() => {
-            answerHandler.updateAnswer(socket, action.data)
-            console.log(`User ${socket.id} updated his answer`)
-          })
+          .then(() => answerHandler.updateAnswer(socket, action.data))
           .then(() => questionHandler.updateLastUpdatedTime(action.data.question_id))
           .catch(() => socket.emit('action', { type: 'AUTHORIZATION ERROR' }))
-        break
       case 'get/categories':
-        questionHandler.getCategories(socket)
-        break
+        return questionHandler.getCategories(socket)
       case 'put/deactivate-question':
-        verifyJWT(action.token)
+        return verifyJWT(action.token)
           .then(({ id }) => verifyUser(id))
           .then(validateUser)
           .then(() => questionHandler.deactivateQuestion(socket, action.data))
           .catch(() => socket.emit('action', { type: 'AUTHORIZATION ERROR' }))
-        break
       case 'get/unread':
-        verifyJWT(action.token)
+        return verifyJWT(action.token)
           .then(({ id }) => verifyUser(id))
           .then(validateUser)
-          .then(() => {
-            console.log(`User ${socket.id} getting unread answers`)
-            answerHandler.getUnreadAnswers(socket, action.data)
-          })
+          .then(() => answerHandler.getUnreadAnswers(socket, action.data))
           .catch(() => socket.emit('action', { type: 'AUTHORIZATION ERROR' }))
-        break
       default:
         break
     }
   })
 
   socket.on('disconnect', () => {
-    console.log(`Client disconnected with id ${socket.id}`)
-    locationHandler.deleteLocation(socket.id)
+    return locationHandler.deleteLocation(socket.id)
   })
 }

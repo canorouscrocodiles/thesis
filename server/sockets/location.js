@@ -5,7 +5,7 @@ const UPDATED_QUESTIONS_SUCCESS = 'UPDATED_QUESTIONS_SUCCESS'
 const UPDATED_QUESTIONS_FAILURE = 'UPDATED_QUESTIONS_FAILURE'
 
 const updateLocation = (socket, {user_id, coordinates}) => {
-  Location.updateLocation(socket.id, user_id, coordinates)
+  return Location.updateLocation(socket.id, user_id, coordinates)
   .then(() => Questions.selectQuestions(coordinates))
   .then((questions) => {
     io.to(socket.id).emit('action', { type: UPDATED_QUESTIONS_SUCCESS, data: questions, location: coordinates })
@@ -17,7 +17,7 @@ const updateLocation = (socket, {user_id, coordinates}) => {
 }
 
 const deleteLocation = (id) => {
-  Location.deleteLocation(id)
+  return Location.deleteLocation(id)
   .then(() => {
     console.log(`Successfully deleted socket with id ${id}`)
   })

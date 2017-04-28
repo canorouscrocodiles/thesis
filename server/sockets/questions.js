@@ -17,27 +17,33 @@ const NEW_QUESTION_POSTED = 'NEW_QUESTION_POSTED'
 const enterRoom = (socket, action) => {
   socket.join(action.data.question_id)
   if (action.data.question_creator) {
-    Questions.updateLastViewedTime(action.data.question_id)
+    console.log(`Updating last viewed timestamp of question with id ${action.data.question_id}`)
+    return Questions.updateLastViewedTime(action.data.question_id)
   }
+  console.log(`User id: ${action.data.user_id} with socket id: ${socket.id} is entering room with id ${action.data.question_id}`)
 }
 
 const leaveRoom = (socket, action) => {
   if (action.data.question_creator) {
-    Questions.updateLastViewedTime(action.data.question_id)
+    console.log(`Updating last viewed timestamp of question with id ${action.data.question_id}`)
+    return Questions.updateLastViewedTime(action.data.question_id)
   } else {
     socket.leave(action.data.question_id)
+    console.log(`User id: ${action.data.user_id} with socket id: ${socket.id} is leaving room with id ${action.data.question_id}`)
   }
 }
 
 const updateLastUpdatedTime = (id) => {
-  Questions.updateLastUpdatedTime(id)
+  console.log(`Updating last viewed timestamp of question with id ${id}`)
+  return Questions.updateLastUpdatedTime(id)
 }
 
 const selectQuestion = (socket, action) => {
-  Questions.selectQuestion(action)
+  return Questions.selectQuestion(action)
     .then(question => {
       if (Object.keys(question).length > 0) {
         io.to(socket.id).emit('action', { type: GET_QUESTION_SUCCESS, data: question })
+        console.log(`User with socket id: ${socket.id} is requesting question with id ${action.data}`)
       } else {
         io.to(socket.id).emit('action', { type: GET_QUESTION_FAILURE, error: 'No question found' })
       }
@@ -48,7 +54,7 @@ const selectQuestion = (socket, action) => {
 const insertQuestion = (socket, action) => {
   let targetQuestion = null
 
-  Questions.insertQuestion(action)
+  return Questions.insertQuestion(action)
     .then(({id}) => Questions.selectOneQuestion(id))
     .then(question => {
       targetQuestion = question
@@ -75,9 +81,10 @@ const insertQuestion = (socket, action) => {
 }
 
 const updateQuestion = (socket, action) => {
-  Questions.updateQuestion(action)
+  return Questions.updateQuestion(action)
   .then(() => {
     io.to(action.id).emit('action', { type: UPDATE_QUESTION_SUCCESS, data: action })
+    console.log(`User ${socket.id} updated his question`)
   })
   .catch((error) => {
     console.log(`Failed to update question. ${error}`)
@@ -86,9 +93,9 @@ const updateQuestion = (socket, action) => {
 }
 
 const getCategories = (socket) => {
-  Questions.getCategories()
+  return Questions.getCategories()
   .then((action) => {
-    socket.emit('action', { type: GET_CATEGORIES_SUCCESS, data: action })
+    io.to(socket.id).emit('action', { type: GET_CATEGORIES_SUCCESS, data: action })
   })
   .catch((error) => {
     console.log(`Failed to get categories. ${error}`)
@@ -97,7 +104,7 @@ const getCategories = (socket) => {
 }
 
 const deactivateQuestion = (socket, question_id) => {
-  Questions.deactivateQuestion(question_id)
+  return Questions.deactivateQuestion(question_id)
   .then(() => {
     // Emit to all users viewing the question of deactivate question
     io.to(question_id).emit('action', { type: SELECTED_QUESTION_DEACTIVATION_SUCCESS, data: question_id })
@@ -129,7 +136,7 @@ var parseGeoJSON = function (location) {
 }
 
 const findAndJoin = (socket, id) => {
-  Questions.findUserQuestions(id)
+  return Questions.findUserQuestions(id)
   .then((ids) => {
     ids.forEach(id => {
       socket.join(id.id)
