@@ -113,18 +113,22 @@ class MainQuestion extends Component {
   }
 
   renderAnswerTitle () {
-    const { answers } = this.props
+    const { answers, question } = this.props
     if (answers.length > 0) {
+      if (answers.length === 1) { return <h2>1 Answer</h2> }
       return <h2>{answers.length} Answers</h2>
-    } else {
+    } else if (question.active) {
       return <h4>Waiting for answers...</h4>
+    } else {
+      return null
     }
   }
 
   renderSortDropdown () {
+    const { answers, question } = this.props
     const options = this.state.sortOptions.map((option, i) => ({ text: option, value: i }))
     const text = this.state.sortOptions[this.state.option]
-    if (this.props.answers.length === 0) { return null }
+    if (answers.length === 0 || !question.active) { return null }
     return <Dropdown selection closeOnChange text={text} onChange={this.handleOptionChange} options={options} />
   }
 

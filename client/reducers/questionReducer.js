@@ -168,7 +168,7 @@ export default (state = initialState, action) => {
     case QUESTION_DEACTIVATION_SUCCESS:
       return {
         ...state,
-        data: [...state.data.filter(question => question.id !== action.data)],
+        data: [ ...state.data.map(question => question.id === action.data ? { ...question, active: false } : question) ],
         allQuestions: [...state.allQuestions.filter(question => question.id !== action.data)]
       }
     case NEW_QUESTION_POSTED:
