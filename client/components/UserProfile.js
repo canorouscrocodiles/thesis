@@ -36,12 +36,12 @@ class UserInfo extends Component {
       return (
         <Segment raised>
           <Container text>
-            <Image centered src={this.props.user.data.img_url} width='200em' height='200em' shape='rounded' />
+            <Image src={this.props.user.data.img_url} width='100em' height='100em' />
             <Header as='h2'>{this.props.user.data.username}</Header>
             <p>{this.props.user.data.bio}</p>
             <Button.Group>
               <Button onClick={() => this.handleSelectedTab('questions')}>My Questions</Button>
-              <Button.Or text='&amp;'/>
+              <Button.Or text='&amp;' />
               <Button onClick={() => this.handleSelectedTab('answers')}>My Answers</Button>
             </Button.Group>
             { this.state.selectedTab === 'questions' ? <UserQuestions /> : <UserAnswers /> }

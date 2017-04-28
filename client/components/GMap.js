@@ -152,7 +152,7 @@ class GMap extends Component {
       position: position,
       icon: {
         path: window.google.maps.SymbolPath.CIRCLE,
-        scale: 10,
+        scale: 2,
         fillColor: '#e52424',
         fillOpacity: 1,
         strokeColor: '#e52424',
@@ -200,7 +200,7 @@ class GMap extends Component {
     questions.forEach(question => {
       let item = document.createElement('li')
       item.className = 'infoListItem'
-      item.appendChild(document.createTextNode(`- ${question.question}`))
+      item.appendChild(document.createTextNode(`${question.question}`))
       list.appendChild(item)
     })
     innerHTML.appendChild(list)

@@ -1,6 +1,7 @@
 html, body {
   width: 100%;
   height: 100%;
+  font-family: 'Roboto';
 }
 
 h2 {
@@ -25,6 +26,7 @@ h2 {
 
 h1, h2, h3, h4, h5, p, span {
   color: #1b3454;
+  font-family: 'Roboto';
 }
 
 a {
@@ -177,8 +179,8 @@ div.ui.medium.right.labeled.input {
   grid-column: 10 / 17;
   grid-row: 2 / 4;
   z-index: 3;
-  overflow: scroll;
-  height: 100vh;
+  overflow-y: scroll;
+  min-height: 500px;
 }
 
 .back-to-top {
@@ -265,4 +267,16 @@ div.ten.wide.column {
 
 .unread-notification {
   cursor: pointer;
+}
+
+.ui.header>.ui.label {
+  margin: 0;
+}
+
+.ui.basic.segment.list-entry {
+  padding: 0;
+}
+
+i.thumbs.down.circular.icon.grey {
+  margin-left: 4px;
 }
