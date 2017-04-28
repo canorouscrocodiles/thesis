@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { sortQuestions, changeOption, changeValue } from '../actions/questions'
 import ListEntry from './ListEntry'
 import UnreadNotification from './UnreadNotification'
-import { Dimmer, Divider, Dropdown, Icon, Image, Loader, Segment } from 'semantic-ui-react'
+import { Dimmer, Divider, Dropdown, Header, Icon, Image, Loader, Segment } from 'semantic-ui-react'
 
 class PostList extends Component {
   constructor (props) {
@@ -81,9 +81,9 @@ class PostList extends Component {
     if (this.props.questions.data.length === 0 && this.props.currentLocation.location) {
       return (
         <Segment raised textAlign='center'>
-          <p>There are no questions around you.</p>
-          <p>😞</p>
-          <p>Post a question you want answered!</p>
+          <Header as='h3'>There are no questions around you.</Header>
+          <Header as='h3'>😞</Header>
+          <Header as='h3'>Post a question you want answered!</Header>
         </Segment>
       )
     } else if (this.props.questions.data.length === 0) {
