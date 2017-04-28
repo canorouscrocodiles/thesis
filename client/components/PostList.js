@@ -100,7 +100,7 @@ class PostList extends Component {
     } else {
       return (
         <div id='postlist' className='post-list'>
-          {this.props.questions.data.map(question => <ListEntry key={question.id} question={question} />)}
+          {this.props.questions.data.map(question => question.active ? <ListEntry key={question.id} question={question} /> : null)}
         </div>
       )
     }
