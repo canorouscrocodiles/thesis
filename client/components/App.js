@@ -170,7 +170,7 @@ class App extends Component {
           <Route path='/question/:id' render={this.renderQuestionPage} />
         </div>
         <div className='back-to-top'>
-          <Icon className='mainColor' size='huge' name='toggle up' onClick={this.scrollToTop} />
+          <Icon className='mainColor' size='huge' name='caret up' onClick={this.scrollToTop} />
         </div>
       </div>
     )
