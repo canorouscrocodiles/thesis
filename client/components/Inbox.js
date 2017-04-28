@@ -3,14 +3,14 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { getUnread } from '../actions/sockets/answer'
 import { removeQuestionFromInbox } from '../actions/inbox'
-import { Menu, Icon, Label } from 'semantic-ui-react'
+import { Popup, Icon, Label } from 'semantic-ui-react'
 
 class Inbox extends Component {
   constructor (props) {
     super(props)
     this.state = {}
-    this.showMessages = this.showMessages.bind(this)
     this.handleClick = this.handleClick.bind(this)
+    this.renderInboxList = this.renderInboxList.bind(this)
   }
 
   componentWillMount () {
@@ -25,29 +25,63 @@ class Inbox extends Component {
     }
   }
 
-  showMessages () {
-    let list = document.getElementById('inboxList')
-    if (list.style.display === 'none' || list.style.length < 1) {
-      list.style.display = 'block'
-    } else {
-      list.style.display = 'none'
-    }
-  }
-
   handleClick (id) {
-    this.showMessages()
     this.props.removeQuestionFromInbox(id)
     this.props.history.push(`/question/${id}`)
   }
 
+  renderInboxList (list) {
+    return list.map((entry, id) => {
+      if (id > 0 && id < list.length - 1) {
+        return (
+          <div className='inboxEntry' key={entry.id}>
+            <p className='inboxQuestion' onClick={() => this.handleClick(entry.id)}>{entry.question}</p>
+            {entry.answers.map((answer, id) => <div className='inboxAnswer' key={`${id}`}>{answer}</div>)}
+            <hr />
+          </div>
+        )
+      } else if (id > 0) {
+        return (
+          <div className='inboxEntry' key={entry.id}>
+            <p className='inboxQuestion' onClick={() => this.handleClick(entry.id)}>{entry.question}</p>
+            {entry.answers.map((answer, id) => <div className='inboxAnswer' key={`${id}`}>{answer}</div>)}
+          </div>
+        )
+      }
+    })
+  }
+
   render () {
-    return (
-      <div id='profileInbox'>
-        <div onClick={this.showMessages}>
-          <Icon name='inbox' size='huge' color='blue' />
+    if (this.props.unread[0] > 0) {
+      return (
+        <Popup
+          trigger={
+            <div id='profileInbox'>
+              <div onClick={this.showMessages}>
+                <Icon name='inbox' size='huge' color='blue' />
+                <Label id='inboxLabel' floating color='teal'>{this.props.unread[0]}</Label>
+              </div>
+            </div>
+          }
+          flowing
+          on='click'
+        >
+          <div id='inboxList'>
+            {
+              this.renderInboxList(this.props.unread)
+            }
+          </div>
+        </Popup>
+      )
+    } else {
+      return (
+        <div id='profileInbox'>
+          <div onClick={this.showMessages}>
+            <Icon name='inbox' size='huge' color='blue' />
+          </div>
         </div>
-      </div>
-    )
+      )
+    }
   }
 }
 

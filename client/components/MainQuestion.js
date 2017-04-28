@@ -131,8 +131,8 @@ class MainQuestion extends Component {
   render () {
     const { question } = this.props
     const styles = {
-      bold: { 'font-weight': 'bold' },
-      italic: { 'font-style': 'italic' }
+      bold: { 'fontWeight': 'bold' },
+      italic: { 'fontStyle': 'italic' }
     }
     if (!question) { return this.renderLoader() }
     let humanTime = moment(question.timestamp).fromNow()

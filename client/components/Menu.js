@@ -22,9 +22,11 @@ class OPMenu extends Component {
   loggedOutButton () {
     return (
       <div id='profileUser'>
-        <Button color='facebook'>
-          <Icon name='facebook' />Login With Facebook
-        </Button>
+        <a href='/auth/facebook'>
+          <Button id='logInButton' color='facebook'>
+            <Icon name='facebook' />Login
+          </Button>
+        </a>
       </div>
     )
   }

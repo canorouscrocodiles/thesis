@@ -123,8 +123,9 @@ export default (state = initialState, action) => {
       }
     case REMOVE_QUESTION_FROM_INBOX:
       const index = state.unread.findIndex(message => message.id === action.data)
-      let newUnread = [ ...state.unread.slice(0, index), ...state.unread.slice(index + 1)]
-      newUnread[0] = state.unread[0] - 1
+      let countMinus = state.unread[index].answers.length
+      let newUnread = [ ...state.unread.slice(0, index), ...state.unread.slice(index + 1) ]
+      newUnread[0] = state.unread[0] - countMinus
       return {
         ...state,
         unread: newUnread

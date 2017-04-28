@@ -30,7 +30,7 @@ class AskQuestion extends Component {
   }
 
   handleCategoryChange (event, data) {
-    this.setState({ category: event.target.value })
+    this.setState({ category: data.value })
   }
 
   resetValues () {
