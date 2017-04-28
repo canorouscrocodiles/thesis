@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { fetchUser, fetchUserQuestions, fetchUserAnswers } from '../actions/user'
+import { Container, Dimmer, Header, Image, Loader, Segment } from 'semantic-ui-react'
 import UserQuestions from './UserQuestions'
 import UserAnswers from './UserAnswers'
 
@@ -24,18 +25,26 @@ class UserInfo extends Component {
 
   render () {
     if (!this.props.user.data) {
-      return (<div> LOADING... </div>)
+      return (
+        <Segment raised>
+          <Dimmer active inverted>
+            <Loader size='massive' inline='centered'>Loading</Loader>
+          </Dimmer>
+        </Segment>
+      )
     } else {
       return (
         <div>
-          <div>
-            <p>{this.props.user.data.username}</p>
-            <p><img src={this.props.user.data.img_url} /></p>
-            <p>{this.props.user.data.bio}</p>
-          </div>
-          <div>
+          <Segment raised>
+            <Container text>
+              <Image centered src={this.props.user.data.img_url} width='200em' height='200em' shape='rounded' />
+              <Header as='h2'>{this.props.user.data.username}</Header>
+              <p>{this.props.user.data.bio}</p>
+            </Container>
+          </Segment>
+          <Segment raised>
             <span onClick={() => this.handleSelectedTab('questions')}>My Questions</span> | <span onClick={() => this.handleSelectedTab('answers')}>My Answers</span>
-          </div>
+          </Segment>
 
           { this.state.selectedTab === 'questions' ? <UserQuestions /> : <UserAnswers /> }
         </div>

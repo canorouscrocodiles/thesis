@@ -53,9 +53,9 @@ const calculateDistance = (questions, location) => {
 const filterCategories = (arr) => {
   let results = Object.keys(_.groupBy(arr, 'category')).map(cat => {
     return {
-      label: cat.toLowerCase(),
-      value: cat,
-      text: cat.toLowerCase()
+      key: cat.toLowerCase(),
+      text: cat,
+      value: cat.toLowerCase()
     }
   })
 
