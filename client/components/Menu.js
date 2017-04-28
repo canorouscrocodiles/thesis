@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Redirect, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { loggingOut } from '../actions/auth'
 import AskQuestion from './AskQuestion'
@@ -7,14 +7,42 @@ import Inbox from './Inbox'
 import { Grid, Button, Label, Dropdown, Menu, Icon, Image } from 'semantic-ui-react'
 
 class OPMenu extends Component {
+  constructor (props) {
+    super(props)
+
+    this.username = ''
+    this.userId = ''
+
+    if (this.props.user) {
+      this.username = this.props.user.username
+      this.userId = this.props.user.id
+    }
+
+    this.state = {
+      options: [
+        { key: 'profile', text: `${this.username}'s' Profile`, icon: 'user', value: 'profile' },
+        { key: 'logout', text: 'Logout', icon: 'sign out', value: 'logout' }
+      ]
+    }
+
+    this.trigger = (
+      <span>
+        <Image shape='circular' height='50em' width='50em' src={`http://graph.facebook.com/${this.userId}/picture?type=large`} />
+      </span>
+    )
+
+    this.handleDropdownChange = this.handleDropdownChange.bind(this)
+  }
+
   userProfileButton () {
     return (
       <div id='profileUser'>
-        <Link className='link' to={`/users/${this.props.user.id}`}>
-          <Image shape='circular' height='40em' width='40em' src={`http://graph.facebook.com/${this.props.user.id}/picture?type=large`} />
-          <span>{this.props.user.username}</span>
-        </Link>
-        <Link className='link' onClick={this.props.loggingOut} to='/'>(Logout)</Link>
+        <Dropdown pointing='top right' trigger={this.trigger}>
+          <Dropdown.Menu>
+            <Dropdown.Item onClick={this.handleDropdownChange} icon='user' text='My Profile' />
+            <Dropdown.Item onClick={this.handleDropdownChange} icon='sign out' text='Logout' />
+          </Dropdown.Menu>
+        </Dropdown>
       </div>
     )
   }
@@ -29,6 +57,20 @@ class OPMenu extends Component {
         </a>
       </div>
     )
+  }
+
+  handleDropdownChange (event, data) {
+    console.log(data.text)
+    if (data.text === 'My Profile') {
+      console.log(this.props)
+      this.props.history.push(`/users/${this.props.user.id}`)
+    }
+
+    if (data.text === 'Logout') {
+      console.log(this.props)
+      this.props.loggingOut()
+      this.props.history.push('/')
+    }
   }
 
   render () {
@@ -64,4 +106,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(OPMenu)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(OPMenu))

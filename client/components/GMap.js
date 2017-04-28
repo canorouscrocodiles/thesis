@@ -297,7 +297,10 @@ class GMap extends Component {
   }
 
   componentDidUpdate () {
-    if (this.state.map) this.state.map.panBy(250, 50)
+    if (this.state.map) {
+      const viewPortWidth = window.innerWidth / 5
+      this.state.map.panBy(viewPortWidth, 0)
+    }
   }
 
   render () {
