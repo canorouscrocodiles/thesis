@@ -59,7 +59,7 @@ class AskQuestion extends Component {
       message: this.state.question,
       coordinates: this.props.location,
       location: `${district}, ${city}`,
-      category_id: '1'
+      category_id: this.state.category
     }
 
     // Check to make sure we have all the necessary data points to successfully insert record
