@@ -114,7 +114,6 @@ class App extends Component {
   }
 
   renderQuestionPage (props) {
-    debugger
     const id = parseInt(props.match.params.id)
     const userQuestions = this.props.user.questions
     const questions = this.props.questions
