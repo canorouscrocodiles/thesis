@@ -59,7 +59,7 @@ class PostList extends Component {
   }
 
   scrollToTop () {
-    var elmnt = document.getElementById('postlist')
+    var elmnt = document.getElementById('postView')
     elmnt.scrollTop = 0
   }
 
@@ -129,9 +129,6 @@ class PostList extends Component {
           <Divider hidden />
           {this.renderUnread()}
           {this.renderPostList()}
-          <div className='back-to-top'>
-            <Icon color='green' size='huge' name='toggle up' onClick={this.scrollToTop} />
-          </div>
         </Segment>
       </div>
     )

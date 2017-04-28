@@ -4,32 +4,11 @@ import { Button, Dropdown, Input } from 'semantic-ui-react'
 import { postQuestion } from '../actions/sockets/questions'
 import { showErrorNotification } from '../actions/errors'
 
-const defaultCategories = [
-  'Advice',
-  'Animals',
-  'Business',
-  'Chipotle',
-  'Concerts',
-  'Convention'
-]
-
-const catOpts = [
-  {
-    text: 'Advice',
-    value: 'advice'
-  },
-  {
-    text: 'Animals',
-    value: 'animals'
-  }
-]
-
 class AskQuestion extends Component {
   constructor (props) {
     super(props)
     this.state = {
       question: '',
-      categories: defaultCategories,
       category: '1',
       charCount: 300
     }
@@ -50,11 +29,12 @@ class AskQuestion extends Component {
     this.setState({ question: event.target.value, charCount: remainder })
   }
 
-  handleCategoryChange (event) {
+  handleCategoryChange (event, data) {
     this.setState({ category: event.target.value })
   }
 
   resetValues () {
+    console.log('reset values')
     this.setState({ question: '', category: '1', charCount: 300 })
   }
 
@@ -88,7 +68,7 @@ class AskQuestion extends Component {
       this.props.postQuestion(data)
       this.resetValues()
     } else {
-      console.log('Missing some info')
+      console.log('Missing some info', data)
     }
   }
 
@@ -105,21 +85,25 @@ class AskQuestion extends Component {
 
   render () {
     return (
-      <div>
-        <Input
-          size='medium'
-          onChange={this.handleQuestionChange}
-          label={{ basic: true, content: `${this.state.charCount}` }}
-          labelPosition='right'
-          placeholder='Ask a question...'
-        />
-        <Button primary color='green' onClick={this.submitQuestion}>Ask!</Button>
-        <Dropdown compact placeholder='Category' onChange={this.handleCategoryChange} selection options={catOpts} />
-        <select value={this.state.category} onChange={this.handleCategoryChange}>
-          {this.state.categories.map((category, id) => <option key={id} value={id + 1}>{category}</option>)}
-        </select>
-        {this.renderSubmitButton()}
-        <p>{`${this.state.charCount} characters remaining`}</p>
+      <div id='questionWrapper'>
+        <div id='questionCategory' className='questionInputElement'>
+          <Dropdown placeholder='Category' onChange={this.handleCategoryChange} selection options={this.props.categories} />
+        </div>
+        <div id='questionBar' className='questionInputElement'>
+          <Input
+            id='questionInput'
+            size='medium'
+            maxLength='300'
+            value={this.state.question}
+            onChange={this.handleQuestionChange}
+            label={{ basic: true, content: `${this.state.charCount}` }}
+            labelPosition='right'
+            placeholder='Ask a question...'
+          />
+        </div>
+        <div id='questionButton' className='questionInputElement'>
+          <Button primary onClick={this.submitQuestion}>Ask!</Button>
+        </div>
       </div>
     )
   }

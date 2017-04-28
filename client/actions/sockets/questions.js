@@ -26,7 +26,9 @@ const socketPostQuestion = (data) => ({ type: POST_QUESTION_REQUEST, data: data 
 const sendSocketFetchQuestion = (id) => ({ type: SOCKET_GET_QUESTION, data: id })
 const signalQuestionsUpdateRequest = () => ({ type: UPDATE_QUESTION_REQUEST })
 const sendSocketUpdateQuestion = (data) => ({ type: SOCKET_UPDATE_QUESTION, data: data })
-export const getCategories = () => ({ type: GET_CATEGORIES_REQUEST })
+export const getCategories = () => {
+  return { type: GET_CATEGORIES_REQUEST }
+}
 const signalQuestionDeactivation = () => ({ type: QUESTION_DEACTIVATE_REQUEST })
 const sendSocketQuestionDeactivation = (id) => ({ type: SOCKET_DEACTIVATE_QUESTION, data: id })
 export const findAndJoin = (id) => ({ type: FIND_AND_JOIN, data: id })

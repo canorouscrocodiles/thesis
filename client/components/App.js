@@ -7,13 +7,13 @@ import { fetchingLocationName, fetchLocationError } from '../actions/location'
 import utils from '../utils'
 import ErrorNotification from './ErrorNotification'
 import GMap from './GMap'
-import Menu2 from './Menu'
+import OPMenu from './Menu'
 import QuestionPage from './QuestionPage'
 import PostList from './PostList'
 import UserProfile from './UserProfile'
 import { sendLocationToServer } from '../actions/sockets/location'
 import { getCategories, findAndJoin } from '../actions/sockets/questions'
-import { Container, Grid, Rail, Segment } from 'semantic-ui-react'
+import { Icon } from 'semantic-ui-react'
 
 const watchOptions = {
   enableHighAccuracy: true,
@@ -35,13 +35,18 @@ class App extends Component {
   }
 
   componentWillMount () {
-    const userId = cookie.select(/(onpoint-id)/g)['onpoint-id']
     this.watchPosition()
     this.removeLocationHash()
     this.setUserFromCookie()
     this.props.getCategories()
-    if (userId) { this.props.findAndJoin(userId) }
     Notification.requestPermission()
+  }
+
+  componentDidMount () {
+    const userId = cookie.select(/(onpoint-id)/g)['onpoint-id']
+    if (userId) {
+      this.props.findAndJoin(userId)
+    }
   }
 
   watchPosition () {
@@ -147,22 +152,22 @@ class App extends Component {
 
   render () {
     return (
-      <div className='our-app'>
-        <Grid>
-          <Grid.Row>
-            <Menu2 username={this.props.user.username} />
-          </Grid.Row>
-          <Grid.Row columns={2}>
-            <Grid.Column width={8}>
-              <GMap />
-            </Grid.Column>
-            <Grid.Column width={8}>
-              <Route exact path='/' component={PostList} />
-              <Route path='/users/:id' render={this.renderUserProfilePage} />
-              <Route path='/question/:id' render={this.renderQuestionPage} />
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
+      <div id='appView'>
+        <div id='menuView'>
+          <ErrorNotification />
+          <OPMenu username={this.props.user.username} />
+        </div>
+        <div id='mapView'>
+          <GMap />
+        </div>
+        <div id='postView'>
+          <Route exact path='/' component={PostList} />
+          <Route path='/users/:id' render={this.renderUserProfilePage} />
+          <Route path='/question/:id' render={this.renderQuestionPage} />
+        </div>
+        <div className='back-to-top'>
+          <Icon color='green' size='huge' name='toggle up' onClick={this.scrollToTop} />
+        </div>
       </div>
     )
   }
