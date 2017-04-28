@@ -107,6 +107,7 @@ class PostList extends Component {
             <Dropdown
               placeholder='Sort'
               selection
+              value={this.props.option}
               defaultValue={this.props.option}
               options={this.state.sortOptions}
               onChange={this.handleOptionChange}
@@ -115,6 +116,7 @@ class PostList extends Component {
               placeholder='Filter categories'
               multiple
               selection
+              value={this.props.categories}
               defaultValue={this.props.categories}
               options={this.props.categoryOptions}
               onChange={this.handleCategoryChange}

@@ -181,7 +181,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         unread: false,
-        option: 0,
+        option: 'New',
         value: []
       }
     case CHANGE_OPTION:
