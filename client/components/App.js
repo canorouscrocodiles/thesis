@@ -126,12 +126,10 @@ class App extends Component {
           break
         }
       }
-      if (question) {
-        for (var i = 0; i < userQuestions.length; i++) {
-          if (userQuestions[i].id === id) {
-            question = userQuestions[i]
-            break
-          }
+      for (var i = 0; i < userQuestions.length; i++) {
+        if (userQuestions[i].id === id) {
+          question = userQuestions[i]
+          break
         }
       }
     } else {
