@@ -1,4 +1,4 @@
-# On Point
+# [On Point](https://on-point.herokuapp.com/)
 
 > Geolocation-based Q&A. Ask and answer nearby questions in real-time
 
@@ -19,7 +19,7 @@
 
 On Point is a geolocation-based Q&A where users ask and answer nearby questions in real-time. This full-stack application was our thesis project at Hack Reactor. We decided to use Node, Express, React, Redux, and PostgreSQL.
 
-It is deployed on Heroku at (*TODO: place app here. Make Project Header url link as well*).
+It is deployed on Heroku at [https://on-point.herokuapp.com/](https://on-point.herokuapp.com/).
 
 ## Team (SF Cohort 73)
 
