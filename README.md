@@ -4,7 +4,7 @@
 
 [![Stories in Ready](https://badge.waffle.io/canorouscrocodiles/thesis.svg?label=ready&title=Ready)](http://waffle.io/canorouscrocodiles/thesis)
 
-
+![on-point-gif](https://cloud.githubusercontent.com/assets/14797743/26421489/21f47e30-407b-11e7-92c6-1350aad20b54.gif)
 
 ## Table of Contents
 
